@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Connection_Solicita tu examen</title>
+    <link rel="stylesheet" href="Estilos/solicitud-examenesStyle.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <img src="logo-placeholder.png" alt="Logo" class="logo">
+            <span class="header-title"><a href="index.html">HealthConnection</a></span>
+        </div>
+        
+        <!-- Main Form Section -->
+        <div class="form-container">
+            <h2>Autoriza tu examen</h2>
+            <form>
+                <!-- Identification Field -->
+                <div class="form-group">
+                    <label for="identificacion">Identificación</label>
+                    <input type="text" id="identificacion" name="identificacion" value="1012345424">
+                </div>
+                
+                <!-- Exam Type Selection -->
+                <div class="form-group">
+                    <label for="tipo-examen">Tipo de examen</label>
+                    <select id="tipo-examen" name="tipo-examen">
+                        <option value="optometria">Optometría</option>
+                        <option value="odontologia">Odontología</option>
+                        <option value="ginecologia">Ginecología</option>
+                        <option value="radiografia">Radiografía</option>
+                        <option value="tag">Tag</option>
+                    </select>
+                </div>
+                
+                <!-- Time Slot Selection -->
+                <div class="form-group">
+                    <label for="jornada">Selecciona la jornada en la que deseas que se realice tu examen</label>
+                    <select id="jornada" name="jornada">
+                        <option value="diurna">Diurna (6AM-12M)</option>
+                        <option value="tarde">Tarde (12PM-6PM)</option>
+                        <option value="noche">Noche (6PM-10PM)</option>
+                    </select>
+                </div>
+                
+                <!-- Specialist Request -->
+                <div class="form-group">
+                    <label>¿Deseas ser atendido por algún Especialista específico?</label>
+                    <div class="radio-group">
+                        <input type="radio" id="especialista-si" name="especialista" value="si">
+                        <label for="especialista-si">Sí</label>
+                        <input type="radio" id="especialista-no" name="especialista" value="no" checked>
+                        <label for="especialista-no">No</label>
+                    </div>
+                    <select id="especialista-select" name="especialista-select" disabled>
+                        <option value="" selected>Selecciona tu especialista...</option>
+                        <!-- Añadir opciones de especialistas aquí -->
+                    </select>
+                </div>
+                
+                <!-- Exam Order Input -->
+                <div class="form-group">
+                    <label for="orden-examen">Ingresa tu orden de examen</label>
+                    <input type="file" id="orden-examen" name="orden-examen">
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit">Autorizar</button>
+            </form>
+        </div>
+    </div>
+    
+    <script >
+        document.addEventListener('DOMContentLoaded', function () {
+        const especialistaSi = document.getElementById('especialista-si');
+        const especialistaNo = document.getElementById('especialista-no');
+        const especialistaSelect = document.getElementById('especialista-select');
+        
+        especialistaSi.addEventListener('change', function () {
+            especialistaSelect.disabled = false;
+        });
+        
+        especialistaNo.addEventListener('change', function () {
+            especialistaSelect.disabled = true;
+        });
+    });</script>
+</body>
+</html>
