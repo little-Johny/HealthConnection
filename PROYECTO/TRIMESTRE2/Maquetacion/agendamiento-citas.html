@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Connection - Agenda tu cita</title>
+    <link rel="stylesheet" href="Estilos/agendamiento-citasStyle.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="navbar">
+                <!-- falta el logo -->
+                <img src="ruta/a/tu/logo.png" alt="Logo" class="logo-img">
+                <button class="health-connection-btn"> <a href="index.html">Health Connection</a></button>
+                <!-- imagen de usuario -->
+                <img src="ruta/a/tu/imagen-de-usuario.png" alt="Usuario" class="user-img">
+            </div>
+        </header>
+        <main>
+            <h2>Agenda tu cita</h2>
+            <section class="appointment-form">
+                <form action="historialSolicitudes.html" method="post">
+                    <div class="form-group">
+                        <label for="specialty">Selecciona la especialidad</label>
+                        <select id="specialty" name="specialty">
+                            <option value="optometria">Optometría</option>
+                            <option value="odontologia">Odontología</option>
+                            <option value="optometria">Optometría</option>
+                            <option value="valoraciones">Valoraciones para cirugía</option>
+                            <option value="chequeo">Chequeo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>¿Quieres solicitar un médico?</label>
+                        <label><input type="radio" name="doctor" value="si"> Sí</label>
+                        <label><input type="radio" name="doctor" value="no"> No</label>
+                        <select id="preferred-doctor" name="preferred-doctor" disabled>
+                            <option value="">Selecciona el médico de tu preferencia</option>
+                            <option value="">Juan Velez</option>
+                            <option value="">Pit</option>
+                            <option value="">Remy</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="center">¿Dónde te gustaría ser atendido?</label>
+                        <select id="center" name="center">
+                            <option value="">Selecciona un centro de atención</option>
+                            <option value="">Soacha</option>
+                            <option value="">Bosa Laureles</option>
+                            <option value="">Kennedy</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Fecha de la cita:</label>
+                        <input type="date" id="date" name="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Hora de la cita:</label>
+                        <input type="time" id="time" name="time">
+                    </div>
+                    <button type="submit">Agendar cita</button>
+                </form>
+            </section>
+        </main>
+    </div>
+    <script>
+        document.querySelectorAll('input[name="doctor"]').forEach((elem) => {
+            elem.addEventListener("change", function(event) {
+                var preferredDoctorSelect = document.getElementById("preferred-doctor");
+                if (event.target.value === "si") {
+                    preferredDoctorSelect.disabled = false;
+                } else {
+                    preferredDoctorSelect.disabled = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

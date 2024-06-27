@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Connection</title>
+    <link rel="stylesheet" href="Estilos/Historialstyle.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <div class="logo">
+                
+                <img src="logo.png" alt="Health Connection Logo" />
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Ingresa la referencia de pago que desees">
+                <button type="button">🔎</button>
+            </div>
+            <div class="user-icon">
+                
+                <img src="Images/users.png" alt="User Icon" />
+            </div>
+        </div>
+
+        <!-- Menú de navegación -->
+        <div class="nav-menu">
+            <button onclick="showSection('citas')">Citas</button>
+            <button onclick="showSection('examenes')">Exámenes</button>
+            <button onclick="showSection('autorizaciones-medicas')">Autorizaciones Médicas</button>
+            <button onclick="showSection('copagos')">Copagos</button>
+            <button onclick="showSection('mis-afiliaciones')">Mis Afiliaciones</button>
+        </div>
+
+        <!-- Secciones de contenido -->
+        <div class="main-content">
+            <!-- Sección Citas -->
+            <div id="citas" class="content-section">
+                <h2>Citas</h2>
+                <!-- Espacio para llenar la información de citas -->
+                <div class="appointment-card">
+                    <p>Paciente: Juan Perez</p>
+                    <p>Especialidad: Cardiología</p>
+                    <p>Fecha: 20/06/2024</p>
+                    <p>Hora: 09:00 AM</p>
+                    <p>Lugar: Centro de atención Chapinero</p>
+                </div>
+                <div class="appointment-card">
+                    <p>Paciente: Ana Gomez</p>
+                    <p>Especialidad: Dermatología</p>
+                    <p>Fecha: 22/06/2024</p>
+                    <p>Hora: 11:00 AM</p>
+                    <p>Lugar: Centro de atención Norte</p>
+                </div>
+            </div>
+
+            <!-- Sección Exámenes -->
+            <div id="examenes" class="content-section">
+                <h2>Exámenes</h2>
+                
+                <div class="appointment-card">
+                    <p>Paciente: Pedro Martinez</p>
+                    <p>Examen: Radiografía</p>
+                    <p>Fecha: 25/06/2024</p>
+                    <p>Hora: 10:00 AM</p>
+                    <p>Lugar: Centro de atención Sur</p>
+                </div>
+            </div>
+
+            <!-- Sección Autorizaciones Médicas -->
+            <div id="autorizaciones-medicas" class="content-section">
+                <h2>Autorizaciones Médicas</h2>
+                
+                <div class="appointment-card">
+                    <p>Paciente: Laura Ortiz</p>
+                    <p>Autorización: Cirugía de rodilla</p>
+                    <p>Fecha: 30/06/2024</p>
+                    <p>Estado: Autorizado</p>
+                </div>
+            </div>
+
+            <!-- Sección Copagos -->
+            <div id="copagos" class="content-section">
+                <h2>Copagos</h2>
+                
+                <div class="payment-card pending">
+                    <p>Paciente: Juan Rodriguez</p>
+                    <p>Cita de: Optometría</p>
+                    <p>Fecha: 15/09/2024</p>
+                    <p>Hora: 10:30 AM</p>
+                    <p>Lugar: Centro de atención Kennedy P</p>
+                    <p class="copago">Realizar COPAGO = 10.300$</p>
+                    <div class="actions">
+                        <button class="edit">Editar Pago</button>
+                        <button class="delete">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Mis Afiliaciones -->
+            <div id="mis-afiliaciones" class="content-section">
+                <h2>Mis Afiliaciones</h2>
+
+                <div class="appointment-card">
+                    <p>Afiliado: Maria Gonzalez</p>
+                    <p>Plan: Plan Básico</p>
+                    <p>Fecha de Inicio: 01/01/2023</p>
+                    <p>Estado: Activo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+
+            // Actualizar la clase active en el menú de navegación
+            const buttons = document.querySelectorAll('.nav-menu button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`.nav-menu button[onclick="showSection('${sectionId}')"]`).classList.add('active');
+        }
+
+        // Mostrar la primera sección por defecto
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('citas');
+        });
+    </script>
+</body>
+</html>

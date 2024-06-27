@@ -1,0 +1,180 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: orange;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+header {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    display: inline;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .back-btn,
+.navbar .search-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2em;
+}
+
+.navbar input[type="text"] {
+    flex: 1;
+    margin: 0 10px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+main {
+    display: flex;
+    margin-top: 20px;
+}
+
+.afiliate {
+    width: 30%;
+    padding-right: 20px;
+    border-right: 1px solid #ccc;
+    border: 2px solid black;
+    margin-left: 25px;
+}
+
+.afiliate h2 {
+    margin-top: -17px;
+    margin-left: 20px ;
+    width: 85px;
+    background: #f9f9f9;
+}
+
+.affiliations {
+    margin-top: 20px;
+}
+
+.affiliation {
+    margin-bottom: 20px;
+}
+
+.affiliation img{
+    width: 100px;
+    height: auto;
+}
+
+.affiliation h3, label{
+    margin-left: 9px;
+
+}
+.affiliation label{
+    color: orange ;
+}
+
+
+section {
+    width: 70%;
+    padding-left: 20px;
+    border: 2px solid black;
+    margin-left: 20px;
+    margin-right: 25px;
+    overflow: hidden;
+}
+
+section h2{
+    margin-top: -17px;
+    margin-left: 20px;
+    width: 188px;
+    background: #f9f9f9;
+    position: absolute;
+
+}
+
+form {
+    margin-top: 20px;
+}
+
+form h2 {
+    margin-top: 0;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select {
+    width: 70%;
+    padding: 5px;
+    margin-bottom: 10px;
+    margin-left: 50px;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 5px;
+}
+
+form input[type="radio"] {
+    margin-right: 5px;
+}
+
+form button {
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form .value {
+    width: 30%;
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: 2px solid orange;
+    text-align: center;
+}
+
+.icono-name {
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icono-name img {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.icono-name picture>img{
+    width: 150px;
+    height: auto;
+}
+
+.icono-name h1 {
+    text-align: left;
+    margin-top: 20px;
+    border: 3px solid;
+    padding: 5px;
+    background-color: orange;
+    border-radius: 5%;
+    text-decoration: none;
+}
+
+.icono-name h1 a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}

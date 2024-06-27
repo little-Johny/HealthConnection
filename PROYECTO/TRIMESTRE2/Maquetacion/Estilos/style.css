@@ -1,0 +1,99 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+
+.icono-name {
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    align-items: center;
+}
+
+.icono-name img {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.icono-name h1 {
+    text-align: left;
+    margin-top: 20px;
+    margin-right: 58%;
+    border: 3px solid;
+    padding: 5px;
+    background-color: orange;
+    border-radius: 5%;
+}
+
+.icono-name h1 a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+.icono-name button {
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 1px solid;
+    border-radius: 5%;
+    padding: 5px;
+    background-color: orange;
+    font-size: 16px;
+}
+
+.icono-name button a {
+    color: #000000;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style: none;
+    margin: 10px;
+    padding: 0;
+    display: flex;
+    justify-content: flex;
+    align-items: normal;
+}
+
+nav li {
+    margin-right: 20px;
+    margin-left: 10px;
+    border: 1px solid;
+    border-radius: 5%;
+    padding: 5px;
+    background-color: orange;
+}
+
+nav a {
+    color: #000000;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #000000;
+}
+
+nav li a {
+    display: block;
+}
+
+.foto-texto {
+    display: flex;
+}
+
+.foto-texto img {
+    margin: 15px 10px 10px 10px;
+    border: 5px solid black;
+}
+
+.foto-texto p {
+    font-size: 30px;
+    margin: 15px 10px 10px 10px;
+}
+
