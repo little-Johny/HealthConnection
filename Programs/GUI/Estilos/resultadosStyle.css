@@ -1,0 +1,66 @@
+/* Contenedor principal */
+body{
+    background: orange;
+}
+
+.container {
+    width: 600px;
+    border: 2px solid black;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+    background: white;
+}
+
+/* Encabezado */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    background-color: #f6a800; /* Color de fondo de ejemplo */
+    display: inline-block;
+}
+
+.user-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #f6a800; /* Color de fondo de ejemplo */
+    display: inline-block;
+    border-radius: 50%;
+}
+
+/* Información del usuario */
+.user-info {
+    margin-bottom: 20px;
+}
+
+/* Tabla de datos del examen */
+.exam-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.exam-table th, .exam-table td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Botón de descargar */
+.download-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f6a800;
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid black;
+    font-weight: bold;
+}

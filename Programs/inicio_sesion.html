@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthConnection Inicia Sesion</title>
+    <link rel="stylesheet" href="Estilos/style3.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="icono-name">
+                <img src="Images/HealthConnection.png" alt="Icono" width="75">
+                <h1><a href="index.html">Health Connection</a></h1>
+            </div>
+        </header>
+        <main>
+            <div class="form-container">
+                <div class="icon">
+                    <img src="Images/users.png" alt="Icono Usuario">
+                </div>
+                <h2>INICIA SESION</h2>
+                <form>
+                    <label for="tipo-documento">Tipo Documento:</label>
+                    <select id="tipo-documento">
+                        <option value="CC">Cedula de cuidadania</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="RV">Registro Civil</option>
+                        <option value="CE">Cedula de Extranjeria</option>
+                    </select>
+
+                    <label for="numero-documento">Numero Documento:</label>
+                    <input type="text" id="numero-documento">
+
+                    <label for="contrasena">Contraseña:</label>
+                    <div class="password-container">
+                        <input type="password" id="contrasena">
+                        <span class="password-toggle">👁️</span>
+                    </div>
+
+                    <div class="links">
+                        <a href="registro.html">No estas registrado? Registrarse</a>
+                    </div>
+
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="mantener-sesion">
+                        <label for="mantener-sesion">Mantener Inicio de Sesion</label>
+                    </div>
+
+                    <button type="submit">
+                        <a href="historialSolicitudes.html">INICIAR SESION</a></button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
