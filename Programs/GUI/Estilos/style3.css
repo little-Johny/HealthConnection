@@ -1,0 +1,138 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.icono-name {
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    align-items: center;
+}
+
+.icono-name img {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.icono-name h1 {
+    text-align: left;
+    margin-top: 20px;
+    border: 3px solid;
+    padding: 5px;
+    background-color: orange;
+    border-radius: 5%;
+}
+
+.icono-name h1 a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+main {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-container {
+    width: 100%;
+    background-color: #d48318;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.icon {
+    text-align: center;
+    margin-bottom: -20px;
+}
+
+.icon img {
+    height: 50px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+label {
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="text"], input[type="password"], select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #d48318;
+    border-radius: 5px;
+}
+
+.password-container {
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    flex: 1;
+}
+
+.password-toggle {
+    cursor: pointer;
+    margin-left: 10px;
+    color: #d48318;
+}
+
+.links {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.links a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+}
+
+button {
+    background-color: #d48318;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #bf6e14;
+}

@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+:root{
+    --color-principal: #ff914d;
+    --color-secundario:#6C5F5B;
+    --color-complementario:#4F4A45;
+    --negro:#151515;
+    --gris-clarito:#9f9e9ed4;
+    --white:#FFFFFF;
+    --fuente-principal:'Quicksand',sans-serif;    
+    --fuente-secundaria:'Nunito',sans-serif;
+    --small-font:14px;
+    --medium-font:16px;
+    --large-font:18px;
+    --gris-fondo:#e8e5e5;
+    
+}
+
+body{
+    margin: 0;
+    font-family: var(--fuente-principal);
+}
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 60px;
+    border-bottom: 1px solid var(--gris-clarito);
+    background-color: var(--color-principal);
+}
+
+.menu{
+    
+    width: 30px;
+    height: auto;
+}
+
+
+
+.navbar-left ul,
+.navbar-right ul{
+    list-style: none;
+    padding: 0;
+    margin:0;
+    display: flex;
+    align-items: center;
+    height: 60px;
+}
+
+.navbar-left {
+    display: flex;
+}
+
+.navbar-left ul{
+    margin-left: 75px;
+}
+
+.navbar-left ul li a,
+.navbar-right ul li a
+{
+    text-decoration: none;
+    border:  1px solid var(--white);
+    padding: 8px;
+    border-radius: 8px;
+    color: var(--white);
+    font-size: var(--large-font);
+    margin-right: 10px;
+    font-weight: bold;
+    white-space: nowrap; /* Evita que el texto se divida en dos líneas */
+    flex: 1; /* Permite que los elementos ocupen el mismo ancho */
+}
+
+.navbar-left ul li a:hover,
+.navbar-right ul li a:hover
+{
+    border: 1px solid var(--color-principal);
+    color: var(--color-principal);
+    
+}
+.navbar-email{
+    color: var(--white);
+    font-size: var(--small-font);
+    margin-right: 12px;
+}
+
+.navbar-email img{
+    margin-left: 10px;
+    transform: rotate(90deg);
+}
+.navbar-shopping-cart{
+    position: relative;
+}
+
+.navbar-shopping-cart img{
+    width: 20px;
+    height: auto;
+}
+
+.navbar-shopping-cart div{
+    width: 16px;
+    height: 16px;
+    background-color: var(--color-principal);
+    border-radius: 50%;
+    font-size: var(--small-font);
+    font-weight: bold;
+    position: absolute;
+    top: -6px;
+    right: -3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.dinamyc-text{
+    margin-left: 20px;
+    color: var(--gris-fondo);
+    font-size: var(--large-font);
+    font-weight: bold;
+}
+@media (max-width:640px){
+    .menu{
+        display: block;
+    }
+
+    .navbar-left ul{
+        display: none;
+    }
+
+    .navbar-email{
+        display: none;
+    }
+}

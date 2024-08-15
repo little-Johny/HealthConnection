@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthConnection Registro</title>
+    <link rel="stylesheet" href="Estilos/style2.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="icono-name">
+                <img src="Images/HealthConnection.png" alt="Icono" width="75">
+                <h1><a href="index.html">Health Connection</a></h1>
+        </header>
+        <main>
+            <div class="form-container">
+                <div class="icon">
+                    <img src="Images/users.png" alt="Icono Usuario">
+                </div>
+                <h2>REGISTRATE</h2>
+                <form>
+                    <label for="tipo-documento">Tipo Documento:</label>
+                    <select id="tipo-documento" required>
+                        <option value="CC">Cedula de cuidadania</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="RV">Registro Civil</option>
+                        <option value="CE">Cedula de Extranjeria</option>
+                    </select>
+
+                    <label for="numero-documento" >Numero Documento:</label>
+                    <input type="text" id="numero-documento"required
+
+                    <label for="contrasena">Contraseña:</label>
+                    <div class="password-container">
+                        <input type="password" id="contrasena" requiered>
+                        <span class="password-toggle">👁️</span>
+                    </div>
+
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre"required>
+
+                    <label for="telefono">Telefono:</label>
+                    <input type="text" id="telefono" required>
+
+                    <label for="direccion">Direccion:</label>
+                    <input type="text" id="direccion" required>
+
+                    <div class="links">
+                        <a href="inicio_sesion.html">Ya estas registrado? Inicia Sesion</a>
+                    </div>
+
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="acepto" checked required>
+                        <label for="acepto">Estoy de acuerdo con compartir mis datos</label>
+                    </div>
+
+                    <button type="submit"><a href="index.html">CREAR USUARIO</a></button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
