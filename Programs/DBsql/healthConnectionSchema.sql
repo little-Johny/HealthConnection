@@ -1,6 +1,7 @@
 -- Crear base de datos
-CREATE DATABASE Health_connection;
+CREATE DATABASE IF NOT EXISTS Health_connection;
 USE Health_connection;
+
 
 -- Tabla de Roles
 CREATE TABLE Rol(
@@ -40,7 +41,7 @@ CREATE TABLE PlanesAfiliacion (
 
 -- Tabla de Pacientes
 CREATE TABLE Pacientes (
-    id_paciente INT AUTO_INCREMENT PRIMARY KEY,
+    documento_paciente INT NOT NULL UNIQUE PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
     tipo_documento INT NOT NULL,
@@ -49,22 +50,23 @@ CREATE TABLE Pacientes (
     telefono VARCHAR(20),
     email VARCHAR(100) NOT NULL,
     direccion INT NOT NULL,
-    ciudad VARCHAR(100),
+    ciudad INT NOT NULL,
     contraseña VARCHAR(100) NOT NULL,
     FOREIGN KEY (tipo_documento) REFERENCES TiposDocumento(id_tipo_documento),
-    FOREIGN KEY (direccion) REFERENCES Direcciones(id_direccion)
+    FOREIGN KEY (direccion) REFERENCES Direcciones(id_direccion),
+    FOREIGN KEY (ciudad) REFERENCES Ciudades(id_ciudad),
 );
 
 -- Tabla de Afiliaciones
 CREATE TABLE Afiliaciones (
     id_afiliacion INT AUTO_INCREMENT PRIMARY KEY,
-    id_paciente INT ,
+    documento_paciente INT ,
     id_plan_afiliacion INT,
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE,
     estado ENUM('Activa', 'Inactiva') NOT NULL,
     FOREIGN KEY (id_plan_afiliacion) REFERENCES PlanesAfiliacion(id_plan_afiliacion),
-    FOREIGN KEY (id_paciente) REFERENCES Pacientes(id_paciente)
+    FOREIGN KEY (documento_paciente) REFERENCES Pacientes(documento_paciente)
 );
 
 -- Tabla de Especialidad de Funcionarios
@@ -118,13 +120,13 @@ CREATE TABLE CategoriasExamenes (
 -- Tabla de Exámenes
 CREATE TABLE Examenes (
     id_examen INT AUTO_INCREMENT PRIMARY KEY,
-    id_paciente INT NOT NULL,
+    documento_paciente INT NOT NULL,
     id_funcionario INT NOT NULL,
     fecha_examen DATETIME NOT NULL,
     resultado VARCHAR(250),
     id_categoria_examen INT NOT NULL,
     id_tipo_servicio INT NOT NULL,
-    FOREIGN KEY (id_paciente) REFERENCES Pacientes(id_paciente),
+    FOREIGN KEY (documento_paciente) REFERENCES Pacientes(documento_paciente),
     FOREIGN KEY (id_funcionario) REFERENCES Funcionarios(id_funcionario),
     FOREIGN KEY (id_categoria_examen) REFERENCES CategoriasExamenes(id_categoria_examen),
     FOREIGN KEY (id_tipo_servicio) REFERENCES TiposServicios(id_tipo_servicio)
@@ -133,14 +135,14 @@ CREATE TABLE Examenes (
 -- Tabla de Citas
 CREATE TABLE Citas (
     id_cita INT AUTO_INCREMENT PRIMARY KEY,
-    id_paciente INT NOT NULL,
+    documento_paciente INT NOT NULL,
     id_funcionario INT NOT NULL,
     fecha_cita DATETIME NOT NULL,
     estado ENUM('Pendiente', 'Confirmada', 'Cancelada', 'Completada') NOT NULL,
     id_categoria_cita INT NOT NULL,
     id_tipo_servicio INT NOT NULL,
     notificaciones BOOLEAN NOT NULL,
-    FOREIGN KEY (id_paciente) REFERENCES Pacientes(id_paciente),
+    FOREIGN KEY (documento_paciente) REFERENCES Pacientes(documento_paciente),
     FOREIGN KEY (id_funcionario) REFERENCES Funcionarios(id_funcionario),
     FOREIGN KEY (id_categoria_cita) REFERENCES CategoriasCitas(id_categoria_cita),
     FOREIGN KEY (id_tipo_servicio) REFERENCES TiposServicios(id_tipo_servicio)
@@ -149,7 +151,7 @@ CREATE TABLE Citas (
 -- Tabla de Pagos
 CREATE TABLE Pagos (
     id_pago INT AUTO_INCREMENT PRIMARY KEY,
-    id_paciente INT NOT NULL,
+    documento_paciente INT NOT NULL,
     id_cita INT NULL,
     id_examen INT NULL,
     id_afiliacion INT NULL,
@@ -157,7 +159,7 @@ CREATE TABLE Pagos (
     fecha_pago DATETIME NOT NULL,
     descripcion VARCHAR(50),
     tipo_servicio INT NOT NULL,
-    FOREIGN KEY (id_paciente) REFERENCES Pacientes(id_paciente),
+    FOREIGN KEY (documento_paciente) REFERENCES Pacientes(documento_paciente),
     FOREIGN KEY (id_cita) REFERENCES Citas(id_cita),
     FOREIGN KEY (id_examen) REFERENCES Examenes(id_examen),
     FOREIGN KEY (id_afiliacion) REFERENCES Afiliaciones(id_afiliacion),
@@ -190,7 +192,7 @@ CREATE TABLE AgendaDoctor (
 
 -- PROCEDIMIENTOS ALMACENADOS
 
-
+DELIMITER //
 -- Procedimiento para insertar un Rol
 CREATE PROCEDURE SP_InsertarRol(
     IN p_rol VARCHAR(30)
@@ -198,7 +200,7 @@ CREATE PROCEDURE SP_InsertarRol(
 BEGIN
     INSERT INTO Rol (rol) 
     VALUES (p_rol);
-END 
+END //
 
 -- Procedimiento para actualizar un Rol
 CREATE PROCEDURE SP_ActualizarRol(
@@ -209,25 +211,25 @@ BEGIN
     UPDATE Rol 
     SET rol = p_rol 
     WHERE id_rol = p_id_rol;
-END 
+END //
 
 -- Procedimiento para eliminar un Rol
-CREATE PROCEDURE Eliminar_Rol(
+CREATE PROCEDURE SP_EliminarRol(
     IN p_id_rol INT
     )
 BEGIN
     DELETE FROM Rol 
     WHERE id_rol = p_id_rol;
-END 
+END //
 
 -- Procedimiento para consultar Roles con filtro
-CREATE PROCEDURE Consultar_Rol(
+CREATE PROCEDURE SP_ConsultarRol(
     IN p_rol VARCHAR(30)
     )
 BEGIN
     SELECT * FROM Rol 
     WHERE rol LIKE CONCAT('%', p_rol, '%');
-END 
+END //
 
 -- Procedimiento para insertar un Tipo de Documento
 CREATE PROCEDURE Insertar_TipoDocumento(
@@ -237,10 +239,10 @@ CREATE PROCEDURE Insertar_TipoDocumento(
 BEGIN
     INSERT INTO TiposDocumento (nombre_tipo, descripcion) 
     VALUES (p_nombre_tipo, p_descripcion);
-END 
+END //
 
 -- Procedimiento para actualizar un Tipo de Documento
-CREATE PROCEDURE Actualizar_TipoDocumento(
+CREATE PROCEDURE SP_ActualizarTipoDocumento(
     IN p_id_tipo_documento INT, 
     IN p_nombre_tipo VARCHAR(50), 
     IN p_descripcion VARCHAR(50)
@@ -250,38 +252,38 @@ BEGIN
     SET nombre_tipo = p_nombre_tipo, 
         descripcion = p_descripcion 
     WHERE id_tipo_documento = p_id_tipo_documento;
-END 
+END //
 
 -- Procedimiento para eliminar un Tipo de Documento
-CREATE PROCEDURE Eliminar_TipoDocumento(
+CREATE PROCEDURE SP_EliminarTipoDocumento(
     IN p_id_tipo_documento INT
     )
 BEGIN
     DELETE FROM TiposDocumento 
     WHERE id_tipo_documento = p_id_tipo_documento;
-END 
+END //
 
 -- Procedimiento para consultar Tipos de Documento con filtro
-CREATE PROCEDURE Consultar_TipoDocumento(
+CREATE PROCEDURE SP_ConsultarTipoDocumento(
     IN p_nombre_tipo VARCHAR(50)
     )
 BEGIN
     SELECT * FROM TiposDocumento 
     WHERE nombre_tipo LIKE CONCAT('%', p_nombre_tipo, '%');
-END 
+END //
 
 -- Procedimiento para insertar una Ciudad
-CREATE PROCEDURE Insertar_Ciudad(
+CREATE PROCEDURE SP_InsertarCiudad(
     IN p_nombre_ciudad VARCHAR(100), 
     IN p_descripcion VARCHAR(50)
     )
 BEGIN
     INSERT INTO Ciudades (nombre_ciudad, descripcion) 
     VALUES (p_nombre_ciudad, p_descripcion);
-END 
+END //
 
 -- Procedimiento para actualizar una Ciudad
-CREATE PROCEDURE Actualizar_Ciudad(
+CREATE PROCEDURE SP_ActualizarCiudad(
     IN p_id_ciudad INT, 
     IN p_nombre_ciudad VARCHAR(100), 
     IN p_descripcion VARCHAR(50)
@@ -291,38 +293,38 @@ BEGIN
     SET nombre_ciudad = p_nombre_ciudad, 
         descripcion = p_descripcion 
     WHERE id_ciudad = p_id_ciudad;
-END 
+END //
 
 -- Procedimiento para eliminar una Ciudad
-CREATE PROCEDURE Eliminar_Ciudad(
+CREATE PROCEDURE SP_EliminarCiudad(
     IN p_id_ciudad INT
     )
 BEGIN
     DELETE FROM Ciudades
     WHERE id_ciudad = p_id_ciudad;
-END 
+END //
 
 -- Procedimiento para consultar Ciudades con filtro
-CREATE PROCEDURE Consultar_Ciudad(
+CREATE PROCEDURE SP_ConsultarCiudad(
     IN p_nombre_ciudad VARCHAR(100)
     )
 BEGIN
     SELECT * FROM Ciudades 
     WHERE nombre_ciudad LIKE CONCAT('%', p_nombre_ciudad, '%');
-END 
+END //
 
 -- Procedimiento para insertar una Dirección
-CREATE PROCEDURE Insertar_Direccion(
+CREATE PROCEDURE SP_InsertarDireccion(
     IN p_direccion VARCHAR(200), 
     IN p_id_ciudad INT
     )
 BEGIN
     INSERT INTO Direcciones (direccion, id_ciudad) 
     VALUES (p_direccion, p_id_ciudad);
-END 
+END //
 
 -- Procedimiento para actualizar una Dirección
-CREATE PROCEDURE Actualizar_Direccion(
+CREATE PROCEDURE SP_ActualizarDireccion(
     IN p_id_direccion INT, 
     IN p_direccion VARCHAR(200), 
     IN p_id_ciudad INT
@@ -332,28 +334,28 @@ BEGIN
     SET direccion = p_direccion, 
         id_ciudad = p_id_ciudad 
     WHERE id_direccion = p_id_direccion;
-END 
+END //
 
 -- Procedimiento para eliminar una Dirección
-CREATE PROCEDURE Eliminar_Direccion(
+CREATE PROCEDURE SP_EliminarDireccion(
     IN p_id_direccion INT
     )
 BEGIN
     DELETE FROM Direcciones 
     WHERE id_direccion = p_id_direccion;
-END 
+END //
 
 -- Procedimiento para consultar Direcciones con filtro
-CREATE PROCEDURE Consultar_Direccion(
+CREATE PROCEDURE SP_ConsultarDireccion(
     IN p_direccion VARCHAR(200)
     )
 BEGIN
     SELECT * FROM Direcciones 
     WHERE direccion LIKE CONCAT('%', p_direccion, '%');
-END 
+END //
 
 -- Procedimiento para insertar un Plan de Afiliación
-CREATE PROCEDURE Insertar_PlanAfiliacion(
+CREATE PROCEDURE SP_InsertarPlanAfiliacion(
     IN p_nombre_plan VARCHAR(50), 
     IN p_descripcion VARCHAR(50), 
     IN p_precio DECIMAL(10,2)
@@ -361,10 +363,10 @@ CREATE PROCEDURE Insertar_PlanAfiliacion(
 BEGIN
     INSERT INTO PlanesAfiliacion (nombre_plan, descripcion, precio) 
     VALUES (p_nombre_plan, p_descripcion, p_precio);
-END 
+END //
 
 -- Procedimiento para actualizar un Plan de Afiliación
-CREATE PROCEDURE Actualizar_PlanAfiliacion(
+CREATE PROCEDURE SP_ActualizarPlanAfiliacion(
     IN p_id_plan_afiliacion INT, 
     IN p_nombre_plan VARCHAR(50), 
     IN p_descripcion VARCHAR(50), 
@@ -376,28 +378,28 @@ BEGIN
         descripcion = p_descripcion, 
         precio = p_precio 
     WHERE id_plan_afiliacion = p_id_plan_afiliacion;
-END 
+END //
 
 -- Procedimiento para eliminar un Plan de Afiliación
-CREATE PROCEDURE Eliminar_PlanAfiliacion(
+CREATE PROCEDURE SP_EliminarPlanAfiliacion(
     IN p_id_plan_afiliacion INT
     )
 BEGIN
     DELETE FROM PlanesAfiliacion 
     WHERE id_plan_afiliacion = p_id_plan_afiliacion;
-END 
+END //
 
 -- Procedimiento para consultar Planes de Afiliación con filtro
-CREATE PROCEDURE Consultar_PlanAfiliacion(
+CREATE PROCEDURE SP_ConsultarPlanAfiliacion(
     IN p_nombre_plan VARCHAR(50)
     )
 BEGIN
     SELECT * FROM PlanesAfiliacion 
     WHERE nombre_plan LIKE CONCAT('%', p_nombre_plan, '%');
-END 
+END //
 
 -- Procedimiento para insertar un Paciente
-CREATE PROCEDURE Insertar_Paciente(
+CREATE PROCEDURE SP_InsertarPaciente(
     IN p_nombre VARCHAR(100), 
     IN p_apellido VARCHAR(100), 
     IN p_tipo_documento INT, 
@@ -406,17 +408,17 @@ CREATE PROCEDURE Insertar_Paciente(
     IN p_telefono VARCHAR(20), 
     IN p_email VARCHAR(100), 
     IN p_direccion INT, 
-    IN p_ciudad VARCHAR(100), 
+    IN p_ciudad INT, 
     IN p_contraseña VARCHAR(100)
 )
 BEGIN
     INSERT INTO Pacientes (nombre, apellido, tipo_documento, fecha_nacimiento, sexo, telefono, email, direccion, ciudad, contraseña) 
     VALUES (p_nombre, p_apellido, p_tipo_documento, p_fecha_nacimiento, p_sexo, p_telefono, p_email, p_direccion, p_ciudad, p_contraseña);
-END 
+END //
 
 -- Procedimiento para actualizar un Paciente
-CREATE PROCEDURE Actualizar_Paciente(
-    IN p_id_paciente INT,
+CREATE PROCEDURE SP_ActualizarPaciente(
+    IN p_documento_paciente INT,
     IN p_nombre VARCHAR(100), 
     IN p_apellido VARCHAR(100), 
     IN p_tipo_documento INT, 
@@ -439,44 +441,43 @@ BEGIN
         direccion = p_direccion, 
         ciudad = p_ciudad, 
         contraseña = p_contraseña
-    WHERE id_paciente = p_id_paciente;
-END 
+    WHERE documento_paciente = p_documento_paciente;
+END //
 
 -- Procedimiento para eliminar un Paciente
-CREATE PROCEDURE Eliminar_Paciente(
-    IN p_id_paciente INT
+CREATE PROCEDURE SP_EliminarPaciente(
+    IN p_documento_paciente INT
     )
 BEGIN
     DELETE FROM Pacientes 
-    WHERE id_paciente = p_id_paciente;
-END 
+    WHERE documento_paciente = p_documento_paciente;
+END //
 
 -- Procedimiento para consultar Pacientes con filtro
-CREATE PROCEDURE Consultar_Paciente(
+CREATE PROCEDURE SP_ConsultarPaciente(
     IN p_nombre VARCHAR(100)
     )
 BEGIN
     SELECT * FROM Pacientes 
     WHERE nombre LIKE CONCAT('%', p_nombre, '%');
-END 
-
+END //
 -- Procedimiento para insertar una Afiliación
-CREATE PROCEDURE Insertar_Afiliacion(
-    IN p_id_paciente INT,
+CREATE PROCEDURE SP_InsertarAfiliacion(
+    IN p_documento_paciente INT,
     IN p_id_plan_afiliacion INT,
     IN p_fecha_inicio DATE,
     IN p_fecha_fin DATE,
     IN p_estado ENUM('Activa', 'Inactiva')
 )
 BEGIN
-    INSERT INTO Afiliaciones (id_paciente, id_plan_afiliacion, fecha_inicio, fecha_fin, estado) 
-    VALUES (p_id_paciente, p_id_plan_afiliacion, p_fecha_inicio, p_fecha_fin, p_estado);
-END 
+    INSERT INTO Afiliaciones (documento_paciente, id_plan_afiliacion, fecha_inicio, fecha_fin, estado) 
+    VALUES (p_documento_paciente, p_id_plan_afiliacion, p_fecha_inicio, p_fecha_fin, p_estado);
+END //
 
 -- Procedimiento para actualizar una Afiliación
-CREATE PROCEDURE Actualizar_Afiliacion(
+CREATE PROCEDURE SP_ActualizarAfiliacion(
     IN p_id_afiliacion INT,
-    IN p_id_paciente INT,
+    IN p_documento_paciente INT,
     IN p_id_plan_afiliacion INT,
     IN p_fecha_inicio DATE,
     IN p_fecha_fin DATE,
@@ -484,44 +485,44 @@ CREATE PROCEDURE Actualizar_Afiliacion(
 )
 BEGIN
     UPDATE Afiliaciones 
-    SET id_paciente = p_id_paciente, 
+    SET documento_paciente = p_documento_paciente, 
         id_plan_afiliacion = p_id_plan_afiliacion, 
         fecha_inicio = p_fecha_inicio, 
         fecha_fin = p_fecha_fin, 
         estado = p_estado
     WHERE id_afiliacion = p_id_afiliacion;
-END 
+END //
 
 -- Procedimiento para eliminar una Afiliación
-CREATE PROCEDURE Eliminar_Afiliacion(
+CREATE PROCEDURE SP_EliminarAfiliacion(
     IN p_id_afiliacion INT
     )
 BEGIN
     DELETE FROM Afiliaciones 
     WHERE id_afiliacion = p_id_afiliacion;
-END 
+END //
 
 -- Procedimiento para consultar Afiliaciones con filtro
-CREATE PROCEDURE Consultar_Afiliacion(
-    IN p_id_paciente INT
+CREATE PROCEDURE SP_ConsultarAfiliacion(
+    IN p_documento_paciente INT
     )
 BEGIN
     SELECT * FROM Afiliaciones 
-    WHERE id_paciente = p_id_paciente;
-END 
+    WHERE documento_paciente = p_documento_paciente;
+END //
 
 -- Procedimiento para insertar una Especialidad de Funcionario
-CREATE PROCEDURE Insertar_EspecialidadFuncionario(
+CREATE PROCEDURE SP_InsertarEspecialidadFuncionario(
     IN p_nombre_especialidad VARCHAR(50), 
     IN p_descripcion VARCHAR(50)
     )
 BEGIN
     INSERT INTO EspecialidadFuncionarios (nombre_especialidad, descripcion) 
     VALUES (p_nombre_especialidad, p_descripcion);
-END 
+END //
 
 -- Procedimiento para actualizar una Especialidad de Funcionario
-CREATE PROCEDURE Actualizar_EspecialidadFuncionario(
+CREATE PROCEDURE SP_ActualizarEspecialidadFuncionario(
     IN p_id_especialidad INT, 
     IN p_nombre_especialidad VARCHAR(50), 
     IN p_descripcion VARCHAR(50)
@@ -531,28 +532,28 @@ BEGIN
     SET nombre_especialidad = p_nombre_especialidad, 
         descripcion = p_descripcion 
     WHERE id_especialidad = p_id_especialidad;
-END 
+END //
 
 -- Procedimiento para eliminar una Especialidad de Funcionario
-CREATE PROCEDURE Eliminar_EspecialidadFuncionario(
+CREATE PROCEDURE SP_EliminarEspecialidadFuncionario(
     IN p_id_especialidad INT
     )
 BEGIN
     DELETE FROM EspecialidadFuncionarios 
     WHERE id_especialidad = p_id_especialidad;
-END 
+END //
 
 -- Procedimiento para consultar Especialidades de Funcionario con filtro
-CREATE PROCEDURE Consultar_EspecialidadFuncionario(
+CREATE PROCEDURE SP_ConsultarEspecialidadFuncionario(
     IN p_nombre_especialidad VARCHAR(50)
     )
 BEGIN
     SELECT * FROM EspecialidadFuncionarios 
     WHERE nombre_especialidad LIKE CONCAT('%', p_nombre_especialidad, '%');
-END 
+END //
 
 -- Procedimiento para insertar un Funcionario
-CREATE PROCEDURE Insertar_Funcionario(
+CREATE PROCEDURE SP_InsertarFuncionario(
     IN p_nombre VARCHAR(100), 
     IN p_apellido VARCHAR(100), 
     IN p_tipo_documento INT, 
@@ -568,10 +569,10 @@ CREATE PROCEDURE Insertar_Funcionario(
 BEGIN
     INSERT INTO Funcionarios (nombre, apellido, tipo_documento, numero_documento, telefono, email, direccion, ciudad, especialidad, rol, contraseña) 
     VALUES (p_nombre, p_apellido, p_tipo_documento, p_numero_documento, p_telefono, p_email, p_direccion, p_ciudad, p_especialidad, p_rol, p_contraseña);
-END 
+END //
 
 -- Procedimiento para actualizar un Funcionario
-CREATE PROCEDURE Actualizar_Funcionario(
+CREATE PROCEDURE SP_ActualizarFuncionario(
     IN p_id_funcionario INT,
     IN p_nombre VARCHAR(100), 
     IN p_apellido VARCHAR(100), 
@@ -598,76 +599,79 @@ BEGIN
         rol = p_rol, 
         contraseña = p_contraseña
     WHERE id_funcionario = p_id_funcionario;
-END 
+END //
 
 -- Procedimiento para eliminar un Funcionario
-CREATE PROCEDURE Eliminar_Funcionario(
+CREATE PROCEDURE SP_EliminarFuncionario(
     IN p_id_funcionario INT
     )
 BEGIN
     DELETE FROM Funcionarios 
     WHERE id_funcionario = p_id_funcionario;
-END 
+END //
 
 -- Procedimiento para consultar Funcionarios con filtro
-CREATE PROCEDURE Consultar_Funcionario(IN p_nombre VARCHAR(100))
+CREATE PROCEDURE SP_ConsultarFuncionario(
+    IN p_nombre VARCHAR(100)
+    )
 BEGIN
     SELECT * FROM Funcionarios 
     WHERE nombre LIKE CONCAT('%', p_nombre, '%');
-END 
+END //
 
 -- Procedimiento para insertar un Tipo de Servicio
-CREATE PROCEDURE Insertar_TipoServicio(
+CREATE PROCEDURE SP_InsertarTipoServicio(
     IN p_nombre_tipo VARCHAR(50), 
     IN p_descripcion VARCHAR(50)
     )
 BEGIN
     INSERT INTO TiposServicios (nombre_tipo, descripcion) 
     VALUES (p_nombre_tipo, p_descripcion);
-END 
+END //
 
 -- Procedimiento para actualizar un Tipo de Servicio
-CREATE PROCEDURE Actualizar_TipoServicio(
+CREATE PROCEDURE SP_ActualizarTipoServicio(
     IN p_id_tipo_servicio INT, 
     IN p_nombre_tipo VARCHAR(50), 
-    IN p_descripcion VARCHAR(50))
+    IN p_descripcion VARCHAR(50)
+    )
 BEGIN
     UPDATE TiposServicios 
     SET nombre_tipo = p_nombre_tipo, 
         descripcion = p_descripcion 
     WHERE id_tipo_servicio = p_id_tipo_servicio;
-END 
+END //
 
 -- Procedimiento para eliminar un Tipo de Servicio
-CREATE PROCEDURE Eliminar_TipoServicio(
+CREATE PROCEDURE SP_EliminarTipoServicio(
     IN p_id_tipo_servicio INT
     )
 BEGIN
     DELETE FROM TiposServicios 
     WHERE id_tipo_servicio = p_id_tipo_servicio;
-END 
+END //
 
 -- Procedimiento para consultar Tipos de Servicio con filtro
-CREATE PROCEDURE Consultar_TipoServicio(
+CREATE PROCEDURE SP_ConsultarTipoServicio(
     IN p_nombre_tipo VARCHAR(50)
     )
 BEGIN
     SELECT * FROM TiposServicios 
     WHERE nombre_tipo LIKE CONCAT('%', p_nombre_tipo, '%');
-END 
+END //
 
 -- Procedimiento para insertar una Categoría de Cita
-CREATE PROCEDURE Insertar_CategoriaCita(
+CREATE PROCEDURE SP_InsertarCategoriaCita(
     IN p_nombre_categoria VARCHAR(50), 
     IN p_descripcion VARCHAR(50)
     )
 BEGIN
     INSERT INTO CategoriasCitas (nombre_categoria, descripcion) 
     VALUES (p_nombre_categoria, p_descripcion);
-END 
+END //
 
 -- Procedimiento para actualizar una Categoría de Cita
-CREATE PROCEDURE Actualizar_CategoriaCita(
+CREATE PROCEDURE SP_ActualizarCategoriaCita(
     IN p_id_categoria_cita INT, 
     IN p_nombre_categoria VARCHAR(50), 
     IN p_descripcion VARCHAR(50)
@@ -677,38 +681,38 @@ BEGIN
     SET nombre_categoria = p_nombre_categoria, 
         descripcion = p_descripcion 
     WHERE id_categoria_cita = p_id_categoria_cita;
-END 
+END //
 
 -- Procedimiento para eliminar una Categoría de Cita
-CREATE PROCEDURE Eliminar_CategoriaCita(
+CREATE PROCEDURE SP_EliminarCategoriaCita(
     IN p_id_categoria_cita INT
     )
 BEGIN
     DELETE FROM CategoriasCitas 
     WHERE id_categoria_cita = p_id_categoria_cita;
-END 
+END //
 
 -- Procedimiento para consultar Categorías de Cita con filtro
-CREATE PROCEDURE Consultar_CategoriaCita(
+CREATE PROCEDURE SP_ConsultarCategoriaCita(
     IN p_nombre_categoria VARCHAR(50)
     )
 BEGIN
     SELECT * FROM CategoriasCitas 
     WHERE nombre_categoria LIKE CONCAT('%', p_nombre_categoria, '%');
-END 
+END //
 
 -- Procedimiento para insertar una Categoría de Examen
-CREATE PROCEDURE Insertar_CategoriaExamen(
+CREATE PROCEDURE SP_InsertarCategoriaExamen(
     IN p_nombre_categoria VARCHAR(50), 
     IN p_descripcion VARCHAR(50)
     )
 BEGIN
     INSERT INTO CategoriasExamenes (nombre_categoria, descripcion) 
     VALUES (p_nombre_categoria, p_descripcion);
-END 
+END //
 
 -- Procedimiento para actualizar una Categoría de Examen
-CREATE PROCEDURE Actualizar_CategoriaExamen(
+CREATE PROCEDURE SP_ActualizarCategoriaExamen(
     IN p_id_categoria_examen INT, 
     IN p_nombre_categoria VARCHAR(50), 
     IN p_descripcion VARCHAR(50)
@@ -718,29 +722,29 @@ BEGIN
     SET nombre_categoria = p_nombre_categoria, 
         descripcion = p_descripcion 
     WHERE id_categoria_examen = p_id_categoria_examen;
-END 
+END //
 
 -- Procedimiento para eliminar una Categoría de Examen
-CREATE PROCEDURE Eliminar_CategoriaExamen(
+CREATE PROCEDURE SP_EliminarCategoriaExamen(
     IN p_id_categoria_examen INT
     )
 BEGIN
     DELETE FROM CategoriasExamenes 
     WHERE id_categoria_examen = p_id_categoria_examen;
-END 
+END //
 
 -- Procedimiento para consultar Categorías de Examen con filtro
-CREATE PROCEDURE Consultar_CategoriaExamen(
+CREATE PROCEDURE SP_ConsultarCategoriaExamen(
     IN p_nombre_categoria VARCHAR(50)
     )
 BEGIN
     SELECT * FROM CategoriasExamenes 
     WHERE nombre_categoria LIKE CONCAT('%', p_nombre_categoria, '%');
-END 
+END //
 
 -- Procedimiento para insertar un Examen
-CREATE PROCEDURE Insertar_Examen(
-    IN p_id_paciente INT, 
+CREATE PROCEDURE SP_InsertarExamen(
+    IN p_documento_paciente INT, 
     IN p_id_funcionario INT, 
     IN p_fecha_examen DATETIME, 
     IN p_resultado VARCHAR(250), 
@@ -748,14 +752,14 @@ CREATE PROCEDURE Insertar_Examen(
     IN p_id_tipo_servicio INT
 )
 BEGIN
-    INSERT INTO Examenes (id_paciente, id_funcionario, fecha_examen, resultado, id_categoria_examen, id_tipo_servicio) 
-    VALUES (p_id_paciente, p_id_funcionario, p_fecha_examen, p_resultado, p_id_categoria_examen, p_id_tipo_servicio);
-END 
+    INSERT INTO Examenes (documento_paciente, id_funcionario, fecha_examen, resultado, id_categoria_examen, id_tipo_servicio) 
+    VALUES (p_documento_paciente, p_id_funcionario, p_fecha_examen, p_resultado, p_id_categoria_examen, p_id_tipo_servicio);
+END //
 
 -- Procedimiento para actualizar un Examen
-CREATE PROCEDURE Actualizar_Examen(
+CREATE PROCEDURE SP_ActualizarExamen(
     IN p_id_examen INT, 
-    IN p_id_paciente INT, 
+    IN p_documento_paciente INT, 
     IN p_id_funcionario INT, 
     IN p_fecha_examen DATETIME, 
     IN p_resultado VARCHAR(250), 
@@ -764,36 +768,36 @@ CREATE PROCEDURE Actualizar_Examen(
 )
 BEGIN
     UPDATE Examenes 
-    SET id_paciente = p_id_paciente, 
+    SET documento_paciente = p_documento_paciente, 
         id_funcionario = p_id_funcionario, 
         fecha_examen = p_fecha_examen, 
         resultado = p_resultado, 
         id_categoria_examen = p_id_categoria_examen, 
         id_tipo_servicio = p_id_tipo_servicio
     WHERE id_examen = p_id_examen;
-END 
+END //
 
 -- Procedimiento para eliminar un Examen
-CREATE PROCEDURE Eliminar_Examen(
+CREATE PROCEDURE SP_EliminarExamen(
     IN p_id_examen INT
     )
 BEGIN
     DELETE FROM Examenes 
     WHERE id_examen = p_id_examen;
-END 
+END //
 
 -- Procedimiento para consultar Exámenes con filtro
-CREATE PROCEDURE Consultar_Examen(
-    IN p_id_paciente INT
+CREATE PROCEDURE SP_ConsultarExamen(
+    IN p_documento_paciente INT
     )
 BEGIN
     SELECT * FROM Examenes 
-    WHERE id_paciente = p_id_paciente;
-END 
+    WHERE documento_paciente = p_documento_paciente;
+END //
 
 -- Procedimiento para insertar una Cita
-CREATE PROCEDURE Insertar_Cita(
-    IN p_id_paciente INT, 
+CREATE PROCEDURE SP_InsertarCita(
+    IN p_documento_paciente INT, 
     IN p_id_funcionario INT, 
     IN p_fecha_cita DATETIME, 
     IN p_estado ENUM('Pendiente', 'Confirmada', 'Cancelada', 'Completada'), 
@@ -802,14 +806,14 @@ CREATE PROCEDURE Insertar_Cita(
     IN p_notificaciones BOOLEAN
 )
 BEGIN
-    INSERT INTO Citas (id_paciente, id_funcionario, fecha_cita, estado, id_categoria_cita, id_tipo_servicio, notificaciones) 
-    VALUES (p_id_paciente, p_id_funcionario, p_fecha_cita, p_estado, p_id_categoria_cita, p_id_tipo_servicio, p_notificaciones);
-END 
+    INSERT INTO Citas (documento_paciente, id_funcionario, fecha_cita, estado, id_categoria_cita, id_tipo_servicio, notificaciones) 
+    VALUES (p_documento_paciente, p_id_funcionario, p_fecha_cita, p_estado, p_id_categoria_cita, p_id_tipo_servicio, p_notificaciones);
+END //
 
 -- Procedimiento para actualizar una Cita
-CREATE PROCEDURE Actualizar_Cita(
+CREATE PROCEDURE SP_ActualizarCita(
     IN p_id_cita INT,
-    IN p_id_paciente INT, 
+    IN p_documento_paciente INT, 
     IN p_id_funcionario INT, 
     IN p_fecha_cita DATETIME, 
     IN p_estado ENUM('Pendiente', 'Confirmada', 'Cancelada', 'Completada'), 
@@ -819,7 +823,7 @@ CREATE PROCEDURE Actualizar_Cita(
 )
 BEGIN
     UPDATE Citas 
-    SET id_paciente = p_id_paciente, 
+    SET documento_paciente = p_documento_paciente, 
         id_funcionario = p_id_funcionario, 
         fecha_cita = p_fecha_cita, 
         estado = p_estado, 
@@ -827,29 +831,29 @@ BEGIN
         id_tipo_servicio = p_id_tipo_servicio, 
         notificaciones = p_notificaciones
     WHERE id_cita = p_id_cita;
-END 
+END //
 
 -- Procedimiento para eliminar una Cita
-CREATE PROCEDURE Eliminar_Cita(
+CREATE PROCEDURE SP_EliminarCita(
     IN p_id_cita INT
     )
 BEGIN
     DELETE FROM Citas 
     WHERE id_cita = p_id_cita;
-END 
+END //
 
 -- Procedimiento para consultar Citas con filtro
-CREATE PROCEDURE Consultar_Cita(
-    IN p_id_paciente INT
+CREATE PROCEDURE SP_ConsultarCita(
+    IN p_documento_paciente INT
     )
 BEGIN
     SELECT * FROM Citas 
-    WHERE id_paciente = p_id_paciente;
-END 
+    WHERE documento_paciente = p_documento_paciente;
+END //
 
 -- Procedimiento para insertar un Pago
-CREATE PROCEDURE Insertar_Pago(
-    IN p_id_paciente INT, 
+CREATE PROCEDURE SP_InsertarPago(
+    IN p_documento_paciente INT, 
     IN p_id_cita INT, 
     IN p_id_examen INT, 
     IN p_id_afiliacion INT, 
@@ -859,14 +863,14 @@ CREATE PROCEDURE Insertar_Pago(
     IN p_tipo_servicio INT
 )
 BEGIN
-    INSERT INTO Pagos (id_paciente, id_cita, id_examen, id_afiliacion, monto, fecha_pago, descripcion, tipo_servicio) 
-    VALUES (p_id_paciente, p_id_cita, p_id_examen, p_id_afiliacion, p_monto, p_fecha_pago, p_descripcion, p_tipo_servicio);
-END 
+    INSERT INTO Pagos (documento_paciente, id_cita, id_examen, id_afiliacion, monto, fecha_pago, descripcion, tipo_servicio) 
+    VALUES (p_documento_paciente, p_id_cita, p_id_examen, p_id_afiliacion, p_monto, p_fecha_pago, p_descripcion, p_tipo_servicio);
+END //
 
 -- Procedimiento para actualizar un Pago
-CREATE PROCEDURE Actualizar_Pago(
+CREATE PROCEDURE SP_ActualizarPago(
     IN p_id_pago INT,
-    IN p_id_paciente INT, 
+    IN p_documento_paciente INT, 
     IN p_id_cita INT, 
     IN p_id_examen INT, 
     IN p_id_afiliacion INT, 
@@ -877,7 +881,7 @@ CREATE PROCEDURE Actualizar_Pago(
 )
 BEGIN
     UPDATE Pagos 
-    SET id_paciente = p_id_paciente, 
+    SET documento_paciente = p_documento_paciente, 
         id_cita = p_id_cita, 
         id_examen = p_id_examen, 
         id_afiliacion = p_id_afiliacion, 
@@ -886,28 +890,28 @@ BEGIN
         descripcion = p_descripcion, 
         tipo_servicio = p_tipo_servicio
     WHERE id_pago = p_id_pago;
-END 
+END //
 
 -- Procedimiento para eliminar un Pago
-CREATE PROCEDURE Eliminar_Pago(
+CREATE PROCEDURE SP_EliminarPago(
     IN p_id_pago INT
     )
 BEGIN
     DELETE FROM Pagos 
     WHERE id_pago = p_id_pago;
-END 
+END //
 
 -- Procedimiento para consultar Pagos con filtro
-CREATE PROCEDURE Consultar_Pago(
-    IN p_id_paciente INT
+CREATE PROCEDURE SP_ConsultarPago(
+    IN p_documento_paciente INT
 )
 BEGIN
     SELECT * FROM Pagos 
-    WHERE id_paciente = p_id_paciente;
-END 
+    WHERE documento_paciente = p_documento_paciente;
+END //
 
 -- Procedimiento para insertar una Publicación
-CREATE PROCEDURE Insertar_Publicacion(
+CREATE PROCEDURE SP_InsertarPublicacion(
     IN p_titulo VARCHAR(100), 
     IN p_contenido TEXT, 
     IN p_imagen VARCHAR(255), 
@@ -917,10 +921,10 @@ CREATE PROCEDURE Insertar_Publicacion(
 BEGIN
     INSERT INTO Publicaciones (titulo, contenido, imagen, fecha_publicacion, autor) 
     VALUES (p_titulo, p_contenido, p_imagen, p_fecha_publicacion, p_autor);
-END 
+END //
 
 -- Procedimiento para actualizar una Publicación
-CREATE PROCEDURE Actualizar_Publicacion(
+CREATE PROCEDURE SP_ActualizarPublicacion(
     IN p_id_publicacion INT,
     IN p_titulo VARCHAR(100), 
     IN p_contenido TEXT, 
@@ -932,28 +936,28 @@ BEGIN
     UPDATE Publicaciones 
     SET titulo = p_titulo, contenido = p_contenido, imagen = p_imagen, fecha_publicacion = p_fecha_publicacion, autor = p_autor
     WHERE id_publicacion = p_id_publicacion;
-END 
+END //
 
 -- Procedimiento para eliminar una Publicación
-CREATE PROCEDURE Eliminar_Publicacion(
+CREATE PROCEDURE SP_EliminarPublicacion(
     IN p_id_publicacion INT
     )
 BEGIN
     DELETE FROM Publicaciones 
     WHERE id_publicacion = p_id_publicacion;
-END 
+END //
 
 -- Procedimiento para consultar Publicaciones con filtro
-CREATE PROCEDURE Consultar_Publicacion(
+CREATE PROCEDURE SP_ConsultarPublicacion(
     IN p_titulo VARCHAR(100)
     )
 BEGIN
     SELECT * FROM Publicaciones 
     WHERE titulo LIKE CONCAT('%', p_titulo, '%');
-END 
+END //
 
 -- Procedimiento para insertar un horario en la Agenda del Doctor
-CREATE PROCEDURE Insertar_HorarioAgenda(
+CREATE PROCEDURE SP_InsertarHorarioAgenda(
     IN p_id_funcionario INT, 
     IN p_fecha DATE, 
     IN p_hora_inicio TIME, 
@@ -963,10 +967,10 @@ CREATE PROCEDURE Insertar_HorarioAgenda(
 BEGIN
     INSERT INTO AgendaDoctor (id_funcionario, fecha, hora_inicio, hora_fin, disponible) 
     VALUES (p_id_funcionario, p_fecha, p_hora_inicio, p_hora_fin, p_disponible);
-END 
+END //
 
 -- Procedimiento para actualizar un horario en la Agenda del Doctor
-CREATE PROCEDURE Actualizar_HorarioAgenda(
+CREATE PROCEDURE SP_ActualizarHorarioAgenda(
     IN p_id_agenda INT,
     IN p_id_funcionario INT, 
     IN p_fecha DATE, 
@@ -978,25 +982,27 @@ BEGIN
     UPDATE AgendaDoctor 
     SET id_funcionario = p_id_funcionario, fecha = p_fecha, hora_inicio = p_hora_inicio, hora_fin = p_hora_fin, disponible = p_disponible
     WHERE id_agenda = p_id_agenda;
-END 
+END //
 
 -- Procedimiento para eliminar un horario en la Agenda del Doctor
-CREATE PROCEDURE Eliminar_HorarioAgenda(
+CREATE PROCEDURE SP_EliminarHorarioAgenda(
     IN p_id_agenda INT
     )
 BEGIN
     DELETE FROM AgendaDoctor 
     WHERE id_agenda = p_id_agenda;
-END 
+END //
 
 -- Procedimiento para consultar la Agenda del Doctor con filtro
-CREATE PROCEDURE Consultar_HorarioAgenda(
+CREATE PROCEDURE SP_ConsultarHorarioAgenda(
     IN p_id_funcionario INT
     )
 BEGIN
     SELECT * FROM AgendaDoctor 
     WHERE id_funcionario = p_id_funcionario;
-END 
+END //
+
+DELIMITER ;
 
 -- VISTAS SIMPLES
 
