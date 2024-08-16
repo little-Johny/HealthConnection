@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Connection</title>
+    <link rel="stylesheet" href="./CSS/ConsultaRegistrosStyle.css">
+    <link rel="shortcut icon" href="../Images/tab_icon.png" type="image/x-icon">
+</head>
+<body>
+   
+    <div id="navbar" ></div>
+
+    <div class="container-record">
+        
+        
+
+        <!-- Menú de navegación -->
+        <div class="nav-menu">
+            <button onclick="showSection('usuarios')">Usuarios</button>
+            <button onclick="showSection('funcionarios')">Funcionarios</button>
+            
+        </div>
+
+        <!-- Secciones de contenido -->
+        <div class="main-content">
+            <!-- Sección Citas -->
+            <div id="usuarios" class="content-section">
+                <div class="title">
+                    <h2>Usuarios</h2>
+                </div>
+                
+                <!-- Espacio para llenar la información de citas -->
+                <div class="appointment-card">
+                    <div class="info">
+                        <p>Documento: 1012345424423</p>
+                        <p>nombre: johny Molano</p>
+                    </div>
+                    
+                    <article>
+                        <button id="cita-edit" class="primary-button"><a href="./historialSolicitudes.html">Ver historial de solicitudes</a></button>
+                        <button id="cita-edit" class="primary-button"><a href="./Historial clinico.html">Ver historial medico</a></button>
+                        <button id="cita-edit" class="primary-button"><a href="./Actualizacion de datos.html">Editar Pefil</a></button>
+
+                    </article>
+                    
+                </div>
+
+                <div class="appointment-card">
+                    <div class="info">
+                        <p>Documento: 1012345424423</p>
+                        <p>nombre: johny Molano</p>
+                    </div>
+                    
+                    <article>
+                        <button id="cita-edit" class="primary-button"><a href="./historialSolicitudes.html">Ver historial de solicitudes</a></button>
+                        <button id="cita-edit" class="primary-button"><a href="./Historial clinico.html">Ver historial medico</a></button>
+                        <button id="cita-edit" class="primary-button"><a href="./Actualizacion de datos.html">Editar Pefil</a></button>
+                    </article>
+                    
+                </div>
+                
+            </div>
+
+            <!-- Sección Exámenes -->
+            <div id="funcionarios" class="content-section">
+                <div class="title">
+                    <h2>Funcionarios</h2>
+                </div>
+                
+                <div class="appointment-card">
+                    <div class="info-doctor">
+                        <p>Identificador: 1012345424423</p>
+                        <p>nombre: johny Molano</p>
+                        <p>rol: doctor</p>
+                        <p>categoria:Psicologia</p>
+                    </div>
+
+                    <article>
+                        <button id="examen-edit" class="primary-button"><a href="./Actualizacion de datos.html">Editar Perfil</a></button>
+                        <button id="examen-edit" class="primary-button"><a href="./Agendadoc.html">Ver Agenda</a></button>
+                    </article>
+                </div>
+
+                <div class="primary-button"><a href="./registrarfuncionario.html">Crea un registro nuevo</a></div>
+                </div>
+                
+            </div>
+
+            
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarDiv = document.getElementById('navbar');
+            /* Verificamos si navbar existe y cargamos el contenido */
+            if (navbarDiv) {
+                fetch('navbar-prototype.html')
+                   // Convertimos la respuesta en un archivo de texto
+                    .then(response => response.text())
+                    .then(data => {
+                        // Modificamos el contenido HTML de navbarDiv
+                        navbarDiv.innerHTML = data;
+                        
+                    })
+                    // Colocamos el catch en caso de que la solicitud falle
+                    .catch(error => console.error('Error cargando el navbar:', error));
+            }
+            // Mostramos la primera sección por defecto
+            showSection('usuarios');
+        });
+        
+        function showSection(sectionId) {
+            // Ocultamos todas las secciones
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Mostramos la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+
+            // Actualizamos la clase active en el menú de navegación
+            const buttons = document.querySelectorAll('.nav-menu button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`.nav-menu button[onclick="showSection('${sectionId}')"]`).classList.add('active');
+        }
+
+    </script>
+</body>
+</html>

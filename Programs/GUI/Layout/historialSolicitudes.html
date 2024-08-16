@@ -4,20 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Connection</title>
-    <link rel="stylesheet" href="./Historialstyle.css">
+    <link rel="stylesheet" href="./CSS/historialSolicitudesStyle.css">
     <link rel="shortcut icon" href="../Images/tab_icon.png" type="image/x-icon">
 </head>
 <body>
    
     <div id="navbar" ></div>
+
     <div class="container-record">
         
-        <div class="searching-container">
-            <div class="search-bar">
-                <input type="text" placeholder="Ingresa la referencia de pago que desees">
-                <button type="button">🔎</button>
-            </div>
-        </div>
+        
 
         <!-- Menú de navegación -->
         <div class="nav-menu">
@@ -43,6 +39,11 @@
                     <p>Fecha: 20/06/2024</p>
                     <p>Hora: 09:00 AM</p>
                     <p>Lugar: Centro de atención Chapinero</p>
+
+                    <article>
+                        <button id="cita-edit" class="primary-button">Editar cita</button>
+                    </article>
+                    
                 </div>
                 <div class="appointment-card">
                     <p>Paciente: Ana Gomez</p>
@@ -50,6 +51,10 @@
                     <p>Fecha: 22/06/2024</p>
                     <p>Hora: 11:00 AM</p>
                     <p>Lugar: Centro de atención Norte</p>
+
+                    <article>
+                        <button id="cita-edit" class="primary-button">Editar cita</button>
+                    </article>
                 </div>
             </div>
 
@@ -65,6 +70,12 @@
                     <p>Fecha: 25/06/2024</p>
                     <p>Hora: 10:00 AM</p>
                     <p>Lugar: Centro de atención Sur</p>
+
+                    <article>
+                        <button id="examen-edit" class="primary-button"><a href="./modifyExamen.html">Editar examen</a></button>
+                        <button id="examen-edit" class="primary-button"><a href="./resultados.html">ver resultado</a></button>
+                    </article>
+                </div>
                 </div>
             </div>
 
@@ -79,10 +90,13 @@
                     <p>Autorización: Cirugía de rodilla</p>
                     <p>Fecha: 30/06/2024</p>
                     <p>Estado: Autorizado</p>
-                </div>
-            </div>
 
-            <!-- Sección Copagos -->
+                    <article>
+                        <button id="autorization-edit" class="primary-button"><a href="http://">ver Autorizacion</a></button>
+                    </article>
+                </div>
+                </div>
+
             <div id="copagos" class="content-section">
                 <div class="title">
                     <h2>Copagos</h2>
@@ -95,8 +109,9 @@
                     <p>Hora: 10:30 AM</p>
                     <p>Lugar: Centro de atención Kennedy P</p>
                     <p class="copago">Realizar COPAGO = 10.300$</p>
+
                     <div class="actions">
-                        <button class="edit">Editar Pago</button>
+                        <button class="edit"><a href="./modifyPagos.html">Editar Pago</a></button>
                         <button class="delete">Eliminar</button>
                     </div>
                 </div>
@@ -113,8 +128,15 @@
                     <p>Plan: Plan Básico</p><br>
                     <p>Fecha de Inicio: 01/01/2023</p><br>
                     <p>Estado: Activo</p><br>
+
+                    <article>
+                        <button id="afiliation-edit" class="primary-button"><a href="./modifyAfiliacion.html">Editar Afiliacion</a></button>
+                    </article>
                 </div>
             </div>
+           
+            
+            
         </div>
     </div>
 
@@ -155,6 +177,21 @@
             });
             document.querySelector(`.nav-menu button[onclick="showSection('${sectionId}')"]`).classList.add('active');
         }
+
+        function redirectToPage(url) {
+            window.location.href = url;
+        }
+        
+        // Selecciona todos los botones con la clase 'redirect-button'
+        const buttons= document.querySelectorAll('#cita-edit');
+        
+        // Asocia la función a cada botón
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Cambia la URL según el botón o utiliza una URL general
+                redirectToPage('./modifyCitas.html');
+            });
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,88 @@
+ /* Importación de fuentes y variables */
+ @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+ :root {
+     --color-principal: #ff914d;
+     --color-secundario: #6C5F5B;
+     --color-complementario: #4F4A45;
+     --negro: #151515;
+     --gris-clarito: #9f9e9ed4;
+     --white: #FFFFFF;
+     --fuente-principal: "Roboto Mono", monospace;
+     --fuente-secundaria: 'Nunito', sans-serif;
+     --small-font: 14px;
+     --medium-font: 16px;
+     --large-font: 18px;
+     --gris-fondo: #e8e5e5;
+     --logo-font: "Coustard", serif;
+ }
+
+ /* Estilos generales */
+ body {
+     font-family: var(--fuente-secundaria);
+     background-color: var(--gris-fondo);
+     margin: 0;
+     padding: 0;
+ }
+
+ .container-agenda {
+     width: 100%;
+     max-width: 800px;
+     margin: 0 auto;
+     padding: 20px;
+ }
+
+ .agenda {
+     border: 1px solid var(--color-secundario);
+     background-color: var(--color-principal);
+     margin-bottom: 20px;
+     padding: 10px;
+ }
+
+ table {
+     width: 100%;
+     border-collapse: collapse;
+     background-color: var(--white);
+ }
+
+ th, td {
+     border: 1px solid var(--gris-clarito);
+     padding: 10px;
+     text-align: center;
+     vertical-align: middle;
+ }
+
+ .header-mes {
+     background-color: var(--color-secundario);
+     font-size: var(--large-font);
+     font-family: var(--logo-font);
+     font-weight: bold;
+     color: var(--white);
+ }
+
+ .buttons {
+     display: flex;
+     justify-content: space-between;
+     padding: 10px 0;
+ }
+
+ button {
+     padding: 10px 20px;
+     border: none;
+     cursor: pointer;
+     font-size: var(--medium-font);
+     font-family: var(--fuente-principal);
+     color: var(--white);
+ }
+
+ .agendar {
+     background-color: var(--color-principal);
+ }
+
+ .eliminar-cita {
+     background-color: var(--color-complementario);
+ }
+
+ .modificar-cita {
+     background-color: var(--color-secundario);
+ }

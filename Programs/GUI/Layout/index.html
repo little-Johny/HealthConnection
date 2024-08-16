@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Connection</title>
+    <link rel="stylesheet" href="./CSS/index.css">
+</head>
+<body>
+    <!-- <header>
+        <div class="logo">
+            <img src="" alt="">
+            <h1>Health Connection</h1>
+        </div>
+        <nav>
+            <a href="../Johny/login.html">Inicio Sesión</a>
+            <a href="#" class="register">Registrarse</a>
+        </nav>
+    </header> -->
+    <nav id="navbar"></nav>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h2>AFILIATE AHORA!</h2>
+            <p>Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi.</p>
+            <button>Leer más</button>
+        </div>
+        <div class="hero-image">
+            <img src="../Johny/images/Doctor.png" alt="Doctor and patient">
+        </div>
+    </section>
+
+    <section class="services">
+        <h2>Nuestros Servicios</h2>
+        <div class="service-cards">
+            <div class="card">
+                <img src="../Johny/images/citas.png" alt="Citas Médicas">
+                <h3>Citas Médicas</h3>
+                <p>Descripción breve del servicio.</p>
+                <button>Leer más</button>
+            </div>
+            <div class="card">
+                <img src="../Johny/images/citas.png" alt="Exámenes">
+                <h3>Exámenes</h3>
+                <p>Descripción breve del servicio.</p>
+                <button>Leer más</button>
+            </div>
+            <div class="card">
+                <img src="../Johny/images/citas.png" alt="Jornadas de Vacunación">
+                <h3>Jornadas de Vacunación</h3>
+                <p>Descripción breve del servicio.</p>
+                <button>Leer más</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <nav class="footer-nav">
+            <a href="#">Inicio</a>
+            <a href="#">Citas</a>
+            <a href="#">Exámenes</a>
+            <a href="#">Doctores</a>
+        </nav>
+        <div class="social-media">
+            <a href="#">Twitter</a>
+            <a href="#">YouTube</a>
+            <a href="#">Facebook</a>
+        </div>
+        <p>&copy; 2024 - Health Connection</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarDiv = document.getElementById('navbar');
+            /* Verificamos si navbar existe y cargamos el contenido */
+            if (navbarDiv) {
+                fetch('navbar-prototype.html')
+                   // Convertimos la respuesta en un archivo de texto
+                    .then(response => response.text())
+                    .then(data => {
+                        // Modificamos el contenido HTML de navbarDiv
+                        navbarDiv.innerHTML = data;
+                        
+                    })
+                    // Colocamos el catch en caso de que la solicitud falle
+                    .catch(error => console.error('Error cargando el navbar:', error));
+            }
+            });
+    </script>
+</body>
+</html>

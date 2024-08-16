@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Exámenes</title>
+    <link rel="stylesheet" href="./CSS/resultadosStyle.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+    <div class="container-result">
+        <div class="info-paciente">
+            <p>Samuel Useche Chaparro</p>
+            <p>T.I: 1013113784</p>
+            <p>Tel: 3107838443</p>
+            <p>Correo: samuuseche01@gmail.com</p>
+        </div>
+        <div class="tabla-resultados">
+            <table>
+                <tr>
+                    <th>Especialidad del Examen</th>
+                    <th>Hecho el día</th>
+                    <th>Paciente</th>
+                </tr>
+                <tr>
+                    <td>Optometría</td>
+                    <td>16/03/2024</td>
+                    <td>Samuel Useche Chaparro</td>
+                </tr>
+            </table>
+        </div>
+        <div class="boton-descargar">
+            <button>Descargar</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarDiv = document.getElementById('navbar');
+            /* Verificamos si navbar existe y cargamos el contenido */
+            if (navbarDiv) {
+                fetch('navbar-prototype.html')
+                   // Convertimos la respuesta en un archivo de texto
+                    .then(response => response.text())
+                    .then(data => {
+                        // Modificamos el contenido HTML de navbarDiv
+                        navbarDiv.innerHTML = data;
+                        
+                    })
+                    // Colocamos el catch en caso de que la solicitud falle
+                    .catch(error => console.error('Error cargando el navbar:', error));
+            }
+            
+        });
+    </script>
+</body>
+</html>

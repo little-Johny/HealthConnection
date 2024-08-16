@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Médica</title>
+    <link rel="stylesheet" href="./CSS/AgendadocStyle.css">
+    
+</head>
+<body>
+    <nav id="navbar"></nav>
+    <div class="container-agenda">
+        <div class="agenda">
+            <table>
+                <tr>
+                    <th colspan="10" class="header-mes">MARZO</th>
+                </tr>
+                <tr>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                    <th>9</th>
+                    <th>10</th>
+                </tr>
+                <tr>
+                    <td>6AM Juan Vasques</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <!-- Agrega más filas para otras horas -->
+            </table>
+        </div>
+        <div class="buttons">
+            <button class="agendar"><a href="./agendamiento-citas.html">Agendar</a></button>
+            <button class="eliminar-cita">Eliminar cita</button>
+            <button class="modificar-cita"><a href="./modifyCitas.html">Modificar cita</a></button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarDiv = document.getElementById('navbar');
+            /* Verificamos si navbar existe y cargamos el contenido */
+            if (navbarDiv) {
+                fetch('navbar-prototype.html')
+                   // Convertimos la respuesta en un archivo de texto
+                    .then(response => response.text())
+                    .then(data => {
+                        // Modificamos el contenido HTML de navbarDiv
+                        navbarDiv.innerHTML = data;
+                        
+                    })
+                    // Colocamos el catch en caso de que la solicitud falle
+                    .catch(error => console.error('Error cargando el navbar:', error));
+            }
+           
+        });
+    </script>
+</body>
+</html>

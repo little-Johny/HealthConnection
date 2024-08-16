@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial Clínico</title>
+    <link rel="stylesheet" href="./CSS/historialclinico.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+    <h1>Historial Clínico</h1>
+
+    <form>
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre">
+
+        <label for="documento">Documento</label>
+        <input type="text" id="documento" name="documento">
+
+        <label for="genero">Género</label>
+        <select id="genero" name="genero">
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+        </select>
+
+        <label for="nacionalidad">Nacionalidad</label>
+        <input type="text" id="nacionalidad" name="nacionalidad">
+
+        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento">
+
+        <label for="edad">Edad</label>
+        <input type="number" id="edad" name="edad">
+
+        <label for="tipo_sangre">Tipo de Sangre</label>
+        <input type="text" id="tipo_sangre" name="tipo_sangre">
+
+        <label for="alergias">Alergias</label>
+        <textarea id="alergias" name="alergias" rows="3"></textarea>
+
+        <label for="operaciones">Operaciones</label>
+        <textarea id="operaciones" name="operaciones" rows="3"></textarea>
+
+        <label for="enfermedades">Enfermedades</label>
+        <textarea id="enfermedades" name="enfermedades" rows="3"></textarea>
+
+        <label for="lesiones">Lesiones</label>
+        <textarea id="lesiones" name="lesiones" rows="3"></textarea>
+
+        <label for="novedades">Novedades</label>
+        <textarea id="novedades" name="novedades" rows="3"></textarea>
+
+        <div class="button-container">
+            <button type="submit">Confirmar Cambios</button>
+            <button type="reset">Borrar</button>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarDiv = document.getElementById('navbar');
+            /* Verificamos si navbar existe y cargamos el contenido */
+            if (navbarDiv) {
+                fetch('navbar-prototype.html')
+                   // Convertimos la respuesta en un archivo de texto
+                    .then(response => response.text())
+                    .then(data => {
+                        // Modificamos el contenido HTML de navbarDiv
+                        navbarDiv.innerHTML = data;
+                        
+                    })
+                    // Colocamos el catch en caso de que la solicitud falle
+                    .catch(error => console.error('Error cargando el navbar:', error));
+            }
+            
+        });
+    </script>
+</body>
+</html>

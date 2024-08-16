@@ -39,7 +39,7 @@
         }
 
         nav {
-            width: 100%;
+            width: 95%;
             display: flex;
             justify-content: space-between;
             padding: 20px;
@@ -47,10 +47,10 @@
             top: 0;
         }
 
-        .logo img {
+        /* .logo img {
             width: 150px;
             height: auto;
-        }
+        } */
 
         /* .navbar {
             width: 100%;
@@ -106,6 +106,7 @@
             overflow-x: hidden;
             width: 100%;
             box-sizing: border-box;
+            background-color: var(--color-principal);
         }
 
         .about {
@@ -113,11 +114,12 @@
         }
 
         .service-card {
-            background-color: #f9f9f9;
+            background-color: var(--white);
             padding: 20px;
             margin: 20px auto;
+            border: 1px solid var(--negro);
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px var(--negro);
             max-width: 600px;
         }
 

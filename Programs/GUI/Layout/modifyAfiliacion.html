@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./CSS/modifyAfiliacionStyle.CSS">
+    <title>Detalles de Afiliacion</title>
+</head>
+<body>
+    <nav id="navbar"></nav>
+    <section class="edit-container">
+        <section id="edit">
+            <h2>Edita</h2>
+            <form action="#" method="post">
+                <div class="form-group">
+                    <label for="specialty">Plan Afiliacion</label>
+                    <select id="specialty" name="specialty">
+                        <option value="Basico">Basico</option>
+                        <option value="Estandar">Estandar</option>
+                        <option value="Premium">Premium</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>¿Servicio de salud actual?</label>
+                    <label><input type="radio" name="specific-doctor" value="si"> Sí</label>
+                    <label><input type="radio" name="specific-doctor" value="no"> No</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialty">Tipo de trabajo</label>
+                    <select id="specialty" name="specialty">
+                        <option value="independiente">independiente</option>
+                        <option value="Empleado">Empleado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="center">¿Dónde te gustaría ser atendido?</label>
+                    <select id="center" name="center">
+                        <option value="">Selecciona un centro de atención</option>
+                        <option value="">Soacha</option>
+                        <option value="">Bosa Laureles</option>
+                        <option value="">Kennedy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Fecha de afiliacion</label>
+                    <input type="date" id="date" name="date">
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Valor</label>
+                    <input type="text" id="date" name="date" value="100.000$">
+                </div>
+                
+                
+                <div class="buttons">
+                    <button type="submit" class="confirm"><a href="./historialSolicitudes.html">Confirmar</a></button>
+                    <button type="submit" class="cancel"><a href="./historialSolicitudes.html">Cancelar</a></button>
+                </div>
+
+
+            </form>
+        </section>
+    
+        
+    
+        
+    </section>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarDiv = document.getElementById('navbar');
+            /* Verificamos si navbar existe y cargamos el contenido */
+            if (navbarDiv) {
+                fetch('navbar-prototype.html')
+                   // Convertimos la respuesta en un archivo de texto
+                    .then(response => response.text())
+                    .then(data => {
+                        // Modificamos el contenido HTML de navbarDiv
+                        navbarDiv.innerHTML = data;
+                        
+                    })
+                    // Colocamos el catch en caso de que la solicitud falle
+                    .catch(error => console.error('Error cargando el navbar:', error));
+            }
+            
+        });
+    </script>
+</body>
+</html>

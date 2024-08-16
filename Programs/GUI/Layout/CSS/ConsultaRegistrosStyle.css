@@ -36,36 +36,15 @@ body {
 
 }
 
-.searching-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
+
 
 .logo img {
     width: 50px;
     height: 50px;
 }
 
-.search-bar {
-    display: flex;
-    align-items: center;
-}
 
-.search-bar input {
-    width: 400px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 25px 0 0 25px;
-}
 
-.search-bar button {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 0 25px 25px 0;
-}
 
 .user-icon img {
     width: 40px;
@@ -137,11 +116,32 @@ body {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
+.info{
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-doctor{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
 
 .appointment-card p {
     margin: 10px 0;
 }
+.primary-button{
+    background-color: var(--white);
+    color: var(--color-principal);
+    border: 2px solid var(--color-principal);
+    font-size: var(--large-font);
+    border-radius:8px ;
+}
 
+.primary-button:hover{
+    cursor: pointer;
+}
 
 .payment-cards-container {
     display: flex;
@@ -158,9 +158,7 @@ body {
     background: white;
 }
 
-.payment-card > p{
-    margin-left: 10px;
-}
+
 
 
 .delete{
