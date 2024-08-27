@@ -2,12 +2,6 @@
 CREATE DATABASE Health_connection;
 USE Health_connection;
 
--- Tabla de Tipos de Documento
-CREATE TABLE TiposDocumento (
-    id_tipo_documento INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_tipo VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(50)
-);
 
 -- Tabla de Ciudad
 CREATE TABLE Ciudad (
@@ -33,7 +27,7 @@ CREATE TABLE Direccion (
 
 -- Tabla de Afiliacion
 CREATE TABLE Afiliacion (
-    id_afiliacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_afiliacion INT AUTO_INCREMENT PRIMARY KEY ,
     nombre_plan VARCHAR(50) NOT NULL,
     costo DECIMAL(10,2) NOT NULL,
     descuento DECIMAL(5,2) NOT NULL,
@@ -45,16 +39,15 @@ CREATE TABLE Paciente (
     numero_documento INT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
-    tipo_doc INT NOT NULL,
+    tipo_doc VARCHAR(30) NOT NULL,
     fecha_de_nacimiento DATE NOT NULL,
-    telefono VARCHAR(20),
-    email VARCHAR(100) UNIQUE,
+    telefono VARCHAR(30),
+    email VARCHAR(100) NOT NULL,
     direccion INT NOT NULL,
     contraseña VARCHAR(255) NOT NULL,
     id_afiliacion INT NULL,
     FOREIGN KEY (id_afiliacion) REFERENCES Afiliacion(id_afiliacion),
-    FOREIGN KEY (direccion) REFERENCES Direccion(id_direccion),
-    FOREIGN KEY (tipo_doc) REFERENCES TiposDocumento(id_tipo_documento)
+    FOREIGN KEY (direccion) REFERENCES Direccion(id_direccion)
 );
 
 -- Tabla de Doctores
@@ -62,31 +55,30 @@ CREATE TABLE Doctor (
     id_doctor INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
-    tipo_documento INT NOT NULL,
-    numero_documento VARCHAR(20) UNIQUE NOT NULL,
-    telefono VARCHAR(20),
+    tipo_documento VARCHAR(30) NOT NULL,
+    numero_documento INT UNIQUE NOT NULL,
+    telefono VARCHAR(30),
     email VARCHAR(100) NOT NULL,
     direccion INT NOT NULL,
     id_especialidad INT NOT NULL,
     contraseña VARCHAR(255) NOT NULL,
     FOREIGN KEY (direccion) REFERENCES Direccion(id_direccion),
-    FOREIGN KEY (id_especialidad) REFERENCES Especialidad(id_especialidad),
-    FOREIGN KEY (tipo_documento) REFERENCES TiposDocumento(id_tipo_documento)
+    FOREIGN KEY (id_especialidad) REFERENCES Especialidad(id_especialidad)
 );
 
--- Tabla de Secretarias
-CREATE TABLE Secretaria (
-    id_secretaria INT AUTO_INCREMENT PRIMARY KEY,
+-- Tabla de Administrativos
+CREATE TABLE Administrativos (
+    id_Administrativos INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
-    tipo_documento INT NOT NULL,
-    numero_documento VARCHAR(20) UNIQUE NOT NULL,
-    telefono VARCHAR(20),
+    rol ENUM('Administrador','Secretaria') NOT NULL,
+    tipo_documento VARCHAR(30) NOT NULL,
+    numero_documento INT UNIQUE NOT NULL,
+    telefono VARCHAR(30),
     email VARCHAR(100) NOT NULL,
     direccion INT NOT NULL,
     contraseña VARCHAR(255) NOT NULL,
-    FOREIGN KEY (direccion) REFERENCES Direccion(id_direccion),
-    FOREIGN KEY (tipo_documento) REFERENCES TiposDocumento(id_tipo_documento)
+    FOREIGN KEY (direccion) REFERENCES Direccion(id_direccion)
 );
 
 -- Tabla de Categorías de Cita
@@ -101,7 +93,7 @@ CREATE TABLE Cita (
     id_cita INT AUTO_INCREMENT PRIMARY KEY,
     id_paciente INT NOT NULL,
     id_doctor INT NOT NULL,
-    id_secretaria INT,
+    id_Administrativos INT,
     fecha DATETIME NOT NULL,
     tipo_cita ENUM('Medicina General', 'Especialista', 'Examen') NOT NULL,
     costo DECIMAL(10,2) NOT NULL,
@@ -109,7 +101,7 @@ CREATE TABLE Cita (
     requiere_autorizacion BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_paciente) REFERENCES Paciente(numero_documento),
     FOREIGN KEY (id_doctor) REFERENCES Doctor(id_doctor),
-    FOREIGN KEY (id_secretaria) REFERENCES Secretaria(id_secretaria),
+    FOREIGN KEY (id_Administrativos) REFERENCES Administrativos(id_Administrativos),
     FOREIGN KEY (categoria) REFERENCES CategoriaCita(id_categoria_cita)
 );
 
@@ -137,12 +129,12 @@ CREATE TABLE Publicacion (
     fecha_publicacion DATETIME NOT NULL
 );
 
--- Tabla Relacional para Publicaciones y Secretarias
-CREATE TABLE Secretaria_Publicacion (
-    id_secretaria INT,
+-- Tabla Relacional para Publicaciones y Administrativoss
+CREATE TABLE Administrativos_Publicacion (
+    id_Administrativos INT,
     id_publicacion INT,
-    PRIMARY KEY (id_secretaria, id_publicacion),
-    FOREIGN KEY (id_secretaria) REFERENCES Secretaria(id_secretaria),
+    PRIMARY KEY (id_Administrativos, id_publicacion),
+    FOREIGN KEY (id_Administrativos) REFERENCES Administrativos(id_Administrativos),
     FOREIGN KEY (id_publicacion) REFERENCES Publicacion(id_publicacion)
 );
 
@@ -150,10 +142,10 @@ CREATE TABLE Secretaria_Publicacion (
 CREATE TABLE AsignacionCita (
     id_asignacion INT AUTO_INCREMENT PRIMARY KEY,
     id_cita INT,
-    id_secretaria INT,
+    id_Administrativos INT,
     fecha_asignacion DATETIME NOT NULL,
     FOREIGN KEY (id_cita) REFERENCES Cita(id_cita),
-    FOREIGN KEY (id_secretaria) REFERENCES Secretaria(id_secretaria)
+    FOREIGN KEY (id_Administrativos) REFERENCES Administrativos(id_Administrativos)
 );
 
 -- Tabla de Facturas
