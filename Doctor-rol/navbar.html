@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEALTH CONNECTION</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <!-- JS Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Importacion de estilos locales -->
+    <link rel="stylesheet" href="./CSS/navBarStyle.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+        
+        :root{
+            --color-principal: #ff914d;
+            --color-secundario:#6C5F5B;
+            --color-complementario:#4F4A45;
+            --negro:#151515;
+            --gris-clarito:#9f9e9ed4;
+            --white:#FFFFFF;
+            --fuente-principal:"Roboto Mono", monospace;   
+            --fuente-secundaria:'Nunito',sans-serif;
+            --small-font:14px;
+            --medium-font:16px; /* Cambiado para ser un valor adecuado */
+            --large-font:18px;
+            --gris-fondo:#e8e5e5;
+            --logo-font:"Coustard", serif;
+        }
+        
+        body {
+            font-family: var(--fuente-principal);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar {
+            width: 100%;
+            background-color: var(--white);
+            padding: 8px 0;
+            box-shadow: 0 2px 4px var(--color-principal);
+        }
+        
+        .container-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            margin: 0 auto;
+        }
+        
+        .profile{
+            display: flex;
+            align-items: center;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .profile img{
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.25rem;
+            margin: 0 0 0 15px;
+            font-family: var(--fuente-principal);
+            font-weight: 900; /* Cambiado a un valor numérico adecuado */
+            color: var(--color-principal);
+        }
+        
+        .menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item {
+            background-color:var(--white);
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: var(--color-principal);
+            font-size: 0.875rem;
+            border:none;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--color-principal);
+            color: var(--white);
+        }
+
+        
+        .icon{
+            stroke: var(--color-principal);
+        }
+        
+        .menu-item .icon {
+            stroke: var(--color-principal);
+            transition: stroke 0.3s ease;
+            margin-right: 0.5rem;
+        }
+        
+        .menu-item:hover .icon {
+            stroke: #ffffff;
+        }
+        
+        .menuServices {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: var(--color-principal);
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            z-index: 1;
+        }
+        
+        .menuServices a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+        
+        .menuServices a:hover {
+            color: #f1f1f1;
+        }
+        
+        .menuServices .closeBtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        
+        
+        .dropdown-menu{
+            background-color:#ff914d;
+        }
+        .dropdown-menu ul li{
+            list-style: none;
+        }
+
+        .service-item{
+            text-decoration: none;
+            color:aliceblue;
+        }
+    </style>
+    
+</head>
+<body >
+    <nav class="navbar">
+
+        <div class="container-nav">
+
+            <div class="profile">
+
+                <a href="./Perfil.html">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff914d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                    </svg>
+                </a>
+                <p id="user-rol " class="text-center " style="vertical-align: middle; color:black;">ADMIN</p>
+            </div>
+
+            <div class="logo">
+                <h1 class="fs-2 ">Health Connection</h1>
+            </div>
+            <div class="menu">
+
+                
+
+                <a href="./index.html" class="menu-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff914d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Home
+                </a>
+
+                <a href="./landingPage.html" class="menu-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff914d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                    About
+                </a>
+
+                <!-- Split dropstart button -->
+                <div class="btn-group dropstart">
+                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropstart</span>
+                    </button>
+                    <ul class="dropdown-menu px-2">
+                        <li><a class="service-item" href="./agenda.html">Agenda</a></li>
+                        <li><a class="service-item" href="./autorizaciones.html">Autorizacion</a></li>
+                    </ul>
+                    <button type="button" class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff914d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                            <rect width="20" height="8" x="2" y="2" rx="2" ry="2"></rect>
+                            <rect width="20" height="8" x="2" y="14" rx="2" ry="2"></rect>
+                            <line x1="6" x2="6.01" y1="6" y2="6"></line>
+                            <line x1="6" x2="6.01" y1="18" y2="18"></line>
+                        </svg>
+                        servicios
+                    </button>
+                </div>
+
+
+                    
+                
+                
+            </div>
+        </div>
+    </nav> 
+</body>
+</html>

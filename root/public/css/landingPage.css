@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+    --color-principal: #ff914d;
+    --color-secundario: #6C5F5B;
+    --color-complementario: #4F4A45;
+    --negro: #151515;
+    --gris-clarito: #9f9e9ed4;
+    --white: #FFFFFF;
+    --fuente-principal: "Roboto Mono", monospace;
+    --fuente-secundaria: 'Nunito', sans-serif;
+    --small-font: 14px;
+    --medium-font: 16px;
+    --large-font: 18px;
+    --gris-fondo: #e8e5e5;
+    --logo-font: "Coustard", serif;
+}
+
+body {
+    font-family: var(--fuente-principal);
+    margin: 0;
+    padding: 0;
+}
+.bg-body-secondary{   
+    overflow-x: hidden;
+}
+
+header {
+    background: var(--color-principal);
+    color: white;
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.navbar {
+    background-color: var(--color-principal);
+    color: var(--white);
+    padding: 10px 0;
+}
+
+.navbar-nav .nav-link,
+.navbar-brand {
+    color: var(--white);
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.btn-primary {
+    background-color: #0066cc;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+section {
+    padding: 50px 0;
+    text-align: center;
+    background-color: var(--gris-fondo);
+}
+
+.about {
+    background-color: #f4f4f4;
+}
+
+.full-height-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-principal);
+}
+.container{
+    display: contents;
+}
+
+.card-container {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card + .card {
+    margin-top: 20px;
+}
+
+.team {
+    background-color: #f4f4f4;
+    padding: 40px 0;
+}
+
+.team-member img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.team-member {
+    margin-bottom: 20px;
+    text-align: center;
+}
+

@@ -72,7 +72,8 @@
         
         .form-group select,
         .form-group input[type="date"],
-        .form-group input[type="time"] {
+        .form-group input[type="time"],
+        .form-group input[type="text"] {
             width: 60%;
             padding: 10px;
             border: 2px solid var(--color-principal);

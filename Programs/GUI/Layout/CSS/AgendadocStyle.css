@@ -17,72 +17,164 @@
      --logo-font: "Coustard", serif;
  }
 
- /* Estilos generales */
  body {
-     font-family: var(--fuente-secundaria);
-     background-color: var(--gris-fondo);
-     margin: 0;
-     padding: 0;
- }
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
 
- .container-agenda {
-     width: 100%;
-     max-width: 800px;
-     margin: 0 auto;
-     padding: 20px;
- }
+header {
+    background-color: #ff914d;
+    color: white;
+    padding: 1em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
- .agenda {
-     border: 1px solid var(--color-secundario);
-     background-color: var(--color-principal);
-     margin-bottom: 20px;
-     padding: 10px;
- }
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
- table {
-     width: 100%;
-     border-collapse: collapse;
-     background-color: var(--white);
- }
+.logo {
+    height: 50px;
+    border-radius: 8px; 
+    object-fit: contain; 
+}
 
- th, td {
-     border: 1px solid var(--gris-clarito);
-     padding: 10px;
-     text-align: center;
-     vertical-align: middle;
- }
+h1 {
+    text-align: center;
+    flex-grow: 1;
+    font-size: 2em;
+    font-weight: 600;
+    margin: 0;
+}
 
- .header-mes {
-     background-color: var(--color-secundario);
-     font-size: var(--large-font);
-     font-family: var(--logo-font);
-     font-weight: bold;
-     color: var(--white);
- }
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
 
- .buttons {
-     display: flex;
-     justify-content: space-between;
-     padding: 10px 0;
- }
+nav ul li {
+    margin: 0 1em;
+}
 
- button {
-     padding: 10px 20px;
-     border: none;
-     cursor: pointer;
-     font-size: var(--medium-font);
-     font-family: var(--fuente-principal);
-     color: var(--white);
- }
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 
- .agendar {
-     background-color: var(--color-principal);
- }
+nav ul li a:hover,
+nav ul li a:active {
+    background-color: #e87a40;
+    color: #fff; 
+}
 
- .eliminar-cita {
-     background-color: var(--color-complementario);
- }
+main {
+    padding: 2em;
+    max-width: 900px;
+    margin: 2em auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
- .modificar-cita {
-     background-color: var(--color-secundario);
- }
+section {
+    margin-bottom: 2em;
+}
+
+h2 {
+    margin-bottom: 1.5em;
+    color: #ff914d;
+    font-size: 1.75em;
+    font-weight: 600;
+    border-bottom: 2px solid #ff914d;
+    padding-bottom: 0.5em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5em;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 1em;
+    text-align: left;
+}
+
+th {
+    background-color: #ff914d;
+    color: white;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+button {
+    background-color: #ff914d;
+    color: white;
+    border: none;
+    padding: 0.75em 1.5em;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #e87a40;
+    transform: scale(1.05);
+}
+
+button.cancel {
+    background-color: #e74c3c;
+}
+
+button.cancel:hover {
+    background-color: #c0392b;
+}
+
+footer {
+    background-color: #ff914d;
+    color: white;
+    text-align: center;
+    padding: 1em;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
+    margin-top: 2em; 
+}
+
+/* Bootstrap Overrides */
+.btn-custom {
+    background-color: #ff914d;
+    color: white;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #e87a40;
+}

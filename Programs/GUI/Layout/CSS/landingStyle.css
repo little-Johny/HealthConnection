@@ -28,7 +28,7 @@
 
         header {
             background: var(--color-principal);
-            height: 100vh;
+            height: 10vh;
             color: white;
             display: flex;
             flex-direction: column;
@@ -38,14 +38,7 @@
             text-align: center;
         }
 
-        nav {
-            width: 95%;
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            position: absolute;
-            top: 0;
-        }
+        
 
         /* .logo img {
             width: 150px;
@@ -63,21 +56,7 @@
             right: 0;
         } */
         
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap; /* Permite que los enlaces se envuelvan en una nueva línea si es necesario */
-            justify-content: center; /* Asegura que los elementos estén centrados */
-        }
         
-        .nav-links li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            padding: 10px 15px;
-            white-space: nowrap;
-        }
         
         
 

@@ -1,80 +1,254 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial Clínico</title>
-    <link rel="stylesheet" href="./CSS/historialclinico.css">
+    <title>Historial del Paciente</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        :root {
+            --color-principal: #ff914d;
+            --color-secundario: #6C5F5B;
+            --color-complementario: #4F4A45;
+            --negro: #151515;
+            --gris-clarito: #9f9e9ed4;
+            --white: #FFFFFF;
+            --fuente-principal: "Roboto Mono", monospace;
+            --fuente-secundaria: 'Nunito', sans-serif;
+            --small-font: 14px;
+            --medium-font: 16px;
+            --large-font: 18px;
+            --gris-fondo: #e8e5e5;
+            --logo-font: "Coustard", serif;
+        }
+
+        body {
+            font-family: var(--fuente-principal);
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #ff914d;
+            color: white;
+            padding: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo {
+            height: 50px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        h1 {
+            text-align: center;
+            flex-grow: 1;
+            font-size: 2em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-list li {
+            margin: 0 0.75em;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            padding: 0.5em 1em;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link:hover,
+        .nav-link:active {
+            background-color: #e87a40;
+            color: white;
+        }
+
+        main {
+            padding: 2em;
+            max-width: 900px;
+            margin: 2em auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        section {
+            margin-bottom: 2em;
+        }
+
+        h2 {
+            color: #ff914d;
+            font-size: 1.75em;
+            font-weight: 600;
+            border-bottom: 2px solid #ff914d;
+            padding-bottom: 0.5em;
+            margin-bottom: 1em;
+        }
+
+        .history-list li {
+            padding: 0.75em;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            margin-bottom: 0.5em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button.save-note {
+            background-color: #ff914d;
+            color: rgb(56, 22, 22);
+            border: none;
+            padding: 0.75em 1.5em;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        button.save-note:hover {
+            background-color: #e87a40;
+        }
+
+        button>a {
+            text-decoration: none;
+            color: white
+        }
+
+        button>a:hover {
+            text-decoration: none;
+            color: white
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .bg-body-secondary {
+            margin-top: 140px;
+        }
+    </style>
 </head>
-<body>
+
+<body class="bg-body-secondary ">
     <nav id="navbar"></nav>
-    <h1>Historial Clínico</h1>
 
-    <form>
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" name="nombre">
+    <main class="container my-4">
+        <section class="patient-info">
+            <h2 class="text-custom">Información del Paciente</h2>
+            <dl class="row">
+                <div class="col-md-4">
+                    <dt>Nombre:</dt>
+                    <dd>Juan Pérez</dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>Edad:</dt>
+                    <dd>45 años</dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>Última visita:</dt>
+                    <dd>2024-08-15</dd>
+                </div>
+            </dl>
+        </section>
 
-        <label for="documento">Documento</label>
-        <input type="text" id="documento" name="documento">
+        <section class="medical-history">
+            <h2 class="text-custom">Historial Médico</h2>
+            <ul class="list-unstyled">
+                <li class="bg-light p-3 mb-2 rounded shadow-sm">
+                    <time datetime="2024-08-15"><strong>2024-08-15:</strong></time> Consulta general. Diagnóstico:
+                    Hipertensión. Tratamiento: Medicación para presión alta.
+                </li>
+                <li class="bg-light p-3 mb-2 rounded shadow-sm">
+                    <time datetime="2024-07-10"><strong>2024-07-10:</strong></time> Examen de sangre. Resultado:
+                    Colesterol alto.
+                </li>
+                <li class="bg-light p-3 mb-2 rounded shadow-sm">
+                    <time datetime="2024-06-01"><strong>2024-06-01:</strong></time> Chequeo anual. Diagnóstico: Salud
+                    en general buena.
+                </li>
+            </ul>
+        </section>
 
-        <label for="genero">Género</label>
-        <select id="genero" name="genero">
-            <option value="masculino">Masculino</option>
-            <option value="femenino">Femenino</option>
-            <option value="otro">Otro</option>
-        </select>
+        <section class="notes">
+            <h2 class="text-custom">Anotaciones</h2>
+            <form action="#" method="post">
+                <div class="form-group">
+                    <label for="notes">Nota:</label>
+                    <textarea id="notes" name="notes" rows="5" class="form-control"
+                        placeholder="Escribe una nota aquí..."></textarea>
+                </div>
+                <div class="d-flex justify-content-around">
+                    <button type="submit" class="btn btn-primary my-2">Guardar Nota</button>
+                    <button class="btn btn-primary my-2" onclick="window.location.href='ObservacionCita.html';"><a
+                            href="./ObservacionCita.html">Generar Nueva Observacion</a></button>
+                </div>
+            </form>
+        </section>
+    </main>
 
-        <label for="nacionalidad">Nacionalidad</label>
-        <input type="text" id="nacionalidad" name="nacionalidad">
-
-        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento">
-
-        <label for="edad">Edad</label>
-        <input type="number" id="edad" name="edad">
-
-        <label for="tipo_sangre">Tipo de Sangre</label>
-        <input type="text" id="tipo_sangre" name="tipo_sangre">
-
-        <label for="alergias">Alergias</label>
-        <textarea id="alergias" name="alergias" rows="3"></textarea>
-
-        <label for="operaciones">Operaciones</label>
-        <textarea id="operaciones" name="operaciones" rows="3"></textarea>
-
-        <label for="enfermedades">Enfermedades</label>
-        <textarea id="enfermedades" name="enfermedades" rows="3"></textarea>
-
-        <label for="lesiones">Lesiones</label>
-        <textarea id="lesiones" name="lesiones" rows="3"></textarea>
-
-        <label for="novedades">Novedades</label>
-        <textarea id="novedades" name="novedades" rows="3"></textarea>
-
-        <div class="button-container">
-            <button type="submit">Confirmar Cambios</button>
-            <button type="reset">Borrar</button>
+    <footer class="text-center footer">
+        <div class="social-media mb-3">
+            <a href="#" class="text-decoration-none me-3">Twitter</a>
+            <a href="#" class="text-decoration-none me-3">YouTube</a>
+            <a href="#" class="text-decoration-none">Facebook</a>
         </div>
-    </form>
-
+        <p>&copy; 2023 Gestión de Citas Médicas. Todos los derechos reservados.</p>
+    </footer>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const navbarDiv = document.getElementById('navbar');
-            /* Verificamos si navbar existe y cargamos el contenido */
             if (navbarDiv) {
                 fetch('navbar-prototype.html')
-                   // Convertimos la respuesta en un archivo de texto
                     .then(response => response.text())
                     .then(data => {
-                        // Modificamos el contenido HTML de navbarDiv
                         navbarDiv.innerHTML = data;
-                        
                     })
-                    // Colocamos el catch en caso de que la solicitud falle
                     .catch(error => console.error('Error cargando el navbar:', error));
             }
-            
         });
     </script>
 </body>
+
 </html>

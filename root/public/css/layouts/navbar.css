@@ -1,0 +1,86 @@
+:root {
+    --color-principal: #ff914d;
+    --color-secundario: #6C5F5B;
+    --color-complementario: #333;
+    --negro: #151515;
+    --gris-clarito: #9f9e9ed4;
+    --white: #FFFFFF;
+    --fuente-principal: "Roboto Mono", monospace;   
+    --small-font: 14px;
+    --medium-font: 16px;
+    --large-font: 18px;
+    --gris-fondo: #e8e5e5;
+}
+
+body {
+    font-family: var(--fuente-principal);
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: var(--white);
+    padding: 8px 0;
+    box-shadow: 0 2px 4px var(--color-principal);
+    height: 80px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.icon {
+    stroke: var(--color-principal);
+}
+.menu-btn{
+    border:1px solid var(--color-principal);
+}
+.navbar-toggler-icon{
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 30 30'%3E%3Cpath stroke='%23ff914d' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+.dropdown-menu{
+    background-color:var(--color-principal);
+    border:none;
+}
+.dropdown-item{
+    font-weight: bolder;
+}
+.service-item {
+    text-decoration: none;
+    color: aliceblue;
+    border-radius:6px;
+
+}
+.navbar-brand{
+    color:var(--color-principal);
+}
+.offcanvas-header{
+    background-color:var(--color-principal)
+}
+.nav-link{
+    font-weight: bold;
+}
+.nav-link:hover{
+    color:var(--color-principal);
+}
+
+#user-rol{
+    color: black;
+    font-size: var(--small-font);
+}
+
+@media(max-width:490px){
+    .navbar-brand{
+        display: none;
+    }
+    #user-rol{
+        font-size: var(--medium-font);
+    }
+}

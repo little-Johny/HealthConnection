@@ -1,38 +1,115 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Connection - Inicio de Sesión</title>
-    <link rel="stylesheet" href="./CSS/login.css">
+    <title> Login Page</title>
+    <link rel="shortcut icon" href="../Images/tab_icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        :root {
+            --color-principal: #ff914d;
+            --color-secundario: #6C5F5B;
+            --color-complementario: #4F4A45;
+            --negro: #151515;
+            --white: #FFFFFF;
+            --fuente-principal: "Roboto Mono", monospace;
+            --small-font: 14px;
+            --medium-font: 16px;
+            --large-font: 18px;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: var(--fuente-principal);
+        }
+        .container-fluid{
+            padding: 0;
+        }
+        .bg-image {
+            background-image: url('../Images/BackgroundHC.jpg'); /* Reemplaza con la URL de tu imagen */
+            background-size: cover;
+            background-position: center;
+            height: 802px;
+            width: 100;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px;
+        }
+        .form{
+            background-color:var(--color-principal);
+            display:flex;
+            flex-direction: column;
+
+        }
+        .title{
+            color:var(--white);
+            margin-bottom:80px ;
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 10px 8px 16px var(--color-complementario);
+        }
+        .login{
+            color:var(--white);
+            text-decoration: none;
+        }
+
+        @media (max-width: 576px) {
+            .bg-image {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-form">
-            <div class="form-header">
-                <h2>INICIA SESIÓN</h2>
+    <div class="container-fluid h-100 w-100">
+        <div class="row g-0 h-100">
+            <!-- Left Side Image for larger screens -->
+            <div class="col-lg-6 bg-image d-none d-lg-block"></div>
+
+            <!-- Login Form -->
+            <div class="col-lg-6 d-flex align-items-center justify-content-center form">
+                <h1 class="title">Tu salud, nuestra prioridad</h1>
+                <div class="card p-4">
+                    <h2 class="text-center mb-4">Login</h2>
+                    <form>
+                        <div class="mb-3">
+                            <label for="doctype" class="form-label">Email address</label>
+                            <select name="doctype" id="doctype" class="form-control">
+                                <option value="">Selecciona tu tipo de documento</option>
+                                <option value="T.I.">T.I.</option>
+                                <option value="C.C.">C.C.</option>
+                                <option value="C.E.">C.E.</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Numero de documento</label>
+                            <input type="email" class="form-control" id="email" placeholder="escribe tu numero de documento">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100"><a href="./index.html" class="login">Entrar</a></button>
+                    </form>
+                    <hr>
+                    <p class="text-center">No tienes una cuenta? <a href="./register.html">Registrate</a></p>
+                </div>
             </div>
-            <form>
-                <label for="document-type">Tipo de Documento:</label>
-                <select id="document-type" name="document-type">
-                    <option value="">Selecciona el tipo de Documento</option>
-                    <option value="cc">Cédula de Ciudadanía</option>
-                    <option value="ti">Tarjeta de Identidad</option>
-                    <option value="passport">Pasaporte</option>
-                </select>
-                <label for="document-number">Número de Documento:</label>
-                <input type="text" id="document-number" name="document-number" required>
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required>
-                <p class="register-link">¿No te has registrado? <a href="./register.html">Crear cuenta</a></p>
-                <button type="submit"><a href="./index.html">Ingresar</a></button>
-            </form>
-        </div>
-        <div class="login-info">
-            <a href="../Johny/index.html"><img src="../Johny/images/HealthConnectionLogo-removebg-preview.png" alt="Health Connection Logo" class="logo"></a>
-            <h3>Ingresa ahora</h3>
-            <p>Ingresa ahora para acceder a todos nuestros servicios</p>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

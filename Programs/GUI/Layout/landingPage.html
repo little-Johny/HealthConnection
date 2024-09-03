@@ -5,92 +5,274 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Connection - Clínica Privada</title>
-    <link rel="stylesheet" href="./CSS/landingStyle.css">
     <link rel="shortcut icon" href="../Images/tab_icon.png" type="image/x-icon">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        :root {
+            --color-principal: #ff914d;
+            --color-secundario: #6C5F5B;
+            --color-complementario: #4F4A45;
+            --negro: #151515;
+            --gris-clarito: #9f9e9ed4;
+            --white: #FFFFFF;
+            --fuente-principal: "Roboto Mono", monospace;
+            --fuente-secundaria: 'Nunito', sans-serif;
+            --small-font: 14px;
+            --medium-font: 16px;
+            --large-font: 18px;
+            --gris-fondo: #e8e5e5;
+            --logo-font: "Coustard", serif;
+        }
+
+        body {
+            font-family: var(--fuente-principal);
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: var(--negro);
+            overflow-x: hidden;
+        }
+
+        header {
+            background: var(--color-principal);
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: var(--color-principal);
+            color: var(--white);
+            padding: 10px 0;
+        }
+
+        .navbar-nav .nav-link,
+        .navbar-brand {
+            color: var(--white);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        section {
+            padding: 50px 0;
+            text-align: center;
+            background-color: var(--gris-fondo);
+        }
+
+        .about {
+            background-color: #f4f4f4;
+        }
+
+        .full-height-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-principal);
+        }
+        .container{
+            display: contents;
+        }
+
+        .card-container {
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card + .card {
+            margin-top: 20px;
+        }
+
+        .team {
+            background-color: #f4f4f4;
+            padding: 40px 0;
+        }
+
+        .team-member img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .team-member {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Barra de Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid px-5">
+            <a class="navbar-brand" href="#">Health Connection</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Nosotros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#team">Equipo Médico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <!-- Encabezado -->
     <header>
-        <nav>
-            <!-- <div class="logo">
-                <img src="../Images/medikit.png" alt="Logo Health Connection">
-            </div> -->
-            <p>
-                HealthConnection
-            </p>
-            <ul class="nav-links">
-                <li><a href="#about">Nosotros</a></li>
-                <li><a href="#services">Servicios</a></li>
-                <li><a href="#team">Equipo Médico</a></li>
-                <li><a href="#contact">Contacto</a></li>
-            </ul>
-        </nav>
         <div class="hero">
             <h1>Bienvenido a Health Connection</h1>
             <p>Tu salud, nuestra prioridad</p>
-            <a href="./register.html" class="btn">Ingresar</a>
+            <a href="./login.html" class="btn">Ingresar</a>
         </div>
     </header>
 
     <!-- Sección de Nosotros -->
     <section id="about" class="about">
-        <h2>Sobre Nosotros</h2>
-        <p>En Health Connection, somos una clínica privada dedicada a brindar servicios médicos de alta calidad con un
-            enfoque en la atención personalizada y el bienestar de nuestros pacientes.</p>
+        <div class="container">
+            <h2>Sobre Nosotros</h2>
+            <p>En Health Connection, somos una clínica privada dedicada a brindar servicios médicos de alta calidad con un
+                enfoque en la atención personalizada y el bienestar de nuestros pacientes.</p>
+        </div>
     </section>
 
     <!-- Sección de Servicios -->
-    <section id="services" class="services">
-        <h2>Nuestros Servicios</h2>
-        <div class="service-card">
-            <h3>Consulta Médica</h3>
-            <p>Ofrecemos consultas médicas con especialistas en diversas áreas, garantizando un diagnóstico preciso y un
-                tratamiento adecuado.</p>
-        </div>
-        <div class="service-card">
-            <h3>Exámenes de Laboratorio</h3>
-            <p>Realiza tus exámenes de laboratorio con nosotros, contamos con tecnología avanzada para obtener resultados
-                confiables y rápidos.</p>
-        </div>
-        <div class="service-card">
-            <h3>Afiliaciones</h3>
-            <p>Nuestros planes de afiliación ajustables a cualquier tipo de necesidad.</p>
+    <section id="services" class="full-height-container">
+        <div class="container">
+            <h2 class="text-white mb-5">Nuestros Servicios</h2>
+            <div class="card-container">
+                <div class="row">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Consulta Médica</h5>
+                            <p class="card-text">Ofrecemos consultas médicas con especialistas en diversas áreas, garantizando un diagnóstico preciso y un tratamiento adecuado.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Exámenes de Laboratorio</h5>
+                            <p class="card-text">Realiza tus exámenes de laboratorio con nosotros, contamos con tecnología avanzada para obtener resultados confiables y rápidos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Afiliaciones</h5>
+                            <p class="card-text">Nuestros planes de afiliación ajustables a cualquier tipo de necesidad.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Sección de Equipo Médico -->
-    <section id="team" class="team">
-        <h2>Nuestro Equipo Médico</h2>
-        <div class="team-member">
-            <img src="doctor1.jpg" alt="Doctor 1">
-            <h3>Dr. Juan Pérez</h3>
-            <p>Cardiólogo</p>
-        </div>
-        <div class="team-member">
-            <img src="doctor2.jpg" alt="Doctor 2">
-            <h3>Dra. María López</h3>
-            <p>Dermatóloga</p>
-        </div>
-        <div class="team-member">
-            <img src="doctor3.jpg" alt="Doctor 3">
-            <h3>Dr. Pedro Gómez</h3>
-            <p>Cirujano</p>
+    <section id="team" class="team text-center">
+        <div class="container">
+            <h2 class="mb-5">Nuestro Equipo Médico</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="team-member">
+                        <img src="../assets/Images/doctor.jpg" alt="Doctor 1" class="img-fluid mb-3">
+                        <h3>Dr. Juan Pérez</h3>
+                        <p>Cardiólogo</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="team-member">
+                        <img src="../assets/Images/doctor.jpg" alt="Doctor 2" class="img-fluid mb-3">
+                        <h3>Dra. María López</h3>
+                        <p>Dermatóloga</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="team-member">
+                        <img src="../assets/Images/doctor.jpg" alt="Doctor 3" class="img-fluid mb-3">
+                        <h3>Dr. Pedro Gómez</h3>
+                        <p>Cirujano</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Sección de Contacto -->
-    <section id="contact" class="contact">
-        <h2>Contacto</h2>
-        <p>¿Tienes alguna pregunta o necesitas más información? Contáctanos hoy mismo.</p>
-        <a href="mailto:contacto@healthconnection.com" class="btn">Enviar Email</a>
+    <section id="contact" class="contact text-center">
+        <div class="container">
+            <h2>Contacto</h2>
+            <p>¿Tienes alguna pregunta o necesitas más información? Contáctanos hoy mismo.</p>
+            <a href="mailto:info@healthconnection.com" class="btn">Enviar un Correo</a>
+        </div>
     </section>
 
-    <!-- Pie de página -->
-    <footer class="footer">
-        <p>&copy; 2024 Health Connection. Todos los derechos reservados.</p>
+    <!-- Pie de Página -->
+    <footer class="text-center footer">
+        <!-- <nav class="footer-nav mb-3">
+            <a href="#" class="text-decoration-none me-3">Inicio</a>
+            <a href="#" class="text-decoration-none me-3">Citas</a>
+            <a href="#" class="text-decoration-none me-3">Exámenes</a>
+            <a href="#" class="text-decoration-none">Doctores</a>
+        </nav> -->
+        <div class="social-media mb-3">
+            <a href="#" class="text-decoration-none me-3">Twitter</a>
+            <a href="#" class="text-decoration-none me-3">YouTube</a>
+            <a href="#" class="text-decoration-none">Facebook</a>
+        </div>
+        <p>&copy; 2024 - Health Connection</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

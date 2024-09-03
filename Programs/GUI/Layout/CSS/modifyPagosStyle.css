@@ -121,13 +121,7 @@ button[type="submit"] {
     font-weight: bold;
 }
 
-.confirm{
-    background-color: green;
-}
 
-.cancel{
-    background-color: red;
-}
 
 button[type="submit"]:hover{
 background-color: var(--white);
