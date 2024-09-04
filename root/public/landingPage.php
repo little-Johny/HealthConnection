@@ -1,3 +1,9 @@
+<?php 
+$baseUrlPublic = '/HealthConnection/root/public/';
+$baseUrlSrc = 'C:/xampp/htdocs/HealthConnection/root/src/'; // Ruta base absoluta para archivos PHP
+$baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -48,7 +54,7 @@
         <div class="hero">
             <h1>Bienvenido a Health Connection</h1>
             <p>Tu salud, nuestra prioridad</p>
-            <a href="./index.html" class="btn btn-primary ">Ingresar</a>
+            <a href="<?php echo $baseUrlPublic?>index.php" class="btn btn-primary ">Ingresar</a>
         </div>
     </header>
 
@@ -133,16 +139,12 @@
         </div>
     </section>
 
-    <!--! Seccion de footer importada con js -->
-    <footer id="footer">
-        
-    </footer>
+    <!-- Footer -->
+    <?php include $baseUrlSrcFooter . 'views/layouts/footer.php'; ?>
 
     <!-- ! Importación de paquete de funcionalidades para estilos de Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- !Importacion de Js Local -->
-    <script src="../public/js/app.js"></script>
 </body>
 
 </html>

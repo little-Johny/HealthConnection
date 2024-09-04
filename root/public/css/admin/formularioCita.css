@@ -55,11 +55,14 @@
             background-color: var(--white);
         }
 
-        .form-group select,
+        .form-group select ,
         .form-group input[type="date"],
         .form-group input[type="time"],
         .form-group input[type="text"] {
+            width: 60%;
+            padding: 10px;
             border: 2px solid var(--color-principal);
+            border-radius: 5px;
             font-family: var(--fuente-principal);
             font-weight: 600;
         }
@@ -84,7 +87,7 @@
         }
 
         .bg-body-secondary {
-            margin-top: 140px;
+            margin-top: 100px;
         }
 
         .footer {

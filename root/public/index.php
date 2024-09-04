@@ -24,9 +24,9 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
     <!-- Navbar -->
     <?php include $baseUrlSrc . 'views/layouts/navbar.php'; ?>
     
-    <main class="container my-4">
+    <main class=" container my-4">
         <!-- Hero Section -->
-        <section class="hero row align-items-center p-4">
+        <section class="my-custom-hero hero row align-items-center p-4">
             <div class="hero-text col-md-7">
                 <h2>AFÍLIATE AHORA!</h2>
                 <p>Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi.</p>
@@ -126,11 +126,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
         </section>
     </main>
     
-    <!-- Footer -->
+    <!-- //! Footer  -->
     <?php include $baseUrlSrcFooter.'views\layouts\footer.php'; ?>
-    
-    
-    <!-- !Importacion de Js Local -->
-    <!-- <script src="../public/js/app.js"></script> -->
 </body>
 </html>

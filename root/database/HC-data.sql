@@ -17,13 +17,34 @@ INSERT INTO Especialidad (nombre_especialidad,costo) VALUES
 INSERT INTO Direccion (direccion, id_ciudad) VALUES
 ('Avenida Carrera 13 # 80-30', 1),
 ('Calle 10 # 20-30', 2),
-('Calle 5 # 15-40', 3);
+('Calle 5 # 15-40', 3),
+('Calle 1 #10-20', 1),  -- Ciudad 1
+('Carrera 5 #15-30', 2), -- Ciudad 2
+('Avenida 6 #20-40', 3), -- Ciudad 3
+('Calle 2 #11-22', 1),   -- Ciudad 1
+('Carrera 7 #16-32', 2), -- Ciudad 2
+('Avenida 8 #21-42', 3), -- Ciudad 3
+('Calle 3 #12-24', 1),   -- Ciudad 1
+('Carrera 8 #17-34', 2), -- Ciudad 2
+('Avenida 9 #22-44', 3), -- Ciudad 3
+('Calle 4 #13-26', 1);   -- Ciudad 1
+
 
 -- Insertar registros en la tabla Afiliacion
-INSERT INTO Afiliacion (nombre_plan, costo, descuento, max_beneficiarios) VALUES
-('Plan Básico', 100.00, 10.00, 3),
-('Plan Estándar', 200.00, 15.00, 5),
-('Plan Premium', 300.00, 20.00, 7);
+-- Inserción de 10 registros en la tabla Afiliacion
+INSERT INTO Afiliacion (nombre_plan, costo, descuento, max_beneficiarios)
+VALUES 
+('Plan Básico', 100.00, 5.00, 2),
+('Plan Familiar', 250.00, 10.00, 5),
+('Plan Individual Plus', 150.00, 7.50, 1),
+('Plan Premium', 350.00, 15.00, 4),
+('Plan Corporativo', 500.00, 20.00, 10),
+('Plan Silver', 200.00, 8.00, 3),
+('Plan Gold', 300.00, 12.50, 4),
+('Plan Platinum', 450.00, 18.00, 5),
+('Plan Senior', 120.00, 6.00, 1),
+('Plan Juvenil', 80.00, 4.00, 1);
+
 
 -- Insertar registros en la tabla Paciente
 INSERT INTO Paciente (numero_documento, nombre, apellido, tipo_doc, fecha_de_nacimiento, telefono, email, direccion, contraseña, id_afiliacion) VALUES

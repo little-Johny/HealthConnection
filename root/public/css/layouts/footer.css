@@ -32,6 +32,7 @@ body {
     background-color: var(--color-complementario);
     color: white;
     text-align: center;
+    margin-top: 40px;
     padding: 20px;
     border-top: 1px solid var(--color-complementario);
     box-shadow: 0 -2px 5px var(--negro);

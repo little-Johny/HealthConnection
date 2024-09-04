@@ -50,7 +50,6 @@ try {
 <body class="bg-body-secondary">
     <!-- Navbar -->
     <?php include $baseUrlSrc . 'views/layouts/navbar.php'; ?>
-    <header id="navbar"></header>
 
     <main class="container my-3">
         <div class="row justify-content-center">
@@ -61,12 +60,12 @@ try {
                     </div>
                     <div class="appointment-form">
                     <form action="<?php echo $baseUrlSrc;?>controllers/procesarCita.php" method="post">
-                            <div class="mb-3">
+                            <div class="mb-3 form-group">
                                 <label for="doc_paciente" class="form-label">Documento del paciente</label>
                                 <input type="text" name="doc_paciente" id="doc_paciente" class="form-control" placeholder="1012345424">
                             </div>
                             
-                            <div class="mb-3">
+                            <div class="mb-3 form-group">
                                 <label for="specialty" class="form-label">Selecciona la especialidad</label>
                                 <select id="specialty" name="specialty" class="form-select" onchange="actualizarCosto()">
                                     <option value="">--Selecciona--</option>
@@ -76,7 +75,7 @@ try {
                                 </select>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-3 form-group">
                                 <label for="type" class="form-label">Selecciona el tipo de cita</label>
                                 <select id="type" name="type" class="form-select" onchange="actualizarCosto()">
                                     <option value="">--Selecciona--</option>
@@ -86,7 +85,7 @@ try {
                                 </select>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-3 form-group">
                                 <label class="form-label">¿Quieres solicitar un médico?</label>
                                 <div>
                                     <label class="form-check-label me-3"><input type="radio" name="specific_doctor" value="si" class="form-check-input"> Sí</label>
@@ -100,18 +99,18 @@ try {
                                 </select>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-3 form-group">
                                 <label for="date" class="form-label">Fecha de la cita:</label>
                                 <input type="date" id="date" name="date" class="form-control">
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-3 form-group">
                                 <label for="time" class="form-label">Hora de la cita:</label>
                                 <input type="time" id="time" name="time" class="form-control">
                             </div>
 
                             <!-- Campo para mostrar el costo de la cita -->
-                            <div class="mb-3">
+                            <div class="mb-3 form-group">
                                 <label for="costo" class="form-label">Costo de la cita:</label>
                                 <input type="text" id="costo" name="costo" class="form-control" readonly>
                             </div>
