@@ -116,7 +116,9 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                                     <td class="actions">
                                         <a href="./historialSolicitudes.html" class="btn btn-sm btn-primary">Ver historial de solicitudes</a>
                                         <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver historial médico</a>
-                                        <a href="./Update-Profile.html" class="btn btn-sm btn-success">Editar Perfil</a>
+                                        <!-- Suponiendo que estás en una página donde se listan los pacientes -->
+                                        <a href="./editarPaciente.php?numero_documento=<?php echo htmlspecialchars($usuario->numero_documento); ?>" class="btn btn-primary">Editar Perfil</a>
+
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

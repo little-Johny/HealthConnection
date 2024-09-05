@@ -29,7 +29,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
         <section style="border-radius:8px; border:1px solid #6C5F5B; padding:20px; box-shadow: 10px 8px 16px #4F4A45; ">
             <h1 class="mb-4" style="display: flex; justify-content:center; color:#ff914d">Editar Perfil</h1>
 
-            <form action="procesar-perfil.php" method="post" enctype="multipart/form-data">
+            <form action="<?php echo $baseUrlSrc;?>controllers/updatePaciente.php" method="post" enctype="multipart/form-data">
                 <!-- Foto de Perfil -->
                 <div class="mb-4 text-center">
                     <h2 class="h5">Foto de Perfil</h2>

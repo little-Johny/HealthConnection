@@ -2,12 +2,12 @@
 include_once "../../../config/databaseConexion.php";
 
 // Suponiendo que tienes una forma de obtener el ID del paciente desde la sesión o parámetros
-$pacienteId = $_GET['id']; // O de otra fuente según tu aplicación
+$numero_documento = $_GET['numero_documento']; // O de otra fuente según tu aplicación
 
 // Consultar la base de datos para obtener la información del paciente
-$sql = "SELECT nombre, apellido, email, foto_perfil FROM pacientes WHERE id = ?";
-$stmt = $pdo->prepare($sql);
-$stmt->execute([$pacienteId]);
+$sql = "SELECT nombre, apellido, email, foto_perfil FROM paciente WHERE numero_documento = ?";
+$stmt = $database->prepare($sql);
+$stmt->execute([$numero_documento]);
 $paciente = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $baseUrlPublic = '/HealthConnection/root/public/';
