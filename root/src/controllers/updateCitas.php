@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($resultado) {
         header("Location:../views/admin/verSolicitudes.php");
+    
     } else {
         echo "Error al actualizar la cita.";
     }

@@ -1,6 +1,7 @@
 <?php
+include_once '../../config/app.php';
 try {
-    include_once '../../config/databaseConexion.php';
+    include_once DB_CONNECTION_PATH;
 
     // Recoger los datos del formulario
     $numero_documento = $_POST['numero_documento'];
@@ -11,17 +12,29 @@ try {
     $genero = $_POST["genero"];
     $telefono = $_POST['telefono'];
     $email = $_POST['email'];
-    $direccion = $_POST['direccion'] ?? null; // Dirección (texto)
-    $id_ciudad = $_POST['ciudad'] ?? null; // Aquí cambiamos a `id_ciudad` en lugar de `ciudad`
+    $direccion = $_POST['direccion'] ?? null;
+    $id_ciudad = $_POST['ciudad'] ?? null;
     $contraseña = $_POST['contraseña'];
-    $id_afiliacion = $_POST['id_afiliacion'] ?? null; // Puede ser NULL
+    $id_afiliacion = $_POST['id_afiliacion'] ?? null;
+    $fotoPerfil = null;
 
-    // Validación de que el ID de ciudad esté definido
     if ($id_ciudad === null) {
         throw new Exception("El ID de la ciudad no está definido.");
     }
 
-    // Verificar que la dirección exista y si no insertar su nuevo registro y obtener su ID
+    if (isset($_FILES['foto_perfil']) && $_FILES['foto_perfil']['error'] === UPLOAD_ERR_OK) {
+        $nombreArchivo = $_FILES['foto_perfil']['name'];
+        $rutaTemporal = $_FILES['foto_perfil']['tmp_name'];
+        $directorioDestino = '../../public/uploads/patients';
+        $rutaArchivo = $directorioDestino . uniqid() . '_' . $nombreArchivo;
+
+        if (move_uploaded_file($rutaTemporal, $rutaArchivo)) {
+            $fotoPerfil = $rutaArchivo;
+        } else {
+            throw new Exception("Error al subir la imagen de perfil.");
+        }
+    }
+
     $sentenciaDireccion = $database->prepare("SELECT id_direccion FROM Direccion WHERE direccion = ? AND id_ciudad = ?;");
     $sentenciaDireccion->execute([$direccion, $id_ciudad]);
     $direccionExistente = $sentenciaDireccion->fetch(PDO::FETCH_ASSOC);
@@ -34,9 +47,8 @@ try {
         $id_direccion = $database->lastInsertId();
     }
 
-    // Insertar el paciente con el ID de dirección correcto
-    $sentencia = $database->prepare("INSERT INTO Paciente(numero_documento, nombre, apellido, tipo_doc, fecha_de_nacimiento, genero, telefono, email, direccion, contraseña, id_afiliacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-    $result = $sentencia->execute([$numero_documento, $nombre, $apellido, $tipo_doc, $fecha_de_nacimiento, $genero, $telefono, $email, $id_direccion, $contraseña, $id_afiliacion]);
+    $sentencia = $database->prepare("INSERT INTO Paciente(numero_documento, nombre, apellido, tipo_doc, fecha_de_nacimiento, genero, telefono, email, direccion, contraseña, id_afiliacion, foto_perfil) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+    $result = $sentencia->execute([$numero_documento, $nombre, $apellido, $tipo_doc, $fecha_de_nacimiento, $genero, $telefono, $email, $id_direccion, $contraseña, $id_afiliacion, $fotoPerfil]);
 
     if ($result === TRUE) {
         echo "<script>
@@ -49,5 +61,6 @@ try {
 
 } catch (PDOException $error) {
     echo "Error: " . $error->getMessage();
+} catch (Exception $error) {
+    echo "Error: " . $error->getMessage();
 }
-

@@ -1,7 +1,8 @@
 <?php
-include_once "../../../config/databaseConexion.php";
+include_once __DIR__ . '/../../config/app.php';
 
 try {
+    include_once DB_CONNECTION_PATH;
     $sentencia = $database->query("
         SELECT C.id_cita, P.nombre AS paciente, E.nombre_especialidad AS especialidad, C.fecha, C.hora
         FROM Cita C

@@ -3,7 +3,6 @@ include_once '../../controllers/consultarRegistros.php';
 $baseUrlPublic = '/HealthConnection/root/public/';
 $baseUrlSrc = 'C:/xampp/htdocs/HealthConnection/root/src/'; // Ruta base absoluta para archivos PHP
 $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
-
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +17,46 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
     <link rel="stylesheet" href="<?php echo $baseUrlPublic; ?>css/admin/verRegistros.css">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <style>
+        /* Estilo para asegurar que la tabla se mantenga dentro del contenedor */
+        .table-responsive {
+            overflow-x: auto;
+        }
+        /* Estilo para limitar el ancho de la tabla en pantallas pequeñas */
+        .table {
+            width: 100%;
+        }
+        /* Centrar verticalmente el contenido de la tabla */
+        .table td, .table th {
+            vertical-align: middle;
+        }
+        /* Estilo para los botones en vista normal */
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Espacio entre botones */
+        }
+        .nav-buttons .btn {
+            flex: 1 1 auto;
+        }
+        /* Estilo para los botones dentro de la columna de acciones */
+        .actions {
+            margin: 0;
+            display: flex;
+            flex-direction: column; /* Apilar los botones verticalmente */
+            gap: 5px; /* Espacio entre botones */
+        }
+        /* Estilo para centrar el botón de registrar */
+        .section-buttons {
+            display: flex;
+            justify-content: center; /* Centra horizontalmente el botón */
+            margin-top: 20px;
+        }
+        .section-buttons .btn {
+            max-width: 200px; /* Ajusta el tamaño máximo del botón */
+        }
+    </style>
 </head>
 
 <body class="bg-body-secondary">
@@ -26,9 +65,9 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
 
     <div class="container container-record">
         <!-- Menú de navegación -->
-        <nav class="d-flex flex-wrap justify-content-between mb-4">
-            <button class="btn" onclick="showSection('usuarios')">Usuarios</button>
-            <button class="btn" onclick="showSection('funcionarios')">Funcionarios</button>
+        <nav class="nav-buttons mb-4">
+            <button class="btn btn-primary" onclick="showSection('usuarios')">Usuarios</button>
+            <button class="btn btn-primary" onclick="showSection('funcionarios')">Funcionarios</button>
         </nav>
 
         <!-- Secciones de contenido -->
@@ -74,7 +113,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                                     <td><?php echo htmlspecialchars($usuario->genero); ?></td>
                                     <td><?php echo htmlspecialchars($usuario->telefono); ?></td>
                                     <td><?php echo htmlspecialchars($usuario->id_afiliacion); ?></td>
-                                    <td>
+                                    <td class="actions">
                                         <a href="./historialSolicitudes.html" class="btn btn-sm btn-primary">Ver historial de solicitudes</a>
                                         <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver historial médico</a>
                                         <a href="./Update-Profile.html" class="btn btn-sm btn-success">Editar Perfil</a>
@@ -84,18 +123,21 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                             </tbody>
                         </table>
                     </div>
-                    <button  onclick="window.location.href='<?php echo $baseUrlSrc; ?>views/admin/registrarPaciente.php';" class="btn btn-sm btn-primary">Registrar nuevo paciente</button>
+                    <div class="section-buttons">
+                        <button onclick="window.location.href='<?php echo $baseUrlSrc; ?>views/admin/registrarPaciente.php';" class="btn btn-sm btn-primary">Registrar nuevo paciente</button>
+                    </div>
                 </div>
             </section>
 
             <!-- Sección Funcionarios -->
             <section id="funcionarios" class="content-section">
-                <div class="title">
-                    <h2>Funcionarios</h2>
-                </div>
+                <div class="container mt-5">
+                    <div class="title mb-4 text-center">
+                        <h2>Funcionarios</h2>
+                    </div>
 
-                <!-- Tabla de Usuarios -->
-                <div class="table-responsive">
+                    <!-- Tabla de Funcionarios -->
+                    <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="table-dark">
                                 <tr>
@@ -119,7 +161,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                                     <td><?php echo htmlspecialchars($usuario->genero); ?></td>
                                     <td><?php echo htmlspecialchars($usuario->telefono); ?></td>
                                     <td><?php echo htmlspecialchars($usuario->id_afiliacion); ?></td>
-                                    <td>
+                                    <td class="actions">
                                         <a href="./historialSolicitudes.html" class="btn btn-sm btn-primary">Ver historial de solicitudes</a>
                                         <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver historial médico</a>
                                         <a href="./Update-Profile.html" class="btn btn-sm btn-success">Editar Perfil</a>
@@ -128,20 +170,19 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="section-buttons">
+                        <button class="btn btn-sm btn-primary "><a href="./registrarfuncionario.html" class="text-light">Registrar nuevo funcionario</a></button>
+                    </div>
                 </div>
-
-
-                <button class="btn btn-sm btn-primary "><a href="./registrarfuncionario.html " >Registrar nuevo funcionario</a></button>
             </section>
         </main>
     </div>
 
     <!-- Footer -->
-    <?php include $baseUrlSrcFooter.'views\layouts\footer.php'; ?>
+    <?php include $baseUrlSrcFooter.'views/layouts/footer.php'; ?>
 
     <script>
-        
-
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
@@ -151,12 +192,11 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
 
         document.getElementById('searchInput').addEventListener('input', function () {
             const searchValue = this.value.toLowerCase();
-            document.querySelectorAll('.content-section.active article').forEach(article => {
-                const text = article.innerText.toLowerCase();
-                article.style.display = text.includes(searchValue) ? '' : 'none';
+            document.querySelectorAll('.content-section.active .table tbody tr').forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(searchValue) ? '' : 'none';
             });
         });
     </script>
 </body>
-
 </html>

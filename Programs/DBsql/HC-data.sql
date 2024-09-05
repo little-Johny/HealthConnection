@@ -2,55 +2,34 @@ USE Health_connection;
 
 
 -- Insertar registros en la tabla Ciudad
-INSERT INTO Ciudad (nombre_ciudad) VALUES
-('Bogotá'),
-('Medellín' ),
-('Cali');
+INSERT INTO Ciudad (nombre_ciudad, descripcion) VALUES
+('Bogotá', 'Capital de Colombia'),
+('Medellín', 'Ciudad de la eterna primavera'),
+('Cali', 'Capital de Valle del Cauca');
 
 -- Insertar registros en la tabla Especialidad
-INSERT INTO Especialidad (nombre_especialidad,costo) VALUES
-('Medicina General', 1000.00),
-('Cardiología',2000.00),
-('Pediatría',3000.00);
+INSERT INTO Especialidad (nombre_especialidad, descripcion) VALUES
+('Medicina General', 'Atención médica integral'),
+('Cardiología', 'Especialidad en enfermedades del corazón'),
+('Pediatría', 'Atención médica para niños');
 
 -- Insertar registros en la tabla Direccion
 INSERT INTO Direccion (direccion, id_ciudad) VALUES
 ('Avenida Carrera 13 # 80-30', 1),
 ('Calle 10 # 20-30', 2),
-('Calle 5 # 15-40', 3),
-('Calle 1 #10-20', 1),  -- Ciudad 1
-('Carrera 5 #15-30', 2), -- Ciudad 2
-('Avenida 6 #20-40', 3), -- Ciudad 3
-('Calle 2 #11-22', 1),   -- Ciudad 1
-('Carrera 7 #16-32', 2), -- Ciudad 2
-('Avenida 8 #21-42', 3), -- Ciudad 3
-('Calle 3 #12-24', 1),   -- Ciudad 1
-('Carrera 8 #17-34', 2), -- Ciudad 2
-('Avenida 9 #22-44', 3), -- Ciudad 3
-('Calle 4 #13-26', 1);   -- Ciudad 1
-
+('Calle 5 # 15-40', 3);
 
 -- Insertar registros en la tabla Afiliacion
--- Inserción de 10 registros en la tabla Afiliacion
-INSERT INTO Afiliacion (nombre_plan, costo, descuento, max_beneficiarios)
-VALUES 
-('Plan Básico', 100.00, 5.00, 2),
-('Plan Familiar', 250.00, 10.00, 5),
-('Plan Individual Plus', 150.00, 7.50, 1),
-('Plan Premium', 350.00, 15.00, 4),
-('Plan Corporativo', 500.00, 20.00, 10),
-('Plan Silver', 200.00, 8.00, 3),
-('Plan Gold', 300.00, 12.50, 4),
-('Plan Platinum', 450.00, 18.00, 5),
-('Plan Senior', 120.00, 6.00, 1),
-('Plan Juvenil', 80.00, 4.00, 1);
-
+INSERT INTO Afiliacion (nombre_plan, costo, descuento, max_beneficiarios) VALUES
+('Plan Básico', 100.00, 10.00, 3),
+('Plan Estándar', 200.00, 15.00, 5),
+('Plan Premium', 300.00, 20.00, 7);
 
 -- Insertar registros en la tabla Paciente
 INSERT INTO Paciente (numero_documento, nombre, apellido, tipo_doc, fecha_de_nacimiento, telefono, email, direccion, contraseña, id_afiliacion) VALUES
-(123456789, 'Juan', 'Pérez', 'C.C', '1980-05-15', '3001234567', 'juan.perez@example.com', 1, 'password123', null),
-(987654321, 'Ana', 'García', 'C.C', '1990-08-22', '3007654321', 'ana.garcia@example.com', 2, 'password456', null),
-(456789123, 'Luis', 'Martínez', 'C.C', '2000-12-01', '3001122334', 'luis.martinez@example.com', 3, 'password789', null);
+(123456789, 'Juan', 'Pérez', 'C.C', '1980-05-15', '3001234567', 'juan.perez@example.com', 1, 'password123', 1),
+(987654321, 'Ana', 'García', 'C.C', '1990-08-22', '3007654321', 'ana.garcia@example.com', 2, 'password456', 2),
+(456789123, 'Luis', 'Martínez', 'C.C', '2000-12-01', '3001122334', 'luis.martinez@example.com', 3, 'password789', 3);
 
 -- Insertar registros en la tabla Doctor
 INSERT INTO Doctor (nombre, apellido, tipo_documento, numero_documento, telefono, email, direccion, id_especialidad, contraseña) VALUES
@@ -65,10 +44,10 @@ INSERT INTO Administrativos (nombre, apellido,rol, tipo_documento, numero_docume
 ('Sofia', 'Ramírez', 'Administrador','C.C', '987654321', '3201122334', 'sofia.ramirez@example.com', 3, 'Administrativos789');
 
 -- Insertar registros en la tabla CategoriaCita
-INSERT INTO TipoCita (nombre_tipo, costo_adicional) VALUES
-('Consulta General',500.00),
-('Consulta Especializada',800.00),
-('Exámenes',1000.00);
+INSERT INTO CategoriaCita (nombre_categoria, descripcion) VALUES
+('Consulta General', 'Consulta médica general'),
+('Consulta Especializada', 'Consulta con especialista'),
+('Exámenes', 'Realización de exámenes médicos');
 
 -- Insertar registros en la tabla Cita
 INSERT INTO Cita (id_paciente, id_doctor, id_Administrativos, fecha, tipo_cita, costo, categoria, requiere_autorizacion) VALUES

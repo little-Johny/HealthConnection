@@ -1,0 +1,20 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const navbarDiv = document.getElementById('navbar');
+    /* Creamos la condicion de que si navbar existe entonces haremos una solicitud al navbar.html */
+    if (navbarDiv) {
+        fetch('navbar-prototype.html')
+           //convertimos la respuesta en un archivo de texto
+            .then(response => response.text())
+            .then(data => {
+                //luego modifivamos el contenido html de navbarDiv
+                navbarDiv.innerHTML = data;
+                
+            })
+            //ponemos el cathc en caso de que la solicitud no funcione
+            .catch(error => console.error('Error cargando el navbar:', error));
+
+            
+    }
+
+    
+});

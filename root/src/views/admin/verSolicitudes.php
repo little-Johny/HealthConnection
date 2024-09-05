@@ -38,11 +38,12 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
             font-family: var(--fuente-principal);            
             margin: 0;
             padding: 0;
-            
         }
-        .bg-body-secondary{
+
+        .bg-body-secondary {
             margin-top: 100px;
         }  
+
         .container-record {
             width: 90%;
             max-width: 90%;
@@ -132,6 +133,11 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
             margin: 20px 0;
         }
 
+        /* Hacer que la tabla sea responsive */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
         @media (max-width: 768px) {
             .nav-menu {
                 flex-direction: column;
@@ -176,126 +182,115 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                 </header>
                 <div class="container mt-5">
                     <h2 class="mb-4">Lista de Citas</h2>
-                    <table class="table table-striped table-responsive">
-                        <thead>
-                            <tr>
-                                <th>ID Cita</th>
-                                <th>Paciente</th>
-                                <th>Especialidad</th>
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($citas as $cita): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($cita->id_cita); ?></td>
-                                <td><?php echo htmlspecialchars($cita->paciente); ?></td>
-                                <td><?php echo htmlspecialchars($cita->especialidad); ?></td>
-                                <td><?php echo htmlspecialchars($cita->fecha); ?></td>
-                                <td><?php echo htmlspecialchars($cita->hora); ?></td> 
-                                <td class="actions">
-                                    <button class="btn btn-success" data-bs-toggle="collapse" data-bs-target="#success-<?php echo htmlspecialchars($cita->id_cita); ?>" aria-expanded="false" aria-controls="success-<?php echo htmlspecialchars($cita->id_cita); ?>">
-                                        Asignar cita
-                                    </button>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID Cita</th>
+                                    <th>Paciente</th>
+                                    <th>Especialidad</th>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($citas as $cita): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($cita->id_cita); ?></td>
+                                    <td><?php echo htmlspecialchars($cita->paciente); ?></td>
+                                    <td><?php echo htmlspecialchars($cita->especialidad); ?></td>
+                                    <td><?php echo htmlspecialchars($cita->fecha); ?></td>
+                                    <td><?php echo htmlspecialchars($cita->hora); ?></td> 
+                                    <td class="actions">
+                                        <button class="btn btn-success" data-bs-toggle="collapse" data-bs-target="#success-<?php echo htmlspecialchars($cita->id_cita); ?>" aria-expanded="false" aria-controls="success-<?php echo htmlspecialchars($cita->id_cita); ?>">
+                                            Asignar cita
+                                        </button>
 
-                                    <div class="collapse mt-2" id="success-<?php echo htmlspecialchars($cita->id_cita); ?>">
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                            Cita asignada
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <div class="collapse mt-2" id="success-<?php echo htmlspecialchars($cita->id_cita); ?>">
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                Cita asignada
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <button class="btn btn-danger" data-bs-toggle="collapse" data-bs-target="#denied-<?php echo htmlspecialchars($cita->id_cita); ?>" aria-expanded="false" aria-controls="denied-<?php echo htmlspecialchars($cita->id_cita); ?>">
-                                        Negar cita
-                                    </button>
-                                    
-                                    <div class="collapse mt-2" id="denied-<?php echo htmlspecialchars($cita->id_cita); ?>">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            Cita denegada
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <a class="btn btn-primary" href="editarCita.php?id_cita=<?php echo htmlspecialchars($cita->id_cita); ?>">Editar</a>
+                                        <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal<?php echo htmlspecialchars($cita->id_cita); ?>">Eliminar</a>
+
+                                        <!-- Modal Confirmación Eliminación -->
+                                        <div class="modal fade" id="confirmModal<?php echo htmlspecialchars($cita->id_cita); ?>" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="confirmModalLabel">Confirmar Eliminación</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ¿Estás seguro de que deseas eliminar esta cita?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="../../controllers/deleteCita.php" method="POST">
+                                                            <input type="hidden" name="id_cita" value="<?php echo htmlspecialchars($cita->id_cita); ?>">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                </td>
-                                <td><a class="btn btn-primary" href="editarCita.php?id_cita=<?php echo $cita->id_cita; ?>">Editar</a>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
-            
 
-            <!-- Sección Exámenes -->
+            <!-- Otras secciones -->
             <section id="examenes" class="content-section">
                 <header class="title">
                     <h2>Exámenes</h2>
                 </header>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="appointment-card">
-                            <p>Examen: Hemograma Completo</p>
-                            <p>Fecha: 22/06/2024</p>
-                            <p>Estado: Completado</p> 
-                            <div class="actions"> 
-                            <button class="btn btn-primary primary-button col-6">Ver Resultados</button> <button class="btn btn-primary primary-button col-6">Descargar PDF</button> 
-                            </div> 
-                        </article> 
-                        
-                    </div> 
-                    <div class="col-12 col-md-6 col-lg-4"> 
-                        <article class="appointment-card"> 
-                            <p>Examen: Radiografía de Tórax</p>
-                            <p>Fecha: 15/06/2024</p> 
-                            <p>Estado: Pendiente</p> 
-                            <div class="actions"> <button class="btn btn-primary primary-button">ver resultados</button> </div> </article> </div> </div> 
+                <p>Aquí se mostrarán los detalles de los exámenes.</p>
             </section>
+            <section id="autorizaciones-medicas" class="content-section">
+                <header class="title">
+                    <h2>Autorizaciones Médicas</h2>
+                </header>
+                <p>Aquí se mostrarán los detalles de las autorizaciones médicas.</p>
+            </section>
+            <section id="copagos" class="content-section">
+                <header class="title">
+                    <h2>Copagos</h2>
+                </header>
+                <p>Aquí se mostrarán los detalles de los copagos.</p>
+            </section>
+            <section id="mis-afiliaciones" class="content-section">
+                <header class="title">
+                    <h2>Mis Afiliaciones</h2>
+                </header>
+                <p>Aquí se mostrarán los detalles de las afiliaciones.</p>
+            </section>
+        </main>
 
-                <!-- Sección Autorizaciones Médicas -->
-        <section id="autorizaciones-medicas" class="content-section">
-            <header class="title">
-                <h2>Autorizaciones Médicas</h2>
-            </header>
-        </section>
+        <!-- Footer -->
+        <?php include $baseUrlSrcFooter . 'views/layouts/footer.php'; ?>
 
-        <!-- Sección Copagos -->
-        <section id="copagos" class="content-section">
-            <header class="title">
-                <h2>Copagos</h2>
-            </header>
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    <article class="payment-card">
-                        <p>Descripción: Copago por consulta general</p>
-                        <p>Monto: $10.000</p>
-                        <p>Fecha de Pago: 15/08/2024</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección Afiliaciones -->
-        <section id="mis-afiliaciones" class="content-section">
-            <header class="title">
-                <h2>Mis Afiliaciones</h2>
-            </header>
-        </section>
-    </>
-</main>
-
-<!-- Footer -->
-<?php include $baseUrlSrcFooter . 'views/layouts/footer.php'; ?>
-
-<script>
-    function showSection(sectionId) {
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
-        });
-        document.getElementById(sectionId).classList.add('active');
-    }
-</script>
+    <script>
+        function showSection(sectionId) {
+            var sections = document.querySelectorAll('.content-section');
+            sections.forEach(function(section) {
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>

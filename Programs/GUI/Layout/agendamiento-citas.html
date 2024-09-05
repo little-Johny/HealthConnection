@@ -13,22 +13,22 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
-        :root{
+        :root {
             --color-principal: #ff914d;
-            --color-secundario:#6C5F5B;
-            --color-complementario:#4F4A45;
-            --negro:#151515;
-            --gris-clarito:#9f9e9ed4;
-            --white:#FFFFFF;
-            --fuente-principal:"Roboto Mono", monospace;
-            --fuente-secundaria:'Nunito',sans-serif;
-            --small-font:14px;
-            --medium-font:16px;
-            --large-font:18px;
-            --gris-fondo:#e8e5e5;
-            --logo-font:"Coustard", serif;
+            --color-secundario: #6C5F5B;
+            --color-complementario: #4F4A45;
+            --negro: #151515;
+            --gris-clarito: #9f9e9ed4;
+            --white: #FFFFFF;
+            --fuente-principal: "Roboto Mono", monospace;
+            --fuente-secundaria: 'Nunito', sans-serif;
+            --small-font: 14px;
+            --medium-font: 16px;
+            --large-font: 18px;
+            --gris-fondo: #e8e5e5;
+            --logo-font: "Coustard", serif;
         }
-        
+
         body {
             background-color: var(--gris-fondo);
             margin: 0;
@@ -38,16 +38,19 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            flex-direction: column;
             text-align: center;
+            flex-direction: column;
         }
-        
+
         .appointment-container {
             background-color: var(--white);
             border: 1px solid var(--color-secundario);
             border-radius: 10px;
+            margin: 120px 0;
             padding: 20px;
             box-shadow: 10px 8px 16px var(--color-complementario);
+            max-width: 600px;
+            width: 100%;
         }
 
         .form {
@@ -55,17 +58,19 @@
             padding: 10px;
             border-radius: 10px;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .form h2 {
             color: var(--white);
             font-family: var(--fuente-principal);
+            margin: 0;
         }
 
         .appointment-form {
+            background-color: var(--white);
             padding: 20px;
             border-radius: 5px;
-            background-color: var(--white);
         }
 
         .form-group select,
@@ -96,99 +101,119 @@
             border: 1px solid var(--color-principal);
         }
 
-        .bg-body-secondary {
-            margin-top: 140px;
-        }
-
         .footer {
             background-color: #333;
             color: white;
             text-align: center;
             padding: 20px;
+            position: relative;
+            bottom: 0;
             width: 100%;
+        }
+
+        @media (max-width: 767.98px) {
+            .form h2 {
+                font-size: var(--medium-font);
+            }
+
+            .appointment-form {
+                padding: 15px;
+            }
+
+            button[type="submit"] {
+                font-size: var(--medium-font);
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .appointment-container {
+                padding: 15px;
+            }
+
+            button[type="submit"] {
+                font-size: var(--small-font);
+                padding: 8px 12px;
+            }
         }
     </style>
 </head>
-<body class="bg-body-secondary">
+<body>
     <header id="navbar"></header>
 
-    <main class="container my-3">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="appointment-container">
-                    <div class="form">
-                        <h2>Agenda tu cita</h2>
+    <main class="container d-flex justify-content-center align-items-center">
+        <div class="appointment-container">
+            <div class="form">
+                <h2>Agenda tu cita</h2>
+            </div>
+            <div class="appointment-form">
+                <form action="historialSolicitudes.html" method="post">
+                    <div class="mb-3">
+                        <label for="doc_pacient" class="form-label">Documento del paciente</label>
+                        <input type="text" name="doc_pacient" id="doc_paciente" class="form-control" placeholder="1012345424">
                     </div>
-                    <div class="appointment-form">
-                        <form action="historialSolicitudes.html" method="post">
-                            <div class="mb-3">
-                                <label for="doc_pacient" class="form-label">Documento del paciente</label>
-                                <input type="text" name="doc_pacient" id="doc_paciente" class="form-control" placeholder="1012345424">
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="specialty" class="form-label">Selecciona tipo de cita</label>
-                                <select id="specialty" name="specialty" class="form-select">
-                                    <option value="">Selecciona el tipo de cita que deseas</option>
-                                    <option value="general">Medicina general</option>
-                                    <option value="especialista">especialista</option>
-                                    <option value="Examen">Examen</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="specialty" class="form-label">Selecciona la especialidad</label>
-                                <select id="specialty" name="specialty" class="form-select">
-                                    <option value="optometria">Optometría</option>
-                                    <option value="odontologia">Odontología</option>
-                                    <option value="pediatria">Pediatría</option>
-                                    <option value="ginecologia">Ginecología</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">¿Quieres solicitar un médico?</label>
-                                <div>
-                                    <label class="form-check-label me-3"><input type="radio" name="specific-doctor" value="si" class="form-check-input"> Sí</label>
-                                    <label class="form-check-label"><input type="radio" name="specific-doctor" value="no" class="form-check-input"> No</label>
-                                </div>
-                                <select id="preferred-doctor" name="preferred-doctor" class="form-select mt-3" disabled>
-                                    <option value="">Selecciona el médico de tu preferencia</option>
-                                    <option value="">Juan Velez</option>
-                                    <option value="">Pit</option>
-                                    <option value="">Remy</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="center" class="form-label">¿Dónde te gustaría ser atendido?</label>
-                                <select id="center" name="center" class="form-select">
-                                    <option value="">Selecciona un centro de atención</option>
-                                    <option value="soacha">Soacha</option>
-                                    <option value="bosa-laureles">Bosa Laureles</option>
-                                    <option value="kennedy">Kennedy</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="date" class="form-label">Fecha de la cita:</label>
-                                <input type="date" id="date" name="date" class="form-control">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="time" class="form-label">Hora de la cita:</label>
-                                <input type="time" id="time" name="time" class="form-control">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Autorización</label>
-                                <input type="file" class="form-control">
-                            </div>
-
-                            <button type="submit" class="btn"><a href="./historialSolicitudes.html" class="text-white text-decoration-none">Agendar cita</a></button>
-                        </form>
+                    
+                    <div class="mb-3">
+                        <label for="specialty" class="form-label">Selecciona tipo de cita</label>
+                        <select id="specialty" name="specialty" class="form-select">
+                            <option value="">Selecciona el tipo de cita que deseas</option>
+                            <option value="general">Medicina general</option>
+                            <option value="especialista">Especialista</option>
+                            <option value="Examen">Examen</option>
+                        </select>
                     </div>
-                </div>
+
+                    <div class="mb-3">
+                        <label for="specialty" class="form-label">Selecciona la especialidad</label>
+                        <select id="specialty" name="specialty" class="form-select">
+                            <option value="optometria">Optometría</option>
+                            <option value="odontologia">Odontología</option>
+                            <option value="pediatria">Pediatría</option>
+                            <option value="ginecologia">Ginecología</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">¿Quieres solicitar un médico?</label>
+                        <div>
+                            <label class="form-check-label me-3"><input type="radio" name="specific-doctor" value="si" class="form-check-input"> Sí</label>
+                            <label class="form-check-label"><input type="radio" name="specific-doctor" value="no" class="form-check-input"> No</label>
+                        </div>
+                        <select id="preferred-doctor" name="preferred-doctor" class="form-select mt-3" disabled>
+                            <option value="">Selecciona el médico de tu preferencia</option>
+                            <option value="">Juan Velez</option>
+                            <option value="">Pit</option>
+                            <option value="">Remy</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="center" class="form-label">¿Dónde te gustaría ser atendido?</label>
+                        <select id="center" name="center" class="form-select">
+                            <option value="">Selecciona un centro de atención</option>
+                            <option value="soacha">Soacha</option>
+                            <option value="bosa-laureles">Bosa Laureles</option>
+                            <option value="kennedy">Kennedy</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Fecha de la cita:</label>
+                        <input type="date" id="date" name="date" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="time" class="form-label">Hora de la cita:</label>
+                        <input type="time" id="time" name="time" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Autorización</label>
+                        <input type="file" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn"><a href="./historialSolicitudes.html" class="text-white text-decoration-none">Agendar cita</a></button>
+                </form>
             </div>
         </div>
     </main>

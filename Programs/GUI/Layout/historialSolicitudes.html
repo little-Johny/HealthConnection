@@ -279,235 +279,142 @@
                 </div>
             </div>
 
-            <!-- Sección Citas -->
-            <section id="citas" class="content-section active">
-                <header class="title">
-                    <h2>Citas</h2>
-                </header>
-                <article class="appointment-card">
-                    <p>Paciente: Juan Perez</p>
-                    <p>Especialidad: Cardiología</p>
-                    <p>Fecha: 20/06/2024</p>
-                    <p>Hora: 09:00 AM</p>
-                    <p>Lugar: Centro de atención Chapinero</p>
+            <div id="citas" class="content-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre del Paciente</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Doctor</th>
+                            <th>Especialidad</th>
+                            <th>Tipo de Cita</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Juan Pérez</td>
+                            <td>2024-09-05</td>
+                            <td>10:00 AM</td>
+                            <td>Dr. Smith</td>
+                            <td>Cardiología</td>
+                            <td>Consulta</td>
+                            <td>
+                                <a href="./modifyCitas.html" class="btn btn-success edit">editar</a>
+                                <button class="btn btn-danger delete">Eliminar</button>
+                            </td>
+                        </tr>
+                        <!-- Agrega más filas según sea necesario -->
+                    </tbody>
+                </table>
 
-                    <!-- *Boton de asignar cita-->
-                    <button class="primary-button my-1" data-bs-toggle="collapse" data-bs-target="#success" aria-expanded="false" aria-controls="miAlerta">
-                        Asignar cita
-                    </button>
+            </div>
             
-                    <!-- Alerta oculta -->
-                    <div class="collapse mt-3" id="success">
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            Cita asignada
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </div>
-                    
-                    <!--!Boton de negar cita  -->
-                    <button class=" primary-button my-1" data-bs-toggle="collapse" data-bs-target="#denied" aria-expanded="false" aria-controls="miAlerta">
-                        Negar cita
-                    </button>
-            
-                    <!-- Alerta oculta -->
-                    <div class="collapse mt-3" id="denied">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Cita denegada
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </div>
-                </article>
 
-                <article class="appointment-card">
-                    <p>Paciente: Ana Gomez</p>
-                    <p>Especialidad: Dermatología</p>
-                    <p>Fecha: 22/06/2024</p>
-                    <p>Hora: 11:00 AM</p>
-                    <p>Lugar: Centro de atención Norte</p>
-                    <button class="primary-button mb-2">
-                        <a href="./ObservacionCita.html" class="text-decoration-none">Ver observaciones</a>
-                    </button>
-                    
-                </article>
-            </section>
 
-            <!-- Sección Exámenes -->
-            <section id="examenes" class="content-section">
-                <header class="title">
-                    <h2>Exámenes</h2>
-                </header>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="appointment-card">
-                            <p>Examen: Hemograma Completo</p>
-                            <p>Fecha: 22/06/2024</p>
-                            <p>Hora: 08:30 AM</p>
-                            <p>Lugar: Centro de atención Chapinero</p>
-                            <button class="primary-button mb-2"><a href="./resultados.html">Ver resultados</a></button>
-                        </article>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="appointment-card">
-                            <p>Examen: Hemograma Completo</p>
-                            <p>Fecha: 22/06/2024</p>
-                            <p>Hora: 08:30 AM</p>
-                            <p>Lugar: Centro de atención Chapinero</p>
-                            <button class="primary-button mb-2"><a href="./resultados.html">Ver resultados</a></button>
-                        </article>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="appointment-card">
-                            <p>Examen: Hemograma Completo</p>
-                            <p>Fecha: 22/06/2024</p>
-                            <p>Hora: 08:30 AM</p>
-                            <p>Lugar: Centro de atención Chapinero</p>
-                            <button class="primary-button mb-2"><a href="./resultados.html">Ver resultados</a></button>
-                        </article>
-                    </div>
-                    
+                <div id="examenes" class="content-section">
+                    <h2 class="title">Mis Exámenes</h2>
+                    <!-- Tabla de exámenes -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre del Examen</th>
+                                <th>Fecha</th>
+                                <th>Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Examen de Sangre</td>
+                                <td>2024-09-05</td>
+                                <td>Normal</td>
+                                <td>
+                                    <a href="./resultados.html" class="btn btn-primary">resultados</a>
+                                </td>
+                            </tr>
+                            <!-- Agrega más filas según sea necesario -->
+                        </tbody>
+                    </table>
                 </div>
-            </section>
+                
+                <div id="autorizaciones-medicas" class="content-section">
+                    <h2 class="title">Autorizaciones Médicas</h2>
+                    <!-- Tabla de autorizaciones médicas -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Autorización</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Autorización 001</td>
+                                <td>2024-09-05</td>
+                                <td>Aprobada</td>
+                                <td>
+                                    <a href="./VerifyAutorization.html" class="btn btn-primary">ver autorizacion</a>
+                                    <a href="." class="btn btn-primary">aprobar</a>
+                                    <a href="." class="btn btn-primary">negar</a>
+                                </td>
+                            </tr>
+                            <tr><td><a href="./newAutorization.html" class="btn btn-primary">Crear autorizacion</a></td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-            <!-- Sección Autorizaciones Médicas -->
-            <section id="autorizaciones-medicas" class="content-section">
-                <header class="title">
-                    <h2>Autorizaciones Médicas</h2>
-                </header>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="appointment-card">
-                            <p>Paciente: Laura Rivera</p>
-                            <p>Autorización: Aprobada</p>
-                            <p>Fecha: 19/06/2024</p>
-                            <button class="primary-button mb-2"><a href="./VerifyAutorization.html">Ver Autorización</a></button>
-                        </article>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="appointment-card">
-                            <p>Paciente: Laura Rivera</p>
-                            <p>Autorización: Aprobada</p>
-                            <p>Fecha: 19/06/2024</p>
-                            <button class="primary-button mb-2"><a href="./VerifyAutorization.html">Ver Autorización</a></button>
-                        </article>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="appointment-card">
-                            <p>Paciente: Laura Rivera</p>
-                            <p>Autorización: Aprobada</p>
-                            <p>Fecha: 19/06/2024</p>
-                            <button class="primary-button mb-2"><a href="./VerifyAutorization.html">Ver Autorización</a></button>
-                        </article>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="appointment-card">
-                            <p>Paciente: Laura Rivera</p>
-                            <p>Autorización: Aprobada</p>
-                            <p>Fecha: 19/06/2024</p>
-                            <!-- *Boton de asignar cita-->
-                            <button class="primary-button my-1" data-bs-toggle="collapse" data-bs-target="#success" aria-expanded="false" aria-controls="miAlerta">
-                                Asignar Autorizacion
-                            </button>
-                    
-                            <!-- Alerta oculta -->
-                            <div class="collapse mt-3" id="success">
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    Autorización asignada
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            </div>
+                <div id="copagos" class="content-section">
+                    <h2 class="title">Copagos</h2>
+                    <!-- Tabla de copagos -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Fecha</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Consulta Médica</td>
+                                <td>2024-09-05</td>
+                                <td>$50</td>
+                                <td>Pagado</td>
+                                <td>
+                                    <a href="./PaymentDetail.html" class="btn btn-primary">detalles</a>
+                                </td>
+                            </tr>
+                            <!-- Agrega más filas según sea necesario -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="mis-afiliaciones" class="content-section">
+                    <h2 class="title">Mis Afiliaciones</h2>
+                    <!-- Tabla de afiliaciones -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Afiliación</th>
+                                <th>Fecha de Inicio</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Afiliación 001</td>
+                                <td>2024-01-01</td>
+                                <td>Activa</td>
+                            </tr>
                             
-                            <!--!Boton de negar cita  -->
-                            <button class=" primary-button my-1" data-bs-toggle="collapse" data-bs-target="#denied" aria-expanded="false" aria-controls="miAlerta">
-                                Negar Autorización
-                            </button>
-                    
-                            <!-- Alerta oculta -->
-                            <div class="collapse mt-3" id="denied">
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    Autorización denegada
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                    <button class="primary-button mb-2">
-                        <a href="./newAutorization.html" class="text-decoration-none">Crear Autorizacion</a>
-                    </button>
+                        </tbody>
+                        
+                    </table>
                 </div>
-            </section>
-
-            <!-- Sección Copagos -->
-            <section id="copagos" class="content-section">
-                <header class="title">
-                    <h2>Copagos</h2>
-                </header>
-                <div class="payment-cards-container">
-                    <div class="payment-card">
-                        <p>Paciente: Maria Gomez</p>
-                        <p>Monto: $100,000</p>
-                        <p>Fecha: 10/06/2024</p>
-                        <p>Estado: Pendiente</p>
-                        <div class="actions">
-                            <button class="primary-button mb-2"><a href="./modifyPagos.html">Ver detalles</a></button>
-                        </div>
-                    </div>
-                    <div class="payment-card">
-                        <p>Paciente: Carlos Rodriguez</p>
-                        <p>Monto: $50,000</p>
-                        <p>Fecha: 15/06/2024</p>
-                        <p>Estado: Pagado</p>
-                        <div class="actions">
-                            <button class="primary-button mb-2"><a href="./modifyPagos.html">Ver detalles</a></button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Sección Afiliaciones -->
-            <section id="mis-afiliaciones" class="content-section">
-                <header class="title">
-                    <h2> Afiliaciones</h2>
-                </header>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="payment-card">
-                            <p>Paciente: Marta Gomez</p>
-                            <p>Afiliación: Activa</p>
-                            <p>Fecha: 17/06/2024</p>
-                            <p>Tipo: Medicina prepagada</p>
-                            <button class="primary-button mb-2"><a href="./modifyAfiliacion.html">Ver detalles</a></button>
-                        </article>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="payment-card">
-                            <p>Paciente: Marta Gomez</p>
-                            <p>Afiliación: Activa</p>
-                            <p>Fecha: 17/06/2024</p>
-                            <p>Tipo: Medicina prepagada</p>
-                            <button class="primary-button mb-2"><a href="./modifyAfiliacion.html">Ver detalles</a></button>
-                        </article>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="payment-card">
-                            <p>Paciente: Marta Gomez</p>
-                            <p>Afiliación: Activa</p>
-                            <p>Fecha: 17/06/2024</p>
-                            <p>Tipo: Medicina prepagada</p>
-                            <button class="primary-button mb-2"><a href="./modifyAfiliacion.html">Ver detalles</a></button>
-                        </article>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <article class="payment-card">
-                            <p>Paciente: Marta Gomez</p>
-                            <p>Afiliación: Activa</p>
-                            <p>Fecha: 17/06/2024</p>
-                            <p>Tipo: Medicina prepagada</p>
-                            <button class="primary-button mb-2"><a href="./modifyAfiliacion.html">Ver detalles</a></button>
-                        </article>
-                    </div>
-                    
-                </div>
-            </section>
+            </div>
         </section>
     </main>
 
