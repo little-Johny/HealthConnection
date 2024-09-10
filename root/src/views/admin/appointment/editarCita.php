@@ -128,7 +128,7 @@ try {
                 
                 <div class="buttons">
                     <button type="submit" class="btn btn-primary">Confirmar</button>
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='../verSolicitudes.php'">Cancelar</button>
                 </div>
             </form>
         </section>
