@@ -1,6 +1,7 @@
 <?php 
 include_once '../../controllers/patientController/consultarPaciente.php'; 
 include_once '../../controllers/doctorController/consultarDoctor.php'; 
+include_once '../../controllers/administrativeController/consultarAdministrativo.php'; 
 $baseUrlPublic = '/HealthConnection/root/public/';
 $baseUrlSrc = 'C:/xampp/htdocs/HealthConnection/root/src/'; // Ruta base absoluta para archivos PHP
 $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
@@ -69,7 +70,8 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
         <nav class="nav-buttons mb-4">
             <button class="btn btn-primary" onclick="showSection('usuarios')">Usuarios</button>
             <button class="btn btn-primary" onclick="showSection('doctores')">Doctores</button>
-            <button class="btn btn-primary" onclick="showSection('funcionarios')">Funcionarios</button>
+            <button class="btn btn-primary" onclick="showSection('Administrativos')">Administrativos</button>
+            <button class="btn btn-primary" onclick="showSection('Secretaria')">Secretaria</button>
         </nav>
 
         <!-- Secciones de contenido -->
@@ -207,29 +209,29 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                                             <a href="./doctors/editarDoctor.php?id_doctor=<?php echo htmlspecialchars($doctor->id_doctor); ?>" class="btn btn-primary">Editar Perfil</a>
                                             <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModalDoctor<?php echo htmlspecialchars($doctor->id_doctor); ?>">Eliminar</a>
 
-                                        <!-- Modal Confirmación Eliminación -->
-                                        <div class="modal fade" id="confirmModalDoctor<?php echo htmlspecialchars($doctor->id_doctor); ?>" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelDoctor" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="confirmModalLabelDoctor">Confirmar Eliminación</h5>
-                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        ¿Estás seguro de que deseas eliminar este doctor?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <form action="../../controllers/doctorController/deleteDoctor.php" method="POST">
-                                                            <input type="hidden" name="id_doctor" value="<?php echo htmlspecialchars($doctor->id_doctor); ?>">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                                                        </form>
+                                            <!-- Modal Confirmación Eliminación -->
+                                            <div class="modal fade" id="confirmModalDoctor<?php echo htmlspecialchars($doctor->id_doctor); ?>" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelDoctor" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmModalLabelDoctor">Confirmar Eliminación</h5>
+                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Estás seguro de que deseas eliminar este doctor?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form action="../../controllers/doctorController/deleteDoctor.php" method="POST">
+                                                                <input type="hidden" name="id_doctor" value="<?php echo htmlspecialchars($doctor->id_doctor); ?>">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -247,7 +249,74 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
             
 
             <!-- Sección Funcionarios -->
-            <section id="funcionarios" class="content-section">
+            <section id="Administrativos" class="content-section">
+                <div class="container mt-5">
+                    <div class="title mb-4 text-center">
+                        <h2>Administrativos</h2>
+                    </div>
+
+                    <!-- Tabla de Funcionarios -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($administrativos as $administrativo): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($administrativo->id_Administrativos); ?></td>
+                                    <td><?php echo htmlspecialchars($administrativo->nombre . ' ' . $administrativo->apellido); ?></td>
+                                    <td><?php echo htmlspecialchars($administrativo->telefono); ?></td>
+                                    <td><?php echo htmlspecialchars($administrativo->email); ?></td>
+                                    <td class="actions">
+
+                                            <a href="./administratives/editarAdministrativo.php?id_Administrativos=<?php echo htmlspecialchars($administrativo->id_Administrativos); ?>" class="btn btn-primary">Editar Perfil</a>
+                                            
+                                            <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModalAdministrativo<?php echo htmlspecialchars($administrativo->id_Administrativos); ?>">Eliminar</a>
+
+                                        <!-- Modal Confirmación Eliminación -->
+                                        <div class="modal fade" id="confirmModalAdministrativo<?php echo htmlspecialchars($administrativo->id_Administrativos); ?>" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelDoctor" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="confirmModalLabelAdministrativo">Confirmar Eliminación</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ¿Estás seguro de que deseas eliminar este administrativo?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="../../controllers/administrativeController/deleteAdministrativo.php" method="POST">
+                                                            <input type="hidden" name="id_Administrativos" value="<?php echo htmlspecialchars($administrativo->id_Administrativos); ?>">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="section-buttons">
+                        <button onclick="window.location.href='<?php echo $baseUrlSrc; ?>views/admin/administratives/registrarAdministrativo.php';" class="btn btn-sm btn-primary">Registrar Administrativo</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sección Secretaria -->
+            <section id="Secretaria" class="content-section">
                 <div class="container mt-5">
                     <div class="title mb-4 text-center">
                         <h2>Funcionarios</h2>
@@ -258,8 +327,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                         <table class="table table-bordered table-hover">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Documento</th>
-                                    <th>Tipo de Documento</th>
+                                    <th>ID</th>
                                     <th>Nombre Completo</th>
                                     <th>Fecha de Nacimiento</th>
                                     <th>Género</th>
@@ -269,15 +337,14 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach($paciente as $usuario): ?>
+                                <?php foreach($secretarias as $secretaria): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($usuario->numero_documento); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->tipo_doc); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->nombre . ' ' . $usuario->apellido); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->fecha_de_nacimiento); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->genero); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->telefono); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->id_afiliacion); ?></td>
+                                    <td><?php echo htmlspecialchars($secretaria->id_secretarias); ?></td>
+                                    
+                                    <td><?php echo htmlspecialchars($secretaria->nombre . ' ' . $secretaria->apellido); ?></td>
+                                    <td><?php echo htmlspecialchars($secretaria->fecha_de_nacimiento); ?></td>
+                                    <td><?php echo htmlspecialchars($secretaria->telefono); ?></td>
+                                    <td><?php echo htmlspecialchars($secretaria->id_afiliacion); ?></td>
                                     <td class="actions">
                                         <a href="./historialSolicitudes.html" class="btn btn-sm btn-primary">Ver historial de solicitudes</a>
                                         <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver historial médico</a>
@@ -289,7 +356,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                         </table>
                     </div>
                     <div class="section-buttons">
-                        <button class="btn btn-sm btn-primary "><a href="./registrarfuncionario.html" class="text-light">Registrar nuevo funcionario</a></button>
+                        <button onclick="window.location.href='<?php echo $baseUrlSrc; ?>views/admin/administratives/registrarAdministrativo.php';" class="btn btn-sm btn-primary">Registrar doctor</button>
                     </div>
                 </div>
             </section>
