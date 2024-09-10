@@ -1,5 +1,6 @@
 <?php 
-include_once '../../controllers/consultarRegistros.php'; 
+include_once '../../controllers/patientController/consultarPaciente.php'; 
+include_once '../../controllers/doctorController/consultarDoctor.php'; 
 $baseUrlPublic = '/HealthConnection/root/public/';
 $baseUrlSrc = 'C:/xampp/htdocs/HealthConnection/root/src/'; // Ruta base absoluta para archivos PHP
 $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
@@ -67,6 +68,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
         <!-- Menú de navegación -->
         <nav class="nav-buttons mb-4">
             <button class="btn btn-primary" onclick="showSection('usuarios')">Usuarios</button>
+            <button class="btn btn-primary" onclick="showSection('doctores')">Doctores</button>
             <button class="btn btn-primary" onclick="showSection('funcionarios')">Funcionarios</button>
         </nav>
 
@@ -99,37 +101,150 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                                     <th>Fecha de Nacimiento</th>
                                     <th>Género</th>
                                     <th>Teléfono</th>
-                                    <th>ID Afiliación</th>
+                                    <th>Plan Afiliacion</th>
+                                    <th>Direccion</th>
+                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
+                            <tbody>
                                 <?php foreach($paciente as $usuario): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($usuario->numero_documento); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->tipo_doc); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->nombre . ' ' . $usuario->apellido); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->fecha_de_nacimiento); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->genero); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->telefono); ?></td>
-                                    <td><?php echo htmlspecialchars($usuario->id_afiliacion); ?></td>
-                                    <td class="actions">
-                                        <a href="./historialSolicitudes.html" class="btn btn-sm btn-primary">Ver historial de solicitudes</a>
-                                        <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver historial médico</a>
-                                        <!-- Suponiendo que estás en una página donde se listan los pacientes -->
-                                        <a href="./editarPaciente.php?numero_documento=<?php echo htmlspecialchars($usuario->numero_documento); ?>" class="btn btn-primary">Editar Perfil</a>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($usuario->numero_documento); ?></td>
+                                        <td><?php echo htmlspecialchars($usuario->tipo_doc); ?></td>
+                                        <td><?php echo htmlspecialchars($usuario->nombre . ' ' . $usuario->apellido); ?></td>
+                                        <td><?php echo htmlspecialchars($usuario->fecha_de_nacimiento); ?></td>
+                                        <td><?php echo htmlspecialchars($usuario->genero); ?></td>
+                                        <td><?php echo htmlspecialchars($usuario->telefono); ?></td>
+                                        <td>
+                                            <?php echo htmlspecialchars($usuario->plan_afiliacion ?? 'No afiliado'); ?>
+                                        </td>
+                                        <td>
+                                            <?php echo htmlspecialchars($usuario->direccion_texto ?? 'Dirección no disponible'); ?>
+                                        </td>
+                                        <td>
+                                        <?php echo htmlspecialchars($usuario->estado ?? 'Dirección no disponible'); ?>
+                                        </td>
 
-                                    </td>
-                                </tr>
+                                        <td class="actions">
+                                            <a href="./historialSolicitudes.html" class="btn btn-sm btn-primary">Ver historial de solicitudes</a>
+                                            <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver historial médico</a>
+                                            <a href="./patients/editarPaciente.php?numero_documento=<?php echo htmlspecialchars($usuario->numero_documento); ?>" class="btn btn-primary">Editar Perfil</a>
+                                            <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal<?php echo htmlspecialchars($usuario->numero_documento); ?>">Eliminar</a>
+
+                                        <!-- Modal Confirmación Eliminación -->
+                                        <div class="modal fade" id="confirmModal<?php echo htmlspecialchars($usuario->numero_documento); ?>" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="confirmModalLabel">Confirmar Eliminación</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ¿Estás seguro de que deseas eliminar este usuario?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="../../controllers/patientController/deletePaciente.php" method="POST">
+                                                            <input type="hidden" name="numero_documento" value="<?php echo htmlspecialchars($usuario->numero_documento); ?>">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
+                            </tbody>
+
+
                             </tbody>
                         </table>
                     </div>
                     <div class="section-buttons">
-                        <button onclick="window.location.href='<?php echo $baseUrlSrc; ?>views/admin/registrarPaciente.php';" class="btn btn-sm btn-primary">Registrar nuevo paciente</button>
+                        <button onclick="window.location.href='<?php echo $baseUrlSrc; ?>views/admin/patients/registrarPaciente.php';" class="btn btn-sm btn-primary">Registrar Paciente</button>
                     </div>
                 </div>
             </section>
+
+            <!-- Sección Doctor -->
+            <section id="doctores" class="content-section ">
+                <div class="container mt-5">
+                    <div class="title mb-4 text-center">
+                        <h2>Doctores</h2>
+                    </div>
+
+                    <!-- Tabla de Usuarios -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Especialidad</th>
+                                    <th>Género</th>
+                                    <th>Teléfono</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tbody>
+                                <?php foreach($doctores as $doctor): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($doctor->id_doctor); ?></td>
+                                        <td><?php echo htmlspecialchars($doctor->nombre . ' ' . $doctor->apellido); ?></td>
+                                        <td><?php echo htmlspecialchars($doctor->nombre_especialidad); ?></td>
+                                        <td><?php echo htmlspecialchars($doctor->genero); ?></td>
+                                        <td><?php echo htmlspecialchars($doctor->telefono); ?></td>                                        
+
+                                        <td class="actions">
+                                            
+                                            <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver agenda </a>
+                                            <a href="./doctors/editarDoctor.php?id_doctor=<?php echo htmlspecialchars($doctor->id_doctor); ?>" class="btn btn-primary">Editar Perfil</a>
+                                            <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModalDoctor<?php echo htmlspecialchars($doctor->id_doctor); ?>">Eliminar</a>
+
+                                        <!-- Modal Confirmación Eliminación -->
+                                        <div class="modal fade" id="confirmModalDoctor<?php echo htmlspecialchars($doctor->id_doctor); ?>" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelDoctor" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="confirmModalLabelDoctor">Confirmar Eliminación</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ¿Estás seguro de que deseas eliminar este doctor?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="../../controllers/doctorController/deleteDoctor.php" method="POST">
+                                                            <input type="hidden" name="id_doctor" value="<?php echo htmlspecialchars($doctor->id_doctor); ?>">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="section-buttons">
+                        <button onclick="window.location.href='<?php echo $baseUrlSrc; ?>views/admin/doctors/registrarDoctor.php';" class="btn btn-sm btn-primary">Registrar doctor</button>
+                    </div>
+                </div>
+            </section>
+            
 
             <!-- Sección Funcionarios -->
             <section id="funcionarios" class="content-section">
@@ -183,6 +298,8 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
 
     <!-- Footer -->
     <?php include $baseUrlSrcFooter.'views/layouts/footer.php'; ?>
+
+    
 
     <script>
         function showSection(id) {

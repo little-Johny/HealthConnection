@@ -1,6 +1,6 @@
 <?php
-    $password="";
-    $user="root";
+    $password="3312";
+    $user="Admin";
     $database_name="Health_connection";
     try{
         $database= new PDO('mysql:host=localhost;dbname='.$database_name,$user,$password);

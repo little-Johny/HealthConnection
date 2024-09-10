@@ -178,3 +178,42 @@ JOIN Paciente p ON c.id_paciente = p.numero_documento
 JOIN Doctor d ON c.id_doctor = d.id_doctor;
 
 
+--!Consulta de solicitante:
+SELECT 
+    C.id_cita,
+    C.fecha,
+    C.hora,
+    C.tipo_cita,
+    C.costo,
+    CASE 
+        WHEN C.solicitante_tipo = 'paciente' THEN P.nombre
+        WHEN C.solicitante_tipo = 'secretaria' THEN S.nombre
+    END AS solicitante_nombre
+FROM 
+    Cita C
+LEFT JOIN 
+    Paciente P ON C.solicitante_tipo = 'paciente' AND C.solicitante_id = P.numero_documento
+LEFT JOIN 
+    Secretaria S ON C.solicitante_tipo = 'secretaria' AND C.solicitante_id = S.numero_documento;
+
+
+-- vedr el historial medico
+SELECT 
+    hc.id_historial_clinico,
+    c.id_cita,
+    o.observacion,
+    o.fecha_observacion
+FROM 
+    HistorialClinico hc
+JOIN 
+    HistorialClinico_Cita hcc ON hc.id_historial_clinico = hcc.id_historial
+JOIN 
+    Cita c ON hcc.id_cita = c.id_cita
+JOIN 
+    Observacion o ON c.id_cita = o.id_cita
+WHERE 
+    hc.id_paciente = 123456789;  -- Reemplaza con el número de documento del paciente
+
+
+INSERT INTO HistorialClinico_Cita (id_historial, id_cita)
+VALUES (1, LAST_INSERT_ID());
