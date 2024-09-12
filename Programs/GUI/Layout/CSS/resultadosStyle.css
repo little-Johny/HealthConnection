@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+    --color-principal: #ff914d;
+    --color-secundario: #6C5F5B;
+    --color-complementario: #4F4A45;
+    --negro: #151515;
+    --gris-clarito: #9f9e9ed4;
+    --white: #FFFFFF;
+    --fuente-principal: "Roboto Mono", monospace;
+    --fuente-secundaria: 'Nunito', sans-serif;
+    --small-font: 14px;
+    --medium-font: 16px;
+    --large-font: 18px;
+    --gris-fondo: #e8e5e5;
+    --logo-font: "Coustard", serif;
+}
+
+body {
+    font-family: var(--fuente-secundaria);
+    background-color: var(--gris-fondo);
+    margin: 0;
+    padding: 0;
+}
+
+.container-result {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.info-paciente {
+    margin-bottom: 20px;
+}
+
+.info-paciente p {
+    margin: 5px 0;
+    font-family: var(--fuente-principal);
+    font-size: var(--medium-font);
+    color: var(--negro);
+}
+
+.tabla-resultados {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+    border: 2px solid var(--color-complementario);
+}
+
+th, td {
+    border: 1px solid var(--gris-clarito);
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: var(--fuente-principal);
+    font-size: var(--medium-font);
+}
+
+th {
+    background-color: var(--gris-clarito);
+}
+
+.boton-descargar {
+    text-align: right;
+}
+
+button {
+    padding: 10px 20px;
+    border: 2px solid var(--negro);
+    background-color: var(--color-principal);
+    cursor: pointer;
+    font-family: var(--fuente-secundaria);
+    font-size: var(--medium-font);
+    color: var(--white);
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--color-complementario);
+}

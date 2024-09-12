@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Autorizaciones</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="autorizaciones.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <nav id="navbar"></nav>    
+    
+    <main class="container my-4">
+        <form action="#" method="post">
+            <fieldset class="border p-4 mb-4 rounded">
+                <legend class="w-auto px-2 text-custom">Información del Paciente</legend>
+                <div class="form-group">
+                    <label for="patientName">Nombre del Paciente:</label>
+                    <input type="text" id="patientName" name="patientName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientID">Documento de Identidad:</label>
+                    <input type="text" id="patientID" name="patientID" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientDOB">Fecha de Nacimiento:</label>
+                    <input type="date" id="patientDOB" name="patientDOB" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="insuranceProvider">Proveedor de Seguro:</label>
+                    <input type="text" id="insuranceProvider" name="insuranceProvider" class="form-control" required>
+                </div>
+            </fieldset>
+            
+            <fieldset class="border p-4 mb-4 rounded">
+                <legend class="w-auto px-2 text-custom">Detalles de la Autorización</legend>
+                <div class="form-group">
+                    <label for="authorizationType">Tipo de Autorización:</label>
+                    <select id="authorizationType" name="authorizationType" class="form-control" required>
+                        <option value="" disabled selected>Seleccione un tipo</option>
+                        <option value="consulta">Consulta</option>
+                        <option value="examen">Examen</option>
+                        <option value="cirugia">Cirugía</option>
+                        <option value="terapia">Terapia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="details">Detalles:</label>
+                    <textarea id="details" name="details" rows="4" class="form-control" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="priority">Prioridad:</label>
+                    <select id="priority" name="priority" class="form-control" required>
+                        <option value="alta">Alta</option>
+                        <option value="media">Media</option>
+                        <option value="baja">Baja</option>
+                    </select>
+                </div>
+            </fieldset>
+            
+            <fieldset class="border p-4 mb-4 rounded">
+                <legend class="w-auto px-2 text-custom">Autorización Médica</legend>
+                <div class="form-group">
+                    <label for="doctorName">Nombre del Doctor:</label>
+                    <input type="text" id="doctorName" name="doctorName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctorSignature">Firma del Doctor:</label>
+                    <input type="file" id="doctorSignature" name="doctorSignature" accept="image/*" class="form-control-file" required>
+                </div>
+            </fieldset>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-custom text-white mr-2">Generar Autorización</button>
+                <button type="reset" class="btn btn-cancel text-white">Restablecer Formulario</button>
+            </div>
+        </form>
+    </main>
+    
+    <footer class="bg-custom text-white text-center py-3 mt-4">
+        <p>&copy; Health Connection.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarDiv = document.getElementById('navbar');
+            if (navbarDiv) {
+                fetch('navbar.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        navbarDiv.innerHTML = data;
+                    })
+                    .catch(error => console.error('Error cargando el navbar:', error));
+            }
+            showSection('usuarios');
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

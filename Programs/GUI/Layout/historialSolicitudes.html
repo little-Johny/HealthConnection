@@ -1,160 +1,465 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Connection</title>
-    <link rel="stylesheet" href="./Historialstyle.css">
+    
     <link rel="shortcut icon" href="../Images/tab_icon.png" type="image/x-icon">
-</head>
-<body>
-   
-    <div id="navbar" ></div>
-    <div class="container-record">
-        
-        <div class="searching-container">
-            <div class="search-bar">
-                <input type="text" placeholder="Ingresa la referencia de pago que desees">
-                <button type="button">🔎</button>
-            </div>
-        </div>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+        :root {
+            --color-principal: #ff914d;
+            --color-secundario: #6C5F5B;
+            --color-complementario: #4F4A45;
+            --negro: #151515;
+            --gris-clarito: #9f9e9ed4;
+            --white: #FFFFFF;
+            --fuente-principal: "Roboto Mono", monospace;
+            --fuente-secundaria: 'Nunito', sans-serif;
+            --small-font: 14px;
+            --medium-font: 16px;
+            --large-font: 18px;
+            --gris-fondo: #e8e5e5;
+            --logo-font: "Coustard", serif;
+        }
+
+        body {
+            font-family: var(--fuente-principal);
+            background-color: var(--gris-fondo);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-record {
+            max-width: 80%;
+            padding: 20px;
+            height: 1000px;
+            margin: 20px auto;
+            background-color: var(--white);
+            border: 1px solid var(--color-secundario);
+            border-radius: 8px;
+            box-shadow: 10px 8px 16px var(--color-complementario);
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .user-icon img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        .nav-menu button {
+            flex: 1;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .nav-menu button:hover {
+            background-color: var(--white);
+            color: var(--color-principal);
+            border: 2px solid var(--color-principal);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-section {
+            display: none;
+            width: 100%;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-principal);
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            color: var(--white);
+            font-size: var(--large-font);
+            text-align: center;
+        }
+
+        .appointment-card {
+            display: flex;
+            flex-direction: column;
+            border: 2px solid var(--color-principal);
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            word-wrap: break-word;
+        }
+
+        .appointment-card p {
+            margin: 10px 0;
+        }
+
+        .primary-button {
+            background-color: var(--white);
+            color: var(--color-principal);
+            border: 2px solid var(--color-principal);
+            font-size: var(--large-font);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .primary-button a {
+            color: var(--color-principal);
+            text-decoration: none;
+        }
+        
+        .primary-button a:hover {
+            color: var(--white);
+        }
+
+        .primary-button:hover {
+            background-color: var(--color-principal);
+            color: var(--white);
+        }
+
+        .payment-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .payment-card {
+            flex: 1 1 250px;
+            border: 2px solid var(--color-principal);
+            border-radius: 8px;
+            background: white;
+            margin-bottom: 20px;
+            padding: 15px;
+            word-wrap: break-word;
+        }
+
+        .payment-card p {
+            margin-left: 10px;
+        }
+
+        .delete {
+            background: red;
+            border-radius: 5px;
+            border: 2px solid black;
+            margin-bottom: 5px;
+        }
+
+        .edit {
+            background: green;
+            border-radius: 5px;
+            border: 2px solid black;
+            margin-bottom: 5px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .search-section {
+            margin: 20px;
+            max-width: 100%;
+            padding: 10px;
+            border: 1px solid var(--color-principal);
+            border-radius: 8px;
+            background-color: var(--white);
+        }
+
+        #search-input {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid var(--color-secundario);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: var(--medium-font);
+        }
+
+        .bg-body-secondary {
+            margin-top: 140px;
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-direction: column;
+            }
+            
+            .appointment-card, .payment-card {
+                width: 100%; /* Asegura que las tarjetas no se desborden */
+            }
+
+            .container-record {
+                max-width: 100%;
+                padding: 20px;
+                height: auto; /* Cambiado para permitir que el contenedor se ajuste en altura según el contenido */
+                margin: 20px auto;
+                background-color: var(--white);
+                border: 1px solid var(--color-secundario);
+                border-radius: 8px;
+                box-shadow: 10px 8px 16px var(--color-complementario);
+                overflow-x: auto; /* Agrega scroll horizontal si el contenido se desborda */
+            }
+            
+            .main-content {
+                display: flex;
+                flex-direction: column;
+                max-width: 100%; /* Asegura que el contenedor principal no se desborde */
+            }
+            
+            .content-section {
+                width: 100%; /* Asegura que cada sección ocupe el 100% del contenedor principal */
+                box-sizing: border-box; /* Incluye padding y border en el cálculo del ancho total */
+            }
+            
+        }
+    </style>
+</head>
+
+<body class="bg-body-secondary">
+
+    <header id="navbar"></header>
+
+    <main class="container-record">
         <!-- Menú de navegación -->
-        <div class="nav-menu">
-            <button onclick="showSection('citas')">Citas</button>
-            <button onclick="showSection('examenes')">Exámenes</button>
-            <button onclick="showSection('autorizaciones-medicas')">Autorizaciones Médicas</button>
-            <button onclick="showSection('copagos')">Copagos</button>
-            <button onclick="showSection('mis-afiliaciones')">Mis Afiliaciones</button>
-        </div>
+        <nav class="nav-menu">
+            <button class="btn btn-outline-primary" onclick="showSection('citas')">Citas</button>
+            <button class="btn btn-outline-primary" onclick="showSection('examenes')">Exámenes</button>
+            <button class="btn btn-outline-primary" onclick="showSection('autorizaciones-medicas')">Autorizaciones Médicas</button>
+            <button class="btn btn-outline-primary" onclick="showSection('copagos')">Copagos</button>
+            <button class="btn btn-outline-primary" onclick="showSection('mis-afiliaciones')">Afiliaciones</button>
+        </nav>
 
         <!-- Secciones de contenido -->
-        <div class="main-content">
-            <!-- Sección Citas -->
-            <div id="citas" class="content-section">
-                <div class="title">
-                    <h2>Citas</h2>
-                </div>
-                
-                <!-- Espacio para llenar la información de citas -->
-                <div class="appointment-card">
-                    <p>Paciente: Juan Perez</p>
-                    <p>Especialidad: Cardiología</p>
-                    <p>Fecha: 20/06/2024</p>
-                    <p>Hora: 09:00 AM</p>
-                    <p>Lugar: Centro de atención Chapinero</p>
-                </div>
-                <div class="appointment-card">
-                    <p>Paciente: Ana Gomez</p>
-                    <p>Especialidad: Dermatología</p>
-                    <p>Fecha: 22/06/2024</p>
-                    <p>Hora: 11:00 AM</p>
-                    <p>Lugar: Centro de atención Norte</p>
-                </div>
-            </div>
-
-            <!-- Sección Exámenes -->
-            <div id="examenes" class="content-section">
-                <div class="title">
-                    <h2>Exámenes</h2>
-                </div>
-                
-                <div class="appointment-card">
-                    <p>Paciente: Pedro Martinez</p>
-                    <p>Examen: Radiografía</p>
-                    <p>Fecha: 25/06/2024</p>
-                    <p>Hora: 10:00 AM</p>
-                    <p>Lugar: Centro de atención Sur</p>
-                </div>
-            </div>
-
-            <!-- Sección Autorizaciones Médicas -->
-            <div id="autorizaciones-medicas" class="content-section">
-                <div class="title">
-                    <h2>Autorizaciones Médicas</h2>
-                </div>
-                
-                <div class="appointment-card">
-                    <p>Paciente: Laura Ortiz</p>
-                    <p>Autorización: Cirugía de rodilla</p>
-                    <p>Fecha: 30/06/2024</p>
-                    <p>Estado: Autorizado</p>
-                </div>
-            </div>
-
-            <!-- Sección Copagos -->
-            <div id="copagos" class="content-section">
-                <div class="title">
-                    <h2>Copagos</h2>
-                </div>
-                
-                <div class="payment-card pending">
-                    <p>Paciente: Juan Rodriguez</p>
-                    <p>Cita de: Optometría</p>
-                    <p>Fecha: 15/09/2024</p>
-                    <p>Hora: 10:30 AM</p>
-                    <p>Lugar: Centro de atención Kennedy P</p>
-                    <p class="copago">Realizar COPAGO = 10.300$</p>
-                    <div class="actions">
-                        <button class="edit">Editar Pago</button>
-                        <button class="delete">Eliminar</button>
+        <section class="main-content">
+            <div class="row search-bar mb-2">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Buscar por nombre del paciente, id servicio..." id="searchInput">
+                        <button class="btn btn-primary" type="button">Buscar</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Sección Mis Afiliaciones -->
-            <div id="mis-afiliaciones" class="content-section">
-                <div class="title">
-                    <h2>Mis Afiliaciones</h2>
+            <div id="citas" class="content-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre del Paciente</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Doctor</th>
+                            <th>Especialidad</th>
+                            <th>Tipo de Cita</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Juan Pérez</td>
+                            <td>2024-09-05</td>
+                            <td>10:00 AM</td>
+                            <td>Dr. Smith</td>
+                            <td>Cardiología</td>
+                            <td>Consulta</td>
+                            <td>
+                                <a href="./modifyCitas.html" class="btn btn-success edit">editar</a>
+                                <button class="btn btn-danger delete">Eliminar</button>
+                            </td>
+                        </tr>
+                        <!-- Agrega más filas según sea necesario -->
+                    </tbody>
+                </table>
+
+            </div>
+            
+
+
+                <div id="examenes" class="content-section">
+                    <h2 class="title">Mis Exámenes</h2>
+                    <!-- Tabla de exámenes -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre del Examen</th>
+                                <th>Fecha</th>
+                                <th>Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Examen de Sangre</td>
+                                <td>2024-09-05</td>
+                                <td>Normal</td>
+                                <td>
+                                    <a href="./resultados.html" class="btn btn-primary">resultados</a>
+                                </td>
+                            </tr>
+                            <!-- Agrega más filas según sea necesario -->
+                        </tbody>
+                    </table>
                 </div>
                 
-                <div class="appointment-card">
-                    <p>Afiliado: Maria Gonzalez</p><br>
-                    <p>Plan: Plan Básico</p><br>
-                    <p>Fecha de Inicio: 01/01/2023</p><br>
-                    <p>Estado: Activo</p><br>
+                <div id="autorizaciones-medicas" class="content-section">
+                    <h2 class="title">Autorizaciones Médicas</h2>
+                    <!-- Tabla de autorizaciones médicas -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Autorización</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Autorización 001</td>
+                                <td>2024-09-05</td>
+                                <td>Aprobada</td>
+                                <td>
+                                    <a href="./VerifyAutorization.html" class="btn btn-primary">ver autorizacion</a>
+                                    <a href="." class="btn btn-primary">aprobar</a>
+                                    <a href="." class="btn btn-primary">negar</a>
+                                </td>
+                            </tr>
+                            <tr><td><a href="./newAutorization.html" class="btn btn-primary">Crear autorizacion</a></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="copagos" class="content-section">
+                    <h2 class="title">Copagos</h2>
+                    <!-- Tabla de copagos -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Fecha</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Consulta Médica</td>
+                                <td>2024-09-05</td>
+                                <td>$50</td>
+                                <td>Pagado</td>
+                                <td>
+                                    <a href="./PaymentDetail.html" class="btn btn-primary">detalles</a>
+                                </td>
+                            </tr>
+                            <!-- Agrega más filas según sea necesario -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="mis-afiliaciones" class="content-section">
+                    <h2 class="title">Mis Afiliaciones</h2>
+                    <!-- Tabla de afiliaciones -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Afiliación</th>
+                                <th>Fecha de Inicio</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Afiliación 001</td>
+                                <td>2024-01-01</td>
+                                <td>Activa</td>
+                            </tr>
+                            
+                        </tbody>
+                        
+                    </table>
                 </div>
             </div>
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="text-center footer">
+        <!-- <nav class="footer-nav mb-3">
+            <a href="#" class="text-decoration-none me-3">Inicio</a>
+            <a href="#" class="text-decoration-none me-3">Citas</a>
+            <a href="#" class="text-decoration-none me-3">Exámenes</a>
+            <a href="#" class="text-decoration-none">Doctores</a>
+        </nav> -->
+        <div class="social-media mb-3">
+            <a href="#" class="text-decoration-none me-3">Twitter</a>
+            <a href="#" class="text-decoration-none me-3">YouTube</a>
+            <a href="#" class="text-decoration-none">Facebook</a>
         </div>
-    </div>
+        <p>&copy; 2024 - Health Connection</p>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const navbarDiv = document.getElementById('navbar');
-            /* Verificamos si navbar existe y cargamos el contenido */
-            if (navbarDiv) {
-                fetch('navbar-prototype.html')
-                   // Convertimos la respuesta en un archivo de texto
-                    .then(response => response.text())
-                    .then(data => {
-                        // Modificamos el contenido HTML de navbarDiv
-                        navbarDiv.innerHTML = data;
-                        
-                    })
-                    // Colocamos el catch en caso de que la solicitud falle
-                    .catch(error => console.error('Error cargando el navbar:', error));
-            }
-            // Mostramos la primera sección por defecto
-            showSection('citas');
-        });
-        
         function showSection(sectionId) {
-            // Ocultamos todas las secciones
-            const sections = document.querySelectorAll('.content-section');
-            sections.forEach(section => {
+            // Ocultar todas las secciones
+            var sections = document.querySelectorAll('.content-section');
+            sections.forEach(function(section) {
                 section.classList.remove('active');
             });
 
-            // Mostramos la sección seleccionada
-            document.getElementById(sectionId).classList.add('active');
-
-            // Actualizamos la clase active en el menú de navegación
-            const buttons = document.querySelectorAll('.nav-menu button');
-            buttons.forEach(button => {
-                button.classList.remove('active');
-            });
-            document.querySelector(`.nav-menu button[onclick="showSection('${sectionId}')"]`).classList.add('active');
+            // Mostrar la sección seleccionada
+            var activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.classList.add('active');
+            }
         }
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarDiv = document.getElementById('navbar');
+            if (navbarDiv) {
+                fetch('navbar-prototype.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        navbarDiv.innerHTML = data;
+                    })
+                    .catch(error => console.error('Error cargando el navbar:', error));
+            }
+        });
     </script>
 </body>
+
 </html>

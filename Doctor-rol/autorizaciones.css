@@ -1,0 +1,73 @@
+.bg-custom {
+    background-color: #ff914d !important;
+}
+
+.text-custom {
+    color: #ff914d !important;
+}
+
+.btn-custom {
+    background-color: #ff914d;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #e87a40;
+}
+
+.btn-cancel {
+    background-color: #e74c3c;
+}
+
+.btn-cancel:hover {
+    background-color: #c0392b;
+}
+
+/* Estilos adicionales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+header .logo {
+    height: 50px;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: 600;
+}
+
+nav ul {
+    display: flex;
+    gap: 1.5em;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #e87a40;
+}
+
+main {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+fieldset {
+    border: 1px solid #ddd;
+}
+
+legend {
+    color: #ff914d;
+    font-size: 1.2em;
+}

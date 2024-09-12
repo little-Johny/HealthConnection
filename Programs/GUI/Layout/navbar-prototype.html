@@ -4,54 +4,202 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HEALTH CONNECTION</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Importación de estilos con Bootstrap a través de CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Importación de paquete de funcionalidades para estilos de Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Estilos locales -->
+    <style>
+        :root {
+            --color-principal: #ff914d;
+            --color-secundario: #6C5F5B;
+            --color-complementario: #4F4A45;
+            --negro: #151515;
+            --gris-clarito: #9f9e9ed4;
+            --white: #FFFFFF;
+            --fuente-principal: "Roboto Mono", monospace;   
+            --fuente-secundaria: 'Nunito', sans-serif;
+            --small-font: 14px;
+            --medium-font: 16px;
+            --large-font: 18px;
+            --gris-fondo: #e8e5e5;
+            --logo-font: "Coustard", serif;
+        }
+        
+        body {
+            font-family: var(--fuente-principal);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar {
+            background-color: var(--white);
+            padding: 8px 0;
+            box-shadow: 0 2px 4px var(--color-principal);
+        }
+        
+        .container-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            margin: 0 auto;
+        }
+        
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.25rem;
+            margin: 0 0 0 15px;
+            font-family: var(--fuente-principal);
+            font-weight: 900;
+            color: var(--color-principal);
+        }
+        
+        .menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item {
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: var(--color-principal);
+            font-size: 0.875rem;
+            border: none;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--color-principal);
+            color: var(--white);
+        }
+
+        .icon {
+            stroke: var(--color-principal);
+        }
+        
+        .menu-item .icon {
+            stroke: var(--color-principal);
+            transition: stroke 0.3s ease;
+            margin-right: 0.5rem;
+        }
+        
+        .menu-item:hover .icon {
+            stroke: #ffffff;
+        }
+        
+        .menuServices {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: var(--color-principal);
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            z-index: 1;
+        }
+        
+        .menuServices a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+        
+        .menuServices a:hover {
+            color: #f1f1f1;
+        }
+        
+        .menuServices .closeBtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        .dropdown-menu {
+            background-color: #ff914d;
+        }
+
+        .dropdown-menu ul li {
+            list-style: none;
+        }
+
+        .service-item {
+            text-decoration: none;
+            color: aliceblue;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="profile">
-                <a href="../historialSolicitudes.html">
-                    <img src="../Images/user-NavBar.png" alt="profile">
+    <nav class="navbar bg-body-tertiary fixed-top">
+        <div class="container-fluid">
+            <div class="profile d-flex align-items-center">
+                <a href="./Update-Profile.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ff914d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                    </svg>
                 </a>
-                
+                <p id="user-rol" class="text-center ms-2 fs-4" style="color: black;">ADMIN</p>
             </div>
-            <div class="logo">
-                <img src="../Images/icons8-hospital-64.png" alt="logito">
-                
-                <h1>Health Connection</h1>
-            </div>
-            <div class="menu">
-                <!-- HOME -->
-                <a href=".." class="menu-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                    Home
-                </a>
-
-                <!-- ABOUT -->
-                <a href="#" class="menu-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M12 16v-4"></path>
-                        <path d="M12 8h.01"></path>
-                    </svg>
-                    About
-                </a>
-
-                <!-- SERVICES -->
-                <a href="#" class="menu-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                        <rect width="20" height="8" x="2" y="2" rx="2" ry="2"></rect>
-                        <rect width="20" height="8" x="2" y="14" rx="2" ry="2"></rect>
-                        <line x1="6" x2="6.01" y1="6" y2="6"></line>
-                        <line x1="6" x2="6.01" y1="18" y2="18"></line>
-                    </svg>
-                    Services
-                </a>
+            <a class="navbar-brand" href="#" style="color: #ff914d;">Health Connection</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header" style="background-color: #ff914d;">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Health Connection</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./landingPage.html">About</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Servicios
+                            </a>
+                            <ul class="dropdown-menu px-2">
+                                <li><a class="dropdown-item service-item" href="./historialSolicitudes.html">Solicitudes</a></li>
+                                <li><a class="dropdown-item service-item" href="./ConsultaRegistros.html">Registros</a></li>
+                                <li><a class="dropdown-item service-item" href="./Reports.html">Reportes</a></li>
+                                <li><a class="dropdown-item service-item" href="./solicitudes-afiliacion.html">Generar Afiliacion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
-</body>
+</body>    
 </html>

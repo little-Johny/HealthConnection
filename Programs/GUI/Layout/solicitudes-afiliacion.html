@@ -4,81 +4,226 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HealthConnection-solicitudAfiliacion</title>
-    <link rel="stylesheet" href="./solicitudes-afiliacionStyle.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="shortcut icon" href="../Images/tab_icon.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        :root{
+            --color-principal: #ff914d;
+            --color-secundario: #6C5F5B;
+            --color-complementario: #4F4A45;
+            --negro: #151515;
+            --gris-clarito: #9f9e9ed4;
+            --white: #FFFFFF;
+            --fuente-principal: "Roboto Mono", monospace;   
+            --fuente-secundaria: 'Nunito', sans-serif;
+            --small-font: 14px;
+            --medium-font: 16px;
+            --large-font: 18px;
+            --gris-fondo: #e8e5e5;
+            --logo-font: "Coustard", serif;
+        }
+
+        body {
+            font-family: var(--fuente-principal);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .bg-body-secondary{
+            margin-top: 100px;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Asegura que esté por encima de otros elementos */
+        }
+
+        .affiliation-container {
+            margin: 20px auto;
+            padding: 40px;
+            border: 1px solid var(--color-secundario);
+            box-shadow: 10px 8px 16px var(--color-complementario);
+            border-radius: 8px;
+            background-color: var(--color-principal);
+        }
+
+        .afilliation-left, .afilliation-right {
+            background-color: var(--white);
+            border: 2px solid black;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 10px;
+            box-sizing: border-box; /* Incluye padding y border en el cálculo de ancho y alto */
+            overflow: auto; /* Agrega barras de desplazamiento si el contenido se desborda */
+        }
+
+        .affiliation img {
+            width: 100px;
+            height: auto;
+        }
+
+        .affiliation h3, label {
+            margin-left: 9px;
+        }
+
+        .affiliation label {
+            color: orange;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        form h2 {
+            margin-top: 0;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form select {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 3px solid rgb(0, 0, 0);
+            border-radius: 5px;
+        }
+
+        form input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        form button {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form .value {
+            width: 100%;
+            margin: 10px 0px 20px 0px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: 2px solid orange;
+            text-align: center;
+        }
+
+        button[type="submit"] {
+            background-color: var(--color-principal);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            font-family: var(--fuente-principal);
+            font-size: var(--large-font);
+            font-weight: bold;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--white);
+            color: var(--color-principal);
+            border: 1px solid var(--color-principal);
+        }
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-body-secondary ">
     <div id="navbar"></div>
-        <div class="parent-request">
-            <div class="affiliation-container">
-        
-        
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
                 <div class="afilliation-left">
                     <h2>Afiliate</h2>
-
-                        <div class="affiliation">
-                            <img src="Images/addUser.png" alt="muñequito">
-                            <h3>Caja De Compensacion</h3>
-                            <label><input type="radio" name="affiliation"> Afiliacion Empresas</label><br>
-                            <label><input type="radio" name="affiliation"> Afiliacion Persona Natural</label>
-                        </div>
-
-                        <div class="affiliation">
-                            <img src="Images/medikit.png" alt="cajita">
-                            <h3>Salud</h3>
-                            <label><input type="radio" name="health-plan"> Plan Beneficios de Salud (PBS)</label><br>
-                            <label><input type="radio" name="health-plan"> Plan Complementario</label>
-                        </div>
-                    
+                    <div class="affiliation">
+                        <img src="Images/addUser.png" alt="muñequito">
+                        <h3>Caja De Compensacion</h3>
+                        <label><input type="radio" name="affiliation"> Afiliacion Empresas</label><br>
+                        <label><input type="radio" name="affiliation"> Afiliacion Persona Natural</label>
+                    </div>
+                    <div class="affiliation">
+                        <img src="Images/medikit.png" alt="cajita">
+                        <h3>Salud</h3>
+                        <label><input type="radio" name="health-plan"> Plan Beneficios de Salud (PBS)</label><br>
+                        <label><input type="radio" name="health-plan"> Plan Complementario</label>
+                    </div>
                 </div>
-
+            </div>
+            <div class="col-md-8">
                 <section class="afilliation-right">
                     <h2>Persona Natural</h2>
                     <form action="mis-afiliaciones.html" method="post">
-                        
                         <label for="document">Documento:</label>
-                            <input type="text" id="document" name="document" value="1012345424"><br><br>
+                        <input type="text" id="document" name="document" value="1012345424"><br><br>
                         <label>¿Actualmente usted cuenta con servicio de salud?</label><br>
-                            <label><input type="radio" name="health-service" value="no"> No</label>
-                            <label><input type="radio" name="health-service" value="si"> Sí</label><br><br>
+                        <label><input type="radio" name="health-service" value="no"> No</label>
+                        <label><input type="radio" name="health-service" value="si"> Sí</label><br><br>
                         <label>¿Tiene trabajo?</label><br>
-                            <label><input type="radio" name="job" value="no"> No</label>
-                            <label><input type="radio" name="job" value="si"> Sí</label><br><br>
+                        <label><input type="radio" name="job" value="no"> No</label>
+                        <label><input type="radio" name="job" value="si"> Sí</label><br><br>
                         <label>¿Trabaja como independiente o empleado?</label><br>
-                            <select name="job-type">
-                                <option value="independiente">Independiente</option>
-                                <option value="empleado" selected>Empleado</option>
-                            </select><br><br>
+                        <select name="job-type">
+                            <option value="independiente">Independiente</option>
+                            <option value="empleado" selected>Empleado</option>
+                        </select><br><br>
                         <label>¿Considera su trabajo un trabajo de alto riesgo?</label><br>
-                            <label><input type="radio" name="high-risk" value="no"> No</label>
-                            <label><input type="radio" name="high-risk" value="si"> Sí</label><br><br>
+                        <label><input type="radio" name="high-risk" value="no"> No</label>
+                        <label><input type="radio" name="high-risk" value="si"> Sí</label><br><br>
                         <label>¿Tiene hijos?</label><br>
-                            <label><input type="radio" name="children" value="no"> No</label>
-                            <label><input type="radio" name="children" value="si" checked> Sí</label>
-                            <input type="number" name="children-count" value="2" min="0"><br><br>
-                            <div class="value">Valor: <div class="cost">$$$$$</div> </div>
-                            <button type="submit"><a href="./historialSolicitudes.html">Crear Afiliacion</a></button>
-                        
+                        <label><input type="radio" name="children" value="no"> No</label>
+                        <label><input type="radio" name="children" value="si" checked> Sí</label>
+                        <input type="number" name="children-count" value="2" min="0"><br><br>
+                        <div class="value">Valor: <div class="cost">$$$$$</div></div>
+                        <button type="submit"><a href="./historialSolicitudes.html" style="color: white; text-decoration: none;">Crear Afiliacion</a></button>
                     </form>
                 </section>
-        
+            </div>
         </div>
+    </div>
+    <footer class="text-center footer">
+        <!-- <nav class="footer-nav mb-3">
+            <a href="#" class="text-decoration-none me-3">Inicio</a>
+            <a href="#" class="text-decoration-none me-3">Citas</a>
+            <a href="#" class="text-decoration-none me-3">Exámenes</a>
+            <a href="#" class="text-decoration-none">Doctores</a>
+        </nav> -->
+        <div class="social-media mb-3">
+            <a href="#" class="text-decoration-none me-3">Twitter</a>
+            <a href="#" class="text-decoration-none me-3">YouTube</a>
+            <a href="#" class="text-decoration-none">Facebook</a>
         </div>
-        
+        <p>&copy; 2024 - Health Connection</p>
+    </footer>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const navbarDiv = document.getElementById('navbar');
-            /* Creamos la condicion de que si navbar existe entonces haremos una solicitud al navbar.html */
             if (navbarDiv) {
-                fetch('navbar-prototype.html')
-                   //convertimos la respuesta en un archivo de texto
+                fetch('../../../root/src/views/layouts/navbar.html')
                     .then(response => response.text())
                     .then(data => {
-                        //luego modifivamos el contenido html de navbarDiv
                         navbarDiv.innerHTML = data;
-                        
                     })
-                    //ponemos el cathc en caso de que la solicitud no funcione
                     .catch(error => console.error('Error cargando el navbar:', error));
             }
         });

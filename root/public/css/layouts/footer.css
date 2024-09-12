@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+    --color-principal: #ff914d;
+    --color-secundario: #6C5F5B;
+    --color-complementario: #333;
+    --negro: #151515;
+    --gris-clarito: #9f9e9ed4;
+    --white: #FFFFFF;
+    --fuente-principal: "Roboto Mono", monospace;   
+    --small-font: 14px;
+    --medium-font: 16px;
+    --large-font: 18px;
+    --gris-fondo: #e8e5e5;
+}
+body {
+    font-family: var(--fuente-principal);
+    margin: 0;
+    padding: 0;
+}
+
+.bg-light {
+    font-family: var(--fuente-principal);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.footer {
+    background-color: var(--color-complementario);
+    color: white;
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid var(--color-complementario);
+    box-shadow: 0 -2px 5px var(--negro);
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer .social-icons a {
+    margin: 0 15px;
+    font-size: 1.2rem;
+}

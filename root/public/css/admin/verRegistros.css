@@ -1,0 +1,107 @@
+:root {
+    --color-principal: #ff914d;
+    --color-secundario: #6C5F5B;
+    --color-complementario: #4F4A45;
+    --negro: #151515;
+    --gris-clarito: #9f9e9ed4;
+    --white: #FFFFFF;
+    --fuente-principal: "Roboto Mono", monospace;
+    --fuente-secundaria: 'Nunito', sans-serif;
+    --gris-fondo: #e8e5e5;
+    --logo-font: "Coustard", serif;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+body {
+    font-family: var(--fuente-principal);
+    background-color: var(--gris-fondo);
+    margin: 0;
+    padding: 0;
+}
+.bg-body-secondary{
+    margin-top: 100px;
+}
+
+
+.container-record {
+    padding: 20px;
+    margin: 20px auto;
+    background-color: var(--white);
+    border: 1px solid var(--color-secundario);
+    border-radius: 8px;
+    box-shadow: 10px 8px 16px var(--color-complementario);
+    max-width: 100%;
+    flex: 1; /* Permite que este contenedor expanda para ocupar el espacio disponible */
+        
+        
+    
+}
+
+.title {
+    background-color: var(--color-principal);
+    color: var(--white);
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.primary-button {
+    background-color: var(--white);
+    color: var(--color-principal);
+    border: 2px solid var(--color-principal);
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+.primary-button:hover {
+    background-color: var(--color-principal);
+    color: var(--white);
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+button >a{
+    text-decoration: none;
+    color:var(--white)
+}
+.actions>a{
+    text-decoration: none;
+
+}
+
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.content-section article {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .content-section {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

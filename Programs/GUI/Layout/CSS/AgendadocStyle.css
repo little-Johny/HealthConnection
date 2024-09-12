@@ -1,0 +1,180 @@
+ /* Importación de fuentes y variables */
+ @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+ :root {
+     --color-principal: #ff914d;
+     --color-secundario: #6C5F5B;
+     --color-complementario: #4F4A45;
+     --negro: #151515;
+     --gris-clarito: #9f9e9ed4;
+     --white: #FFFFFF;
+     --fuente-principal: "Roboto Mono", monospace;
+     --fuente-secundaria: 'Nunito', sans-serif;
+     --small-font: 14px;
+     --medium-font: 16px;
+     --large-font: 18px;
+     --gris-fondo: #e8e5e5;
+     --logo-font: "Coustard", serif;
+ }
+
+ body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #ff914d;
+    color: white;
+    padding: 1em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    height: 50px;
+    border-radius: 8px; 
+    object-fit: contain; 
+}
+
+h1 {
+    text-align: center;
+    flex-grow: 1;
+    font-size: 2em;
+    font-weight: 600;
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 1em;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a:active {
+    background-color: #e87a40;
+    color: #fff; 
+}
+
+main {
+    padding: 2em;
+    max-width: 900px;
+    margin: 2em auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    margin-bottom: 2em;
+}
+
+h2 {
+    margin-bottom: 1.5em;
+    color: #ff914d;
+    font-size: 1.75em;
+    font-weight: 600;
+    border-bottom: 2px solid #ff914d;
+    padding-bottom: 0.5em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5em;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 1em;
+    text-align: left;
+}
+
+th {
+    background-color: #ff914d;
+    color: white;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+button {
+    background-color: #ff914d;
+    color: white;
+    border: none;
+    padding: 0.75em 1.5em;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #e87a40;
+    transform: scale(1.05);
+}
+
+button.cancel {
+    background-color: #e74c3c;
+}
+
+button.cancel:hover {
+    background-color: #c0392b;
+}
+
+footer {
+    background-color: #ff914d;
+    color: white;
+    text-align: center;
+    padding: 1em;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
+    margin-top: 2em; 
+}
+
+/* Bootstrap Overrides */
+.btn-custom {
+    background-color: #ff914d;
+    color: white;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #e87a40;
+}
