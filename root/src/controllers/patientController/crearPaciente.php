@@ -3,7 +3,7 @@ try {
     // Conexión a la base de datos
     require_once 'C:/xampp/htdocs/HealthConnection/root/config/databaseConexion.php';
 
-    // Recoger los datos del formulario con comprobación, se usa isseta para verificar que no sean valores nullos
+    // Recoger los datos del formulario con comprobación, se usa isset para verificar que no sean valores nulos
     $numero_documento = isset($_POST['numero_documento']) ? $_POST['numero_documento'] : null;
     $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : null;
     $apellido = isset($_POST['apellido']) ? $_POST['apellido'] : null;
@@ -63,12 +63,17 @@ try {
     $sentenciaInsertarPaciente = $database->prepare("INSERT INTO Paciente(numero_documento, nombre, apellido, tipo_doc, fecha_de_nacimiento, genero, telefono, email, direccion, contraseña, id_plan_afiliacion, foto_perfil, id_rol, estado, afiliado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
     $result = $sentenciaInsertarPaciente->execute([$numero_documento, $nombre, $apellido, $tipo_doc, $fecha_de_nacimiento, $genero, $telefono, $email, $id_direccion, $hashedPassword, $id_afiliacion, $fotoPerfil, $id_rol, $estado, $afiliado]);
 
+    
     // Comprobación del resultado e impresión de mensaje
     if ($result === TRUE) {
+        
+
+        // Redirigir al formulario de historial clínico con el ID del paciente en la URL
         echo "<script>
-                alert('Registrado exitosamente');
-                window.location.href = '../../views/admin/verRegistros.php';
-            </script>";
+            alert('Registrado exitosamente');
+            window.location.href = '../../views/admin/clinicalHistory/formClinicalHistory.php?id_paciente=$numero_documento';
+        </script>";
+
     } else {
         echo "Algo salió mal.";
     }
@@ -78,4 +83,3 @@ try {
 } catch (Exception $error) {
     echo "Error: " . $error->getMessage();
 }
-

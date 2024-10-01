@@ -11,6 +11,7 @@
     </script>
 
     <style>
+        /* Estilos personalizados para la vista */
         @import url('https://fonts.googleapis.com/css2?family=Coustard:wght@400;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
         :root {
@@ -39,67 +40,10 @@
         }
 
         header {
-            background-color: #ff914d;
+            background-color: var(--color-principal);
             color: white;
             padding: 1em;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .logo {
-            height: 50px;
-            border-radius: 8px;
-            object-fit: contain;
-        }
-
-        h1 {
-            text-align: center;
-            flex-grow: 1;
-            font-size: 2em;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            flex-grow: 1;
-        }
-
-        .nav-list {
-            list-style: none;
-            display: flex;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-list li {
-            margin: 0 0.75em;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            font-size: 1em;
-            padding: 0.5em 1em;
-            border-radius: 4px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-link:hover,
-        .nav-link:active {
-            background-color: #e87a40;
-            color: white;
         }
 
         main {
@@ -111,51 +55,13 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        section {
-            margin-bottom: 2em;
-        }
-
         h2 {
-            color: #ff914d;
+            color: var(--color-principal);
             font-size: 1.75em;
             font-weight: 600;
-            border-bottom: 2px solid #ff914d;
+            border-bottom: 2px solid var(--color-principal);
             padding-bottom: 0.5em;
             margin-bottom: 1em;
-        }
-
-        .history-list li {
-            padding: 0.75em;
-            background-color: #f9f9f9;
-            border-radius: 4px;
-            margin-bottom: 0.5em;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        button.save-note {
-            background-color: #ff914d;
-            color: rgb(56, 22, 22);
-            border: none;
-            padding: 0.75em 1.5em;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-
-        button.save-note:hover {
-            background-color: #e87a40;
-        }
-
-        button>a {
-            text-decoration: none;
-            color: white
-        }
-
-        button>a:hover {
-            text-decoration: none;
-            color: white
         }
 
         .footer {
@@ -165,16 +71,23 @@
             padding: 20px;
         }
 
+        .social-media a {
+            color: white;
+            margin-right: 10px;
+        }
+
         .bg-body-secondary {
             margin-top: 140px;
         }
     </style>
 </head>
 
-<body class="bg-body-secondary ">
+<body class="bg-body-secondary">
+    <!-- Navbar dinámico cargado desde otro archivo -->
     <nav id="navbar"></nav>
 
     <main class="container my-4">
+        <!-- Sección 1: Información básica del paciente traída de la tabla de pacientes -->
         <section class="patient-info">
             <h2 class="text-custom">Información del Paciente</h2>
             <dl class="row">
@@ -193,6 +106,7 @@
             </dl>
         </section>
 
+        <!-- Sección 2: Historial médico del paciente, datos traídos de la tabla HistorialClinico -->
         <section class="medical-history">
             <h2 class="text-custom">Historial Médico</h2>
             <ul class="list-unstyled">
@@ -211,8 +125,15 @@
             </ul>
         </section>
 
+        <!-- Sección 3: Observaciones previas, cargadas de la tabla de observaciones relacionada con el historial clínico (Pendiente de implementación) -->
+        <section class="patient-observations">
+            <h2>Observaciones Anteriores</h2>
+            <p>No hay observaciones registradas.</p>
+        </section>
+
+        <!-- Sección 4: Crear nuevas observaciones para el paciente -->
         <section class="notes">
-            <h2 class="text-custom">Anotaciones</h2>
+            <h2 class="text-custom">Observaciones</h2>
             <form action="#" method="post">
                 <div class="form-group">
                     <label for="notes">Nota:</label>
@@ -221,13 +142,15 @@
                 </div>
                 <div class="d-flex justify-content-around">
                     <button type="reset" class="btn btn-primary my-2">Guardar Nota</button>
-                    <button class="btn btn-primary my-2" onclick="window.location.href='ObservacionCita.html';"><a
-                            href="./ObservacionCita.html">Generar Nueva Observacion</a></button>
+                    <button class="btn btn-primary my-2" onclick="window.location.href='ObservacionCita.html';">
+                        <a href="./ObservacionCita.html" class="text-white text-decoration-none">Generar Nueva Observación</a>
+                    </button>
                 </div>
             </form>
         </section>
     </main>
 
+    <!-- Footer con enlaces a redes sociales -->
     <footer class="text-center footer">
         <div class="social-media mb-3">
             <a href="#" class="text-decoration-none me-3">Twitter</a>
@@ -236,7 +159,9 @@
         </div>
         <p>&copy; 2023 Gestión de Citas Médicas. Todos los derechos reservados.</p>
     </footer>
+
     <script>
+        // Script para cargar la barra de navegación desde un archivo externo
         document.addEventListener('DOMContentLoaded', () => {
             const navbarDiv = document.getElementById('navbar');
             if (navbarDiv) {

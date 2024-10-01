@@ -59,20 +59,10 @@ try {
                         <h2>Agenda tu cita</h2>
                     </div>
                     <div class="appointment-form">
-                    <form action="<?php echo $baseUrlSrc;?>controllers/appointmentController/procesarCita.php" method="post">
+                        <form action="<?php echo $baseUrlSrc;?>controllers/appointmentController/procesarCita.php" method="post">
                             <div class="mb-3 form-group">
                                 <label for="doc_paciente" class="form-label">Documento del paciente</label>
                                 <input type="text" name="doc_paciente" id="doc_paciente" class="form-control" placeholder="1012345424">
-                            </div>
-                            
-                            <div class="mb-3 form-group">
-                                <label for="specialty" class="form-label">Selecciona la especialidad</label>
-                                <select id="specialty" name="specialty" class="form-select" onchange="actualizarCosto()">
-                                    <option value="">--Selecciona--</option>
-                                    <?php foreach ($especialidades as $especialidad) : ?>
-                                        <option value="<?= $especialidad['id_especialidad']; ?>" data-costo="<?= $especialidad['costo']; ?>"><?= $especialidad['nombre_especialidad']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
                             </div>
 
                             <div class="mb-3 form-group">
@@ -81,6 +71,16 @@ try {
                                     <option value="">--Selecciona--</option>
                                     <?php foreach ($tiposcitas as $tipo) : ?>
                                         <option value="<?= $tipo['id_tipo']; ?>" data-costo="<?= $tipo['costo_adicional']; ?>"><?= $tipo['nombre_tipo']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3 form-group">
+                                <label for="specialty" class="form-label">Selecciona la especialidad</label>
+                                <select id="specialty" name="specialty" class="form-select" onchange="actualizarCosto()">
+                                    <option value="">--Selecciona--</option>
+                                    <?php foreach ($especialidades as $especialidad) : ?>
+                                        <option value="<?= $especialidad['id_especialidad']; ?>" data-costo="<?= $especialidad['costo']; ?>"><?= $especialidad['nombre_especialidad']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -101,7 +101,7 @@ try {
 
                             <div class="mb-3 form-group">
                                 <label for="date" class="form-label">Fecha de la cita:</label>
-                                <input type="date" id="date" name="date" class="form-control">
+                                <input type="date" id="date" name="date" class="form-control" min="<?php echo date('Y-m-d'); ?>">
                             </div>
 
                             <div class="mb-3 form-group">
@@ -115,8 +115,10 @@ try {
                                 <input type="text" id="costo" name="costo" class="form-control" readonly>
                             </div>
 
+                            <div class="mb-3 form-group" id="message"></div>
+
                             <!-- Autorización (Validar si es necesaria según la categoría seleccionada) -->
-                            <div class="mb-3">
+                            <div class="mb-3 form-group" id="autorization-container" style="display: none;">
                                 <label for="autorization" class="form-label">Autorización</label>
                                 <input type="file" name="autorization" class="form-control">
                             </div>
@@ -133,6 +135,44 @@ try {
     <?php include $baseUrlSrcFooter . 'views/layouts/footer.php'; ?>
 
     <script>
+        // JavaScript para actualizar el costo de la cita según la especialidad y tipo de cita seleccionados
+        function actualizarCosto() {
+            var selectEspecialidad = document.getElementById("specialty");
+            var selectTipo = document.getElementById("type");
+            var costoInput = document.getElementById("costo");
+            var autorizationContainer = document.getElementById("autorization-container");
+            var message = document.getElementById("message");
+
+            // Verificar la existencia de los elementos antes de manipularlos
+            if (!selectEspecialidad || !selectTipo || !costoInput || !autorizationContainer || !message) {
+                console.error("Uno o más elementos no se encontraron en el DOM.");
+                return;
+            }
+
+            // Obtener el costo de la opción seleccionada para especialidad
+            var costoEspecialidad = selectEspecialidad.options[selectEspecialidad.selectedIndex].getAttribute("data-costo");
+            costoEspecialidad = parseFloat(costoEspecialidad) || 0; // Convertir a número, o 0 si no hay valor
+
+            // Obtener el costo de la opción seleccionada para tipo de cita
+            var costoTipo = selectTipo.options[selectTipo.selectedIndex].getAttribute("data-costo");
+            costoTipo = parseFloat(costoTipo) || 0; // Convertir a número, o 0 si no hay valor
+            
+            // Calcular el costo total
+            var costoTotal = costoEspecialidad + costoTipo;
+            
+            // Actualizar el campo de costo con el valor total
+            costoInput.value = costoTotal.toFixed(2); // Formatear a dos decimales
+
+            // Mostrar o ocultar el campo de input de autorización dependiendo de la necesidad
+            if (selectTipo.value === "1") {
+                autorizationContainer.style.display = "block";
+                message.innerHTML = 'Has seleccionado un examen, por favor adjunta tu autorización.';
+            } else {
+                autorizationContainer.style.display = "none";
+                message.innerHTML = "";
+            }
+        }
+
         // JavaScript para habilitar/deshabilitar el campo del doctor preferido
         document.querySelectorAll('input[name="specific_doctor"]').forEach((elem) => {
             elem.addEventListener("change", function(event) {
@@ -145,26 +185,8 @@ try {
             });
         });
 
-        // JavaScript para actualizar el costo de la cita según la especialidad y tipo de cita seleccionados
-        function actualizarCosto() {
-            var selectEspecialidad = document.getElementById("specialty");
-            var selectTipo = document.getElementById("type");
-            var costoInput = document.getElementById("costo");
-
-            // Obtener el costo de la opción seleccionada para especialidad
-            var costoEspecialidad = selectEspecialidad.options[selectEspecialidad.selectedIndex].getAttribute("data-costo");
-            costoEspecialidad = parseFloat(costoEspecialidad) || 0; // Convertir a número, o 0 si no hay valor
-
-            // Obtener el costo de la opción seleccionada para tipo de cita
-            var costoTipo = selectTipo.options[selectTipo.selectedIndex].getAttribute("data-costo");
-            costoTipo = parseFloat(costoTipo) || 0; // Convertir a número, o 0 si no hay valor
-
-            // Calcular el costo total
-            var costoTotal = costoEspecialidad + costoTipo;
-
-            // Actualizar el campo de costo con el valor total
-            costoInput.value = costoTotal.toFixed(2); // Formatear a dos decimales
-        }
+        // Inicializar el campo de autorización en la carga de la página
+        document.addEventListener("DOMContentLoaded", actualizarCosto);
     </script>
 </body>
 </html>

@@ -1,0 +1,35 @@
+/* Estilos personalizados */
+body {
+    background-image: url('../../../../public/images/BackgroundHC.jpg');
+    background-size: cover;
+    font-family: "Roboto Mono", monospace;
+}
+.container {
+    margin-top: 50px;
+    padding: 15px;
+}
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.card-header {
+    background-color: #ff914d;
+    color: white;
+    border-radius: 15px 15px 0 0;
+    padding: 15px;
+}
+.form-select,
+.form-control {
+    width: 90%;
+    padding: 10px;
+    border: 2px solid #ff914d;
+    border-radius: 5px;
+    font-weight: 600;
+}
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}

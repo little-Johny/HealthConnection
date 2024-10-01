@@ -1,7 +1,8 @@
 <?php 
 $baseUrlPublic = '/HealthConnection/root/public/';
-$baseUrlSrc = 'C:/xampp/htdocs/HealthConnection/root/src/'; // Ruta base absoluta para archivos PHP
-$baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
+$baseUrlSrc = '/HealthConnection/root/src/'; // Usa una ruta relativa
+$baseUrlSrcFooter = '/HealthConnection/root/src/';
+require_once '../src/controllers/publicationController/selectPublication.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,8 +27,8 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
         <section class="my-custom-hero hero row align-items-center p-4">
             <div class="hero-text col-md-7">
                 <h2>AFÍLIATE AHORA!</h2>
-                <p>Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi.</p>
-                <button class="btn btn-primary">Leer más</button>
+                <p>¡Afíliate hoy y cuida de tu salud y bienestar con los mejores profesionales! Obtén acceso exclusivo a servicios médicos de calidad, descuentos especiales y atención personalizada. ¡Protege lo que más importa!</p>
+                <!-- <button class="btn btn-primary">Leer más</button> -->
             </div>
             <div id="carouselExampleInterval" class="carousel slide col-md-5" data-bs-ride="carousel">
                 <div class="carousel-inner">
@@ -57,36 +58,84 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
             <h2>Nuestros Servicios</h2>
             <div class="row">
                 <div class="col-md-4 p-sm-4 ">
-                    <div class="card p-4 ">
-                        <img src="<?php echo $baseUrlPublic; ?>images/citas.png" alt="Citas Médicas" class="card-img-top">
+                    <div class="card h-100 book-card shadow-sm">
+                        <img src="<?php echo $baseUrlPublic; ?>images/citas.png" alt="Citas Médicas" class="card-img-top d-block mx-auto">
                         <div class="card-body">
                             <h3 class="card-title">Citas </h3>
                             <p class="card-text">Descripción breve del servicio.</p>
-                            <a href="<?php echo $baseUrlSrc ?>views/admin/appointment/formularioCita.php" class="btn btn-primary">Agenda</a>
+                            <a href="<?php echo $baseUrlSrc ?>views/admin/appointment/formularioCita.php" class="btn btn-warning">Agenda</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 p-sm-4">
-                    <div class="card p-4 ">
-                        <img src="<?php echo $baseUrlPublic; ?>images/citas.png" alt="Exámenes" class="card-img-top">
+                    <div class="card h-100 book-card shadow-sm">
+                        <img src="<?php echo $baseUrlPublic; ?>images/citas.png" alt="Exámenes" class="card-img-top d-block mx-auto">
                         <div class="card-body">
                             <h3 class="card-title">Exámenes</h3>
                             <p class="card-text">Descripción breve del servicio.</p>
-                            <a href="" class="btn btn-primary">Leer más</a>
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#examModal">
+                                Leer más
+                            </button>
                         </div>
                     </div>
+
+                    <!-- modal -->
+                    <div class="modal fade" id="examModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">¿No sabes cómo solicitar un examen?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-start">
+                                    Para solicitar tu examen, necesitas una autorización. Cuando la tengas, solo tienes que dirigirte al apartado de citas y en tipo de cita debes seleccionar "Examen". Se habilitará la opción para que subas tu autorización.
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
                 </div>
                 <div class="col-md-4 p-sm-4">
-                    <div class="card p-4">
-                        <img src="<?php echo $baseUrlPublic; ?>images/examenes.png" alt="Jornadas de Vacunación" class="card-img-top">
+                    <div class="card h-100 book-card shadow-sm">
+                        <img src="<?php echo $baseUrlPublic; ?>images/examenes.png" alt="Jornadas de Vacunación" class="card-img-top d-block mx-auto">
                         <div class="card-body">
                             <h3 class="card-title"> Vacunación </h3>
                             <p class="card-text">Descripción breve del servicio.</p>
-                            <button class="btn btn-primary">Leer más</button>
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#vacunationModal">
+                                Leer más
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- modal -->
+                    <div class="modal fade" id="vacunationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">¡Vacúnate!</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-start">
+                                    ¡Protege tu salud y la de tu familia! Únete a nuestras jornadas de vacunación y asegúrate de estar al día con tus vacunas. Cuidar de tu bienestar es más fácil que nunca. ¡No esperes más, agenda tu cita hoy mismo!
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- Más tarjetas de servicio -->
+
+                <!-- Sección de publicaciones -->
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <?php foreach ($publicaciones as $publicacion): ?>
+                        <div class="col">
+                            <div class="card h-100 book-card shadow-sm">
+                                <img src="<?php echo $baseUrlPublic; ?>uploads/publications/<?= htmlspecialchars($publicacion->imagen_publicacion) ?>" class="card-img-top d-block mx-auto my-2" alt="Imagen de la publicación">
+                                <div class="card-body">
+                                    <h5 class="book-title"><?php echo htmlspecialchars($publicacion->titulo); ?></h5>
+                                    <p class="book-content"><?php echo htmlspecialchars($publicacion->contenido); ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </section>
     </main>
@@ -96,11 +145,9 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
     
     <script>
         window.onload = function() {
-            // Obtén el parámetro de la URL
             const urlParams = new URLSearchParams(window.location.search);
             const role = urlParams.get('role');
 
-            // Muestra un mensaje de bienvenida basado en el rol
             if (role) {
                 let message = '';
                 switch (role) {

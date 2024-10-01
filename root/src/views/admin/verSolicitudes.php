@@ -149,7 +149,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
         </main>
 
         <!-- Footer -->
-        <?php include  '../../views/layouts/footer.php'; ?>
+        <?php include_once  '../../views/layouts/footer.php'; ?>
 
     <script>
         function showSection(sectionId) {

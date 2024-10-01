@@ -22,19 +22,19 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <style>
-        /* Estilo para asegurar que la tabla se mantenga dentro del contenedor */
+        
         .table-responsive {
             overflow-x: auto;
         }
-        /* Estilo para limitar el ancho de la tabla en pantallas pequeñas */
+        
         .table {
             width: 100%;
         }
-        /* Centrar verticalmente el contenido de la tabla */
+        
         .table td, .table th {
             vertical-align: middle;
         }
-        /* Estilo para los botones en vista normal */
+        
         .nav-buttons {
             display: flex;
             flex-wrap: wrap;
@@ -50,14 +50,14 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
             flex-direction: column; /* Apilar los botones verticalmente */
             gap: 5px; /* Espacio entre botones */
         }
-        /* Estilo para centrar el botón de registrar */
+        
         .section-buttons {
             display: flex;
             justify-content: center; /* Centra horizontalmente el botón */
             margin-top: 20px;
         }
         .section-buttons .btn {
-            max-width: 200px; /* Ajusta el tamaño máximo del botón */
+            max-width: 200px; /
         }
     </style>
 </head>
@@ -131,8 +131,8 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
                                         </td>
 
                                         <td class="actions">
-                                            <a href="./historialSolicitudes.html" class="btn btn-sm btn-primary">Ver historial de solicitudes</a>
-                                            <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver historial médico</a>
+                                            <!-- <a href="./historialSolicitudes.html" class="btn btn-sm btn-primary">Ver historial de solicitudes</a> -->
+                                            <a href="./clinicalHistory//verClinicalHistory.php?numero_documento=<?php echo htmlspecialchars($usuario->numero_documento); ?>" class="btn btn-sm btn-warning">Ver historial médico</a>
                                             <a href="./patients/editarPaciente.php?numero_documento=<?php echo htmlspecialchars($usuario->numero_documento); ?>" class="btn btn-primary">Editar Perfil</a>
                                             <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal<?php echo htmlspecialchars($usuario->numero_documento); ?>">Eliminar</a>
 
@@ -206,7 +206,7 @@ $baseUrlSrcFooter = 'C:/xampp/htdocs/HealthConnection/root/src/';
 
                                         <td class="actions">
                                             
-                                            <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver agenda </a>
+                                            <!-- <a href="./Historial clinico.html" class="btn btn-sm btn-secondary">Ver agenda </a> -->
                                             <a href="./doctors/editarDoctor.php?id_doctor=<?php echo htmlspecialchars($doctor->id_doctor); ?>" class="btn btn-primary">Editar Perfil</a>
                                             <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModalDoctor<?php echo htmlspecialchars($doctor->id_doctor); ?>">Eliminar</a>
 

@@ -56,8 +56,54 @@
             max-height: 240px;
             object-fit: cover;
         }
+        
         .card img {
+            padding-top: 15px;
             margin-bottom: 15px;
             max-height: 200px;
-            object-fit: contain;
+            max-width: 200px;
+            object-fit: cover;
+        }
+
+        .book-card {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .book-card:hover {
+            transform: scale(1.05);
+            border-color:#ff914d;
+        }
+
+        .book-card img {
+            object-fit: cover;
+            height: 250px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .book-author {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .book-price {
+            font-size: 1.1rem;
+            color: #28a745;
+            font-weight: bold;
         }

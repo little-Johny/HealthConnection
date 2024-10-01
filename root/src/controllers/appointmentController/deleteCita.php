@@ -1,9 +1,14 @@
 <?php
-if(!isset($_POST["id_cita"])) exit();
-$id = $_POST["id_cita"];
 include_once 'C:\xampp\htdocs\HealthConnection\root\config\databaseConexion.php';
+
+if(!isset($_POST["id_cita"])) exit();
+
+
+$id = $_POST["id_cita"];
+
 $sentencia = $database->prepare("DELETE FROM Cita WHERE id_cita = ?;");
 $resultado = $sentencia->execute([$id]);
+
 if($resultado) {
     echo '
     <script> 
