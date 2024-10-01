@@ -1,7 +1,8 @@
 <?php
 require_once 'C:/xampp/htdocs/HealthConnection/root/config/databaseConexion.php';
 
-// Obtener las ciudades existentes desde la base de datos para poblar el campo select de ciudad
+
+//! Obtener las ciudades existentes desde la base de datos para poblar el campo select de ciudad
 $ciudades = [];
 try {
     $consultaCiudad = $database->query("SELECT id_ciudad, nombre_ciudad FROM Ciudad");
@@ -10,6 +11,7 @@ try {
     echo "Error al obtener ciudades: " . $error->getMessage();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -190,7 +192,7 @@ try {
 
                                 <div class="col-md-6">
                                     <label for="fecha_de_nacimiento" class="form-label">Fecha de Nacimiento:</label>
-                                    <input type="date" id="fecha_de_nacimiento" name="fecha_de_nacimiento" class="form-control" required>
+                                    <input type="date" id="fecha_de_nacimiento" name="fecha_de_nacimiento" class="form-control" required max="<?= date('Y-m-d')?>">
                                 </div>
 
                                 <div class="col-md-6">

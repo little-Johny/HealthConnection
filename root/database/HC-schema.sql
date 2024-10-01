@@ -64,7 +64,7 @@ CREATE TABLE Paciente (
     telefono VARCHAR(30),
     email VARCHAR(100) NOT NULL,
     direccion INT NOT NULL,
-    contraseña VARCHAR(255) NOT NULL,
+    contraseña VARBINARY(255) NOT NULL,
     id_plan_afiliacion INT NULL,
     foto_perfil VARCHAR(255) NULL,
     id_rol INT NOT NULL,  -- Asociar el rol desde la tabla Rol
@@ -87,10 +87,10 @@ CREATE TABLE Doctor (
     email VARCHAR(100) NOT NULL,
     direccion INT NOT NULL,
     id_especialidad INT NOT NULL,
-    contraseña VARCHAR(255) NOT NULL,
+    contraseña VARBINARY(255) NOT NULL,
     foto_perfil VARCHAR(255) NULL,
     genero CHAR(1) NOT NULL,
-    id_rol INT NOT NULL,  -- Asociar el rol desde la tabla Rol
+    id_rol INT NOT NULL,  -- Asociar el rol desde la tabla Rol =2
     FOREIGN KEY (direccion) REFERENCES Direccion(id_direccion),
     FOREIGN KEY (id_especialidad) REFERENCES Especialidad(id_especialidad),
     FOREIGN KEY (id_rol) REFERENCES Rol(id_rol)
@@ -108,7 +108,7 @@ CREATE TABLE Administrativos (
     telefono VARCHAR(30),
     email VARCHAR(100) NOT NULL,
     direccion INT NOT NULL,
-    contraseña VARCHAR(255) NOT NULL,
+    contraseña VARBINARY(255) NOT NULL,
     FOREIGN KEY (id_rol) REFERENCES Rol(id_rol),
     FOREIGN KEY (direccion) REFERENCES Direccion(id_direccion)
 );
@@ -125,7 +125,7 @@ CREATE TABLE Secretaria (
     telefono VARCHAR(30),
     email VARCHAR(100) NOT NULL,
     direccion INT NOT NULL,
-    contraseña VARCHAR(255) NOT NULL,
+    contraseña VARBINARY(255) NOT NULL,
     FOREIGN KEY (id_rol) REFERENCES Rol(id_rol),
     FOREIGN KEY (direccion) REFERENCES Direccion(id_direccion)
 );
@@ -196,7 +196,7 @@ CREATE TABLE HistorialAutorizacion (
 );
 
 
--- Tabla HistorialCita(Tabla Relacional para almacenar el historial de estados de citas)
+-- !15 Tabla HistorialCita(Tabla Relacional para almacenar el historial de estados de citas)
 CREATE TABLE HistorialCita (
     id_historial INT AUTO_INCREMENT PRIMARY KEY,
     id_cita INT NOT NULL,
@@ -206,7 +206,8 @@ CREATE TABLE HistorialCita (
     FOREIGN KEY (id_estado) REFERENCES Estado(id_estado)
 );
 
--- Tabla de HitoriaClinica del paciente
+
+-- !16 Tabla de HitoriaClinica del paciente
 CREATE TABLE HistorialClinico (
     id_historial_clinico INT AUTO_INCREMENT PRIMARY KEY,
     id_paciente INT NOT NULL,
@@ -219,6 +220,8 @@ CREATE TABLE HistorialClinico (
     FOREIGN KEY (id_paciente) REFERENCES Paciente(numero_documento)
 );
 
+
+-- !17 Tabla de HistorialClinico_Cita 
 CREATE TABLE HistorialClinico_Cita (
     id_historial INT NOT NULL,
     id_cita INT NOT NULL,
@@ -227,7 +230,9 @@ CREATE TABLE HistorialClinico_Cita (
     FOREIGN KEY (id_historial) REFERENCES HistorialClinico(id_historial_clinico),
     FOREIGN KEY (id_cita) REFERENCES Cita(id_cita)
 );
--- Tabla de Publicaciones
+
+
+-- !18 Tabla de Publicaciones
 CREATE TABLE Publicacion (
     id_publicacion INT AUTO_INCREMENT PRIMARY KEY,
     imagen_publicacion VARCHAR(255) NULL,
@@ -237,7 +242,7 @@ CREATE TABLE Publicacion (
 );
 
 
--- Tabla Relacional para Publicaciones y Administrativoss
+-- !19 Tabla Relacional para Publicaciones y Administrativoss
 CREATE TABLE Administrativos_Publicacion (
     id_Administrativos INT,
     id_publicacion INT,
@@ -247,7 +252,7 @@ CREATE TABLE Administrativos_Publicacion (
 );
 
 
--- Tabla Relacional para Secretarias y Publicaciones
+-- !20 Tabla Relacional para Secretarias y Publicaciones
 CREATE TABLE Secretaria_Publicacion (
     id_Secretaria INT,
     id_publicacion INT,
@@ -258,7 +263,7 @@ CREATE TABLE Secretaria_Publicacion (
 
 
 
--- Tabla de Facturas
+-- !21 Tabla de Facturas
 CREATE TABLE Factura (
     id_factura INT AUTO_INCREMENT PRIMARY KEY,
     id_servicio INT NULL,-- !Si es cita sera el id de la cita, pero si es afiliacion sera el id del plan de afiliacion, y para identeificarlo mejor se usara el paciente 
@@ -273,7 +278,7 @@ CREATE TABLE Factura (
 );
 
 
--- Tabla de Pagos
+-- !22 Tabla de Pagos
 CREATE TABLE Pago (
     id_pago INT AUTO_INCREMENT PRIMARY KEY,
     id_factura INT NOT NULL,
@@ -284,7 +289,7 @@ CREATE TABLE Pago (
 );
 
 
--- Tabla de Observaciones
+-- !23 Tabla de Observaciones
 CREATE TABLE Observacion (
     id_observacion INT AUTO_INCREMENT PRIMARY KEY,
     id_cita INT NOT NULL,
@@ -292,8 +297,3 @@ CREATE TABLE Observacion (
     fecha_observacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_cita) REFERENCES Cita(id_cita)
 );
-
-
-CREATE USER 'Admin'@'localhost' IDENTIFIED BY '3312'
-GRANT ALL PRIVILEGES ON Health_connection.* TO 'Admin'@'localhost';
-FLUSH PRIVILEGES;

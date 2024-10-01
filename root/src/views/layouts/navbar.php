@@ -61,8 +61,8 @@ $baseUrlSrc = '/HealthConnection/root/src/';
                             <ul class="dropdown-menu px-2">
                                 <li><a class="dropdown-item service-item" href="<?php echo $baseUrlSrc; ?>views/admin/verSolicitudes.php">Solicitudes</a></li>
                                 <li><a class="dropdown-item service-item" href="<?php echo $baseUrlSrc; ?>views/admin/verRegistros.php">Registros</a></li>
-                                <li><a class="dropdown-item service-item" href="./Reports.html">Reportes</a></li>
-                                <li><a class="dropdown-item service-item" href="./solicitudes-afiliacion.html">Generar Afiliacion</a></li>
+                                <li><a class="dropdown-item service-item" href="<?php echo $baseUrlSrc; ?>views/admin/Publications/verPublications.php">Publicaciones</a></li>
+                                <!-- <li><a class="dropdown-item service-item" href="./solicitudes-afiliacion.html">Generar Afiliacion</a></li> -->
                             </ul>
                         </li>
                     </ul>

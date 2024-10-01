@@ -51,7 +51,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="<?php echo htmlspecialchars($baseUrlPublic); ?>css/admin/editarCita.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo htmlspecialchars($baseUrlPublic); ?>css/admin/appointment/editarCita.css">
     <link rel="shortcut icon" href="../Images/tab_icon.png" type="image/x-icon">
     <title>Detalles de Citas Médicas</title>
 </head>

@@ -1,7 +1,8 @@
 <?php
+include_once 'C:\xampp\htdocs\HealthConnection\root\config\databaseConexion.php';
+
 if(!isset($_POST["numero_documento"])) exit();
 $numero_documento = $_POST["numero_documento"];
-include_once 'C:\xampp\htdocs\HealthConnection\root\config\databaseConexion.php';
 
 // Eliminar las autorizaciones relacionadas
 $deleteAutorizacionesStmt = $database->prepare("DELETE FROM Autorizacion WHERE id_paciente = ?");
