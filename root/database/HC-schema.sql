@@ -73,7 +73,7 @@ CREATE TABLE Paciente (
 
 -- !7 Tabla Paciente_has_Afiliacion
 CREATE TABLE Paciente_has_Afiliacion (
-    id_pacienteAfiliacion INT NOT NULL PRIMARY_KEY AUTO_INCREMENT,
+    id_pacienteAfiliacion INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_cotizante INT NOT NULL,
     id_afiliacion INT NOT NULL,
     fecha_adquisicion DATETIME DEFAULT CURRENT_TIMESTAMP,
