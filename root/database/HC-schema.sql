@@ -56,10 +56,10 @@ CREATE TABLE Paciente (
     nombre_paciente VARCHAR(100) NOT NULL,
     apellido_paciente VARCHAR(100) NOT NULL,
     genero_paciente CHAR(1) NOT NULL,
-    grupo_sanguineo ENUM('-O','+O','-A','+A','-B','+B','-AB'.'+AB'),
+    grupo_sanguineo ENUM('-O','+O','-A','+A','-B','+B','-AB','+AB'),
     nacimiento_paciente DATE NOT NULL,
-    ciudad_paciente VARCHAR NOT NULL,
-    direccion_paciente VARCHAR NOT NULL,
+    ciudad_paciente VARCHAR(255) NOT NULL,
+    direccion_paciente VARCHAR(255) NOT NULL,
     telefono_paciente VARCHAR(30),
     email_paciente VARCHAR(100) NOT NULL,
     foto_paciente VARCHAR(255) NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE Paciente_has_Afiliacion (
     fecha_pago DATE,
     estado_pacienteAfiliacion ENUM('activo','inactivo') DEFAULT 'activo',
     FOREIGN KEY (id_cotizante) REFERENCES Paciente(numero_documento),
-    FOREIGN KEY (id_afiliacion) REFERENCES Autorizacion(id_autorizacion) 
+    FOREIGN KEY (id_afiliacion) REFERENCES Afiliacion(id_afiliacion) 
 );
 
 -- !8 Tabla Beneficiario
@@ -148,7 +148,7 @@ CREATE TABLE Funcionario (
     rol INT NOT NULL,  
     especialidad_funcionario INT NULL,
     consultorio_funcionario INT NULL,
-    FOREIGN KEY (id_rol) REFERENCES Rol (id_rol),
+    FOREIGN KEY (rol) REFERENCES Rol (id_rol),
     FOREIGN KEY (especialidad_funcionario) REFERENCES Especialidad (id_especialidad),
     FOREIGN KEY (consultorio_funcionario) REFERENCES Consultorio (id_consultorio) 
 );
@@ -173,7 +173,7 @@ CREATE TABLE Estado (
 
 -- !15 Tabla de Autorizaciones
 CREATE TABLE Autorizacion (
-    id_autorizacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_autorizacion INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_paciente INT NOT NULL,  -- Paciente al que se le autoriza el procedimiento
     id_doctor INT NOT NULL,    -- Doctor que solicita y/o asigna la autorización
     id_funcionario_asignador INT NULL, -- Administrador que aprueba o rechaza la autorización
