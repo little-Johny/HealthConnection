@@ -2,10 +2,20 @@ const express = require('express');
 require('express-async-errors'); // Se cargará globalmente si se usa en rutas
 const cors = require('cors');
 const path = require('path');
+
 const connection = require('./config/db');
+const routerApi = require('./routers');
 
 const app = express();
 const port = 3000;
+
+app.use(express.json());
+app.use(cors());
+
+// Servir archivos estáticos de la carpeta "uploads"
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads'))); // Ruta absoluta
+
+routerApi(app);
 
 // Función para probar la conexión a la base de datos
 const testDbConnection = async () => {

@@ -7,18 +7,10 @@ CREATE TABLE Usuario (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    rol ENUM('administrador', 'doctor', 'paciente', 'secretaria') NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    rol ENUM('administrador', 'doctor', 'paciente', 'asistente') NOT NULL,
+    activo BOOLEAN DEFAULT true,
     creado_en DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabla de afiliaciones
-CREATE TABLE Afiliacion (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_plan VARCHAR(50) NOT NULL,
-    costo DECIMAL(10,2) NOT NULL,
-    descuento DECIMAL(5,2) NOT NULL,
-    max_beneficiarios INT NOT NULL
 );
 
 -- Tabla de pacientes
@@ -36,9 +28,7 @@ CREATE TABLE Paciente (
     correo VARCHAR(100),
     direccion VARCHAR(255),
     ciudad VARCHAR(100),
-    afiliacion_id INT, -- Relación con Afiliaciones
-    FOREIGN KEY (usuario_id) REFERENCES Usuario(id),
-    FOREIGN KEY (afiliacion_id) REFERENCES Afiliacion(id)
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id)
 );
 
 -- Tabla de historia clínica

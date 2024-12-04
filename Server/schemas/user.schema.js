@@ -4,21 +4,24 @@ const ROLES = ['administrador', 'doctor', 'paciente', 'secretaria'];
 const id = Joi.number().integer().positive();
 const username = Joi.string().alphanum().min(5).max(50);
 const password = Joi.string().alphanum().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,12}$/).messages({'string.pattern.base':'a contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener una longitud mínima de 8 caracteres.'});
-const email = Joi.string().email();
+const correo = Joi.string().email();
 const rol = Joi.string().valid(...ROLES);
+const activo = Joi.boolean().default(true);
 
 const createUserSchema = Joi.object({
     username: username.required(),
     password: password.required(),
-    email: email.optional(),
+    correo: correo.optional(),
     rol: rol.required(),
+    activo: activo.optional(),
 });
 
 const updateUserSchema = Joi.object({
     username: username.optional(),
     password: password.optional(),
-    email: email.optional(),
+    correo: correo.optional(),
     rol: rol.optional(),
+    activo: activo.optional(),
 });
 
 const getUserSchema = Joi.object({
