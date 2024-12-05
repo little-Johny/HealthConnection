@@ -51,4 +51,15 @@ router.patch(
     }
 );
 
+// Endpoint para obtener la lista de usuarios
+router.get('/getAll', async (req, res, next) => {
+    try {
+        const result = await service.find();
+        res.status(200).json(result);
+    } catch (error) {
+        // Manejo de errores utilizando Boom
+        next(error); // Si no es un error Boom, pasa al manejador global
+    }
+});
+
 module.exports = router;

@@ -52,38 +52,43 @@ class UserService {
 
     async login(username, password) {
         try {
+            // Busca el usuario por nombre de usuario
             const user = await this.findByUsername(username);
             if (!user) {
-                throw boom.unauthorized('User not found');
+                throw boom.unauthorized('Usuario no encontrado.');
             }
-
+    
             // Verifica si la contraseña coincide
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
-                throw boom.unauthorized('Wrong password');
+                throw boom.unauthorized('Contraseña incorrecta.');
             }
-
-            // Genera el token con `user_id` y `role`
+    
+            // Genera el token JWT con `userId` y `role`
             const token = jwt.sign(
-                { userId: user.id, role: user.rol },
+                { userId: user.id, role: user.rol }, // Cambiado de `user.role` a `user.rol`
                 process.env.JWT_SECRET,
                 { expiresIn: '1h' }
             );
-
+    
+            // Devuelve la respuesta con el token y datos adicionales
             return {
                 success: true,
                 token,
-                rol: user.rol,  // Corregido para usar `user.rol`
+                userId: user.id,      // Incluido explícitamente el `userId`
+                role: user.rol,       // Incluido explícitamente el `role`
                 message: 'Inicio de sesión exitoso.',
             };
         } catch (error) {
-            // Manejar errores en la base de datos
+            // Manejar errores en la base de datos o generales
             if (!error.isBoom) {
-                throw boom.badImplementation('Ocurrió un error en la base de datos', error);
+                console.error('Error inesperado en el login:', error);
+                throw boom.badImplementation('Ocurrió un error en el proceso de login.');
             }
-            throw error;
+            throw error; // Re-lanzar errores gestionados (Boom)
         }
     }
+    
 
     async findOne(id) {
         try {

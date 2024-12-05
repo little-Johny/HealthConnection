@@ -14,9 +14,16 @@ const telefono = Joi.string().alphanum().min(10).pattern(/^[^a-zA-Z]*$/).message
 const correo = Joi.string().email();
 const horario = Joi.string();
 const fecha_contratacion = Joi.date().max('now');
+const username = Joi.string().alphanum().min(5).max(50);
+const password = Joi.string().alphanum().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,12}$/).messages({'string.pattern.base':'La contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener una longitud mínima de 8 caracteres y maxima de 12 caracteres.'});
+const rol = Joi.string().default('paciente');
+const activo = Joi.boolean().default(true);
 
 const createAdministrativoSchema = Joi.object({
-    usuario_id: usuario_id.required(),
+    username: username.required(),
+    password: password.required(),
+    rol,
+    activo,
     nombres: nombres.required(),
     apellidos: apellidos.required(),
     foto: foto.optional(),
@@ -26,7 +33,7 @@ const createAdministrativoSchema = Joi.object({
     telefono: telefono.required(),
     correo: correo.required(),
     horario: horario.required(),
-    fecha_contratacion:fecha_contratacion.required(),
+    fecha_contratacion
 });
 
 const updateAdministrativoSchema = Joi.object({

@@ -89,7 +89,6 @@ CREATE TABLE Doctor (
     correo VARCHAR(100),
     horario TEXT,
     fecha_contratacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    tarjeta_profesional VARCHAR(255), -- Documento de tarjeta profesional
     FOREIGN KEY (usuario_id) REFERENCES Usuario(id),
     FOREIGN KEY (especialidad_id) REFERENCES Especialidad(id)
 );
