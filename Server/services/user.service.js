@@ -25,7 +25,7 @@ class UserService {
                 hashedPassword,
                 correo,
                 rol,
-                activo
+                activo == true,
             ]);
 
             // Validación del resultado
@@ -52,43 +52,38 @@ class UserService {
 
     async login(username, password) {
         try {
-            // Buscar al usuario por su username
-            const userResponse = await this.findByUsername(username);
-            
-            if (!userResponse.success) {
-                throw boom.unauthorized('Usuario no encontrado.');
+            const user = await this.findByUsername(username);
+            if (!user) {
+                throw boom.unauthorized('User not found');
             }
-    
-            // Extrae solo lo necesario de userResponse
-            const { username, rol, userId } = userResponse;
-    
-            // Verificar la contraseña
-            const passwordMatch = await bcrypt.compare(password, userResponse.password);
+
+            // Verifica si la contraseña coincide
+            const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
-                throw boom.unauthorized('Contraseña incorrecta.');
+                throw boom.unauthorized('Wrong password');
             }
-    
-            // Generar el token JWT
+
+            // Genera el token con `user_id` y `role`
             const token = jwt.sign(
-                { userId, role: rol },
+                { userId: user.id, role: user.rol },
                 process.env.JWT_SECRET,
-                { expiresIn: process.env.JWT_EXPIRATION || '1h' } // El tiempo puede ajustarse según tus necesidades
+                { expiresIn: '1h' }
             );
-    
+
             return {
+                success: true,
                 token,
-                role: rol,
+                rol: user.rol,  // Corregido para usar `user.rol`
                 message: 'Inicio de sesión exitoso.',
             };
         } catch (error) {
-            // Manejo de errores inesperados
+            // Manejar errores en la base de datos
             if (!error.isBoom) {
-                throw boom.badImplementation('Ocurrió un error inesperado durante el inicio de sesión.', error);
+                throw boom.badImplementation('Ocurrió un error en la base de datos', error);
             }
             throw error;
         }
-    };
-    
+    }
 
     async findOne(id) {
         try {
@@ -111,7 +106,7 @@ class UserService {
                 userId: user.id,
                 username: user.username,
                 rol: user.rol,
-                active: user.active,
+                active: user.activo,
             };
         } catch (error) {
             // Manejar errores en la base de datos
@@ -182,20 +177,19 @@ class UserService {
                 FROM Usuario 
                 WHERE username = ?;
             `;
-    
             const [result] = await mysql.query(query, [username]);
-    
-            // Validar si el usuario fue encontrado
+
             if (result.length === 0) {
-                throw boom.notFound('User not found');
+                return null; // Si no se encuentra el usuario, retorna null
             }
-    
-            const user = result[0]; // Tomar la primera fila
-    
+
+            const user = result[0];
+
             return { 
                 success: true, 
-                userId: user.id,
+                id: user.id,
                 username: user.username,
+                password: user.password,
                 rol: user.rol,
             };
         } catch (error) {
@@ -235,7 +229,7 @@ class UserService {
 
     async updateUser(id, updates) {
         // Buscar al usuario
-        const user = await this.findById(id);
+        const user = await this.findOne(id);
     
         if (!user) {
             throw boom.notFound(`Usuario con id ${id} no encontrado`);

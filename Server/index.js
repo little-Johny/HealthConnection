@@ -3,6 +3,11 @@ require('express-async-errors'); // Se cargará globalmente si se usa en rutas
 const cors = require('cors');
 const path = require('path');
 
+const {
+    logError, 
+    errorHandler, 
+    boomErrorHandler
+} = require('./middlewares/error.handler');
 const connection = require('./config/db');
 const routerApi = require('./routers');
 
@@ -16,6 +21,11 @@ app.use(cors());
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads'))); // Ruta absoluta
 
 routerApi(app);
+
+// Implementación de middlewares
+app.use(logError);
+app.use(boomErrorHandler);
+app.use(errorHandler);
 
 // Función para probar la conexión a la base de datos
 const testDbConnection = async () => {

@@ -15,7 +15,7 @@ const correo = Joi.string().email();
 const direccion = Joi.string().min(10).max(255);
 const ciudad = Joi.string().min(4).max(255);
 const username = Joi.string().alphanum().min(5).max(50);
-const password = Joi.string().alphanum().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,12}$/).messages({'string.pattern.base':'a contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener una longitud mínima de 8 caracteres.'});
+const password = Joi.string().alphanum().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,12}$/).messages({'string.pattern.base':'La contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener una longitud mínima de 8 caracteres y maxima de 12 caracteres.'});
 const rol = Joi.string().default('paciente');
 const activo = Joi.boolean().default(true);
 

@@ -18,13 +18,13 @@ function errorHandler(error, req, res, next) {
 //Errores tipo boom
 function boomErrorHandler(error, req, res, next) {
     //validar si el error es creado por la libreria boom
-    if (err.isBoom) {
-        const { output } = err;
+    if (error.isBoom) {
+        const { output } = error;
     //estatus code dinamico y json leidos desde el output de boom
         res.status(output.statusCode).json(output.payload);
     } else {
     //si no es un errore de tipo boom ira a ejecutar un middleware de errores normales
-        next(err);
+        next(error);
     }
 };
 
