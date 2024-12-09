@@ -15,9 +15,7 @@ function createDirectory(dir) {
 const uploadsDir = path.join(__dirname, '../../Uploads');
 const directories = {
     pacientes: path.join(uploadsDir, 'pacientes'),
-    doctoresFotoes: path.join(uploadsDir, 'doctores'),
-    doctoresFoto: path.join(uploadsDir, 'doctores/fotos'),
-    doctoresTarjeta: path.join(uploadsDir, 'doctores/tarjetas'),
+    doctores: path.join(uploadsDir, 'doctores'),
     administrativos: path.join(uploadsDir, 'administrativos'),
     publicaciones: path.join(uploadsDir, 'publicaciones'),
 };
@@ -62,8 +60,7 @@ const createUploadMiddleware = (folder) => multer({
 });
 
 const pacienteUpload = createUploadMiddleware(directories.pacientes);
-const doctoresFotoUpload = createUploadMiddleware(directories.doctoresFoto);
-const doctoresTarjetaUpload = createUploadMiddleware(directories.doctoresTarjeta);
+const doctoresUpload = createUploadMiddleware(directories.doctores);
 const administrativoUpload = createUploadMiddleware(directories.administrativos);
 
-module.exports = { pacienteUpload, doctoresFotoUpload, doctoresTarjetaUpload, administrativoUpload };
+module.exports = { pacienteUpload, doctoresUpload,  administrativoUpload };

@@ -6,16 +6,18 @@ const validatorHandler = require('../middlewares/validation.handler');
 
 const checkPermission = require('../middlewares/permission.handler');
 const { pacienteUpload } = require('../middlewares/files.handler');
+const ResponseHandler = require('../middlewares/response.handler');
+
 const {
     createPacienteSchema,
     updatePacienteSchema,
-    getPacienteSchema
+    getPacienteSchema,
 } = require('../schemas/paciente.schema');
 
 const PacienteService = require('../services/paciente.service');
 
 const router = express.Router();
-const service = new PacienteService(); 
+const service = new PacienteService();
 
 // Ruta para registrar paciente
 router.post(
@@ -33,7 +35,12 @@ router.post(
 
             // Registrar paciente (y usuario asociado)
             const result = await service.registerPaciente(body);
-            res.status(201).json(result);
+            ResponseHandler.success({
+                res,
+                message: 'Paciente registrado exitosamente.',
+                data: result,
+                status: 201,
+            });
         } catch (error) {
             next(error);
         }
@@ -43,13 +50,16 @@ router.post(
 // Ruta para desactivar paciente
 router.patch(
     '/deactivate/:documento',
-    authentication, // Middleware de autenticación
-    // checkRole('administrador'), // Middleware de roles si se desea control de acceso
+    authentication,
     async (req, res, next) => {
         try {
             const { documento } = req.params;
             const result = await service.deactivatePaciente(documento);
-            res.json(result);
+            ResponseHandler.success({
+                res,
+                message: 'Paciente desactivado exitosamente.',
+                data: result,
+            });
         } catch (error) {
             next(error);
         }
@@ -59,12 +69,15 @@ router.patch(
 // Ruta para obtener pacientes activos
 router.get(
     '/getActive',
-    authentication, // Middleware de autenticación
-    // checkRole('administrador', 'asistente', 'doctor'), // Control de roles si es necesario
+    authentication,
     async (req, res, next) => {
         try {
             const result = await service.getActivePacientes();
-            res.json(result);
+            ResponseHandler.success({
+                res,
+                message: 'Pacientes activos obtenidos exitosamente.',
+                data: result,
+            });
         } catch (error) {
             next(error);
         }
@@ -72,56 +85,70 @@ router.get(
 );
 
 // Endpoint para obtener un paciente por documento
-router.get('/pacienteDocument/:documento', async (req, res, next) => {
-    const { documento } = req.params;  // Obtener el documento de los parámetros de la URL
+router.get(
+    '/pacienteDocument/:documento', 
+    async (req, res, next) => {
+        try {
+            const { documento } = req.params;
 
-    try {
-        // Llamar al servicio para obtener el paciente
-        const result = await service.findByDocumento(documento);
-        
-        // Devolver los datos del paciente si se encuentra
-        res.json(result);
-    } catch (error) {
-        next(error);  // Pasar el error al manejador de errores
+            // Llamar al servicio para obtener el paciente
+            const result = await service.findByDocumento(documento);
+
+            ResponseHandler.success({
+                res,
+                message: 'Paciente obtenido exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
 // Ruta para actualizar paciente
 router.patch(
     '/updatePaciente/:documento',
-    authentication,  // Middleware de autenticación
-    pacienteUpload.single('foto'),  // Middleware para manejar la carga de la foto
-    validatorHandler(updatePacienteSchema, 'body'),  // Validación de los datos del cuerpo
+    authentication,
+    pacienteUpload.single('foto'),
+    validatorHandler(updatePacienteSchema, 'body'),
     async (req, res, next) => {
-        const { documento } = req.params;
-        let updates = { ...req.body };  // Copia de los datos enviados en el cuerpo de la solicitud
-
-        // Si se sube una foto, se asigna la URL al campo 'foto' de los datos
-        if (req.file) {
-            updates.foto = `http://localhost:3000/Uploads/pacientes/${req.file.filename}`;
-        }
-
         try {
-            // Llamada al servicio para actualizar el paciente
+            const { documento } = req.params;
+            let updates = { ...req.body };
+
+            // Si se sube una foto, se asigna la URL al campo 'foto' de los datos
+            if (req.file) {
+                updates.foto = `http://localhost:3000/Uploads/pacientes/${req.file.filename}`;
+            }
+
             const result = await service.updatePaciente(documento, updates);
-            res.json(result);
+
+            ResponseHandler.success({
+                res,
+                message: 'Paciente actualizado exitosamente.',
+                data: result,
+            });
         } catch (error) {
-            next(error);  // Pasa el error al manejador global
+            next(error);
         }
     }
 );
 
 // Ruta para eliminar paciente
 router.delete(
-    '/deletePaciente/:documento', 
-    authentication, // Autenticación del usuario
-    // checkRole('administrador', 'asistente'), // Control de roles, si es necesario
+    '/deletePaciente/:documento',
+    authentication,
     async (req, res, next) => {
-        const { documento } = req.params;
-
         try {
+            const { documento } = req.params;
+
             const result = await service.deletePaciente(documento);
-            res.json(result);
+
+            ResponseHandler.success({
+                res,
+                message: 'Paciente eliminado exitosamente.',
+                data: result,
+            });
         } catch (error) {
             next(error);
         }

@@ -3,11 +3,7 @@ const boom = require('@hapi/boom');
 
 const authentication = require('../middlewares/authentication.handler');
 const validatorHandler = require('../middlewares/validation.handler');
-const {
-    logError, 
-    errorHandler, 
-    boomErrorHandler
-} = require('../middlewares/error.handler');
+const ResponseHandler = require('../middlewares/response.handler');
 const checkPermission = require('../middlewares/permission.handler');
 const UserService = require('../services/user.service');
 const { updateUserSchema } = require('../schemas/user.schema');
@@ -23,11 +19,11 @@ router.post(
             const result = await service.login(username, password);
 
             // Enviar una respuesta estructurada
-            res.status(200).json({
-                success: result.success,
-                message: result.message,
-                token: result.token,
-                role: result.role,
+            ResponseHandler.success({
+                res,
+                message: 'Inicio de sesion exitoso',
+                data: result,
+                status: 201,
             });
         } catch (error) {
             next(error);  // Manejo de errores

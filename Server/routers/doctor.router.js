@@ -2,7 +2,16 @@ const express = require('express');
 const router = express.Router();
 const DoctorService = require('../services/doctor.service');
 const boom = require('@hapi/boom');
-const { doctoresFotoUpload, doctoresTarjetaUpload } = require('../middlewares/files.handler');
+const { doctoresUpload } = require('../middlewares/files.handler');
+const validatorHandler = require('../middlewares/validation.handler');
+const ResponseHandler = require('../middlewares/response.handler');
+const {
+    createDoctorSchema,
+    updateDoctorSchema,
+    getDoctorSchema
+} = require('../schemas/doctores.schema');
+const responseHandler = require('../middlewares/response.handler');
+
 
 // Instanciar el servicio
 const doctorService = new DoctorService();
@@ -10,18 +19,46 @@ const doctorService = new DoctorService();
 // Registrar un nuevo doctor
 router.post(
     '/registerDoctor',
-    doctoresFotoUpload.single('foto'),
+    doctoresUpload.single('foto'),
+    validatorHandler(createDoctorSchema, 'body'),
     async (req, res, next) => {
         try {
             const body = req.body;
 
             if (req.file) {
-                body.foto = `http://localhost:3000/Uploads/doctores/foto/${req.file.filename}`;
+                if (!req.file.mimetype.startsWith('image/')) {
+                    throw boom.badRequest('El archivo debe ser una imagen.');
+                }
+                body.foto = `http://localhost:3000/Uploads/doctores/${req.file.filename}`;
             }
             
-
+            // Registrar doctor (y usuario asociado)
             const result = await doctorService.registerDoctor(body);
-            res.status(201).json(result);
+            ResponseHandler.success({
+                res,
+                message: 'Doctor registrado exitosamente.',
+                data: result,
+                status: 201,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+//Desactivar doctor
+router.patch(
+    '/deactivate/:documento',
+    async ( req, res, next) => {
+        try {
+            const { documento } = req.params;
+            
+            const  result = await doctorService.deactivateDoctor(documento);
+            responseHandler.success({
+                res,
+                message: 'Doctor desactivado exitosamente.',
+                data: result,
+            });
         } catch (error) {
             next(error);
         }
@@ -29,49 +66,62 @@ router.post(
 );
 
 // Obtener todos los doctores activos
-router.get('/active', async (req, res, next) => {
-    try {
-        const result = await doctorService.getActiveDoctors();
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
+router.get(
+    '/getActive', 
+    async (req, res, next) => {
+        try {
+            const result = await doctorService.getActiveDoctors();
+            ResponseHandler.success({
+                res,
+                message: 'Doctores activos obtenidos exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
 // Buscar doctor por número de documento
-router.get('/:numero_documento', async (req, res, next) => {
-    try {
-        const result = await doctorService.findByDocumento(req.params.numero_documento);
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
+router.get(
+    '/doctorDocument/:documento', 
+    async (req, res, next) => {
+        try {
+            const { documento } = req.params;
+
+            const result = await doctorService.findByDocumento(documento);
+            ResponseHandler.success({
+                res,
+                message: 'Doctor obtenido exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
 // Actualizar doctor
 router.patch(
-    '/:numero_documento',
-    (req, res, next) => {
-        // Middleware para manejar las subidas de archivos
-        doctoresFotoUpload.single('foto')(req, res, (err) => {
-            if (err) return next(err);
-            doctoresTarjetaUpload.single('tarjeta_profesional')(req, res, next);
-        });
-    },
+    '/updateDoctor/:documento',
+    doctoresUpload.single('foto'),
+    validatorHandler(updateDoctorSchema, 'body'),
     async (req, res, next) => {
-        const { numero_documento } = req.params;
-        let updates = { ...req.body };
-
-        if (req.files && req.files['foto']) {
-            updates.foto = `http://localhost:3000/Uploads/doctores/fotos/${req.files['foto'][0].filename}`;
-        }
-        if (req.files && req.files['tarjeta_profesional']) {
-            updates.tarjeta_profesional = `http://localhost:3000/Uploads/doctores/tarjetas/${req.files['tarjeta_profesional'][0].filename}`;
-        }
-
         try {
-            const result = await doctorService.updateDoctor(numero_documento, updates);
-            res.status(200).json(result);
+            const { documento } = req.params;
+            let updates = { ...req.body };
+
+            if (req.files && req.files['foto']) {
+                updates.foto = `http://localhost:3000/Uploads/doctores/${req.file.filename}`;
+            }
+
+            const result = await doctorService.updateDoctor(documento, updates);
+            
+            ResponseHandler.success({
+                res,
+                message: 'Doctor actualizado exitosamente.',
+                data: result,
+            });
         } catch (error) {
             next(error);
         }
@@ -79,13 +129,23 @@ router.patch(
 );
 
 // Eliminar doctor
-router.delete('/:numero_documento', async (req, res, next) => {
-    try {
-        const result = await doctorService.deleteDoctor(req.params.numero_documento);
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
+router.delete(
+    '/deleteDoctor/:documento', 
+    async (req, res, next) => {
+        try {
+            const { documento } = req.params;
+
+            const result = await doctorService.deleteDoctor(documento);
+
+            ResponseHandler.success({
+                res,
+                message: 'Doctor eliminado exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
 module.exports = router;

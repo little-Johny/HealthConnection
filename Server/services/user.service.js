@@ -17,7 +17,7 @@ class UserService {
             // Consulta SQL parametrizada
             const query = `
                 INSERT INTO Usuario (username, password, correo, rol, activo) 
-                VALUES (?, ?, ?, ?, ?);
+                VALUES (?, ?, ?, ?, true);
             `;
 
             const [result] = await mysql.query(query, [
@@ -25,7 +25,6 @@ class UserService {
                 hashedPassword,
                 correo,
                 rol,
-                activo == true,
             ]);
 
             // Validación del resultado
@@ -52,42 +51,44 @@ class UserService {
 
     async login(username, password) {
         try {
-            // Busca el usuario por nombre de usuario
+            // Buscar usuario por nombre de usuario
             const user = await this.findByUsername(username);
             if (!user) {
                 throw boom.unauthorized('Usuario no encontrado.');
             }
     
-            // Verifica si la contraseña coincide
+            // Verificar contraseña
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
                 throw boom.unauthorized('Contraseña incorrecta.');
             }
     
-            // Genera el token JWT con `userId` y `role`
+            // Generar token JWT con `userId` y `role`
             const token = jwt.sign(
-                { userId: user.id, role: user.rol }, // Cambiado de `user.role` a `user.rol`
+                { userId: user.id, role: user.rol },
                 process.env.JWT_SECRET,
                 { expiresIn: '1h' }
             );
     
-            // Devuelve la respuesta con el token y datos adicionales
+            // Respuesta estandarizada
             return {
-                success: true,
                 token,
-                userId: user.id,      // Incluido explícitamente el `userId`
-                role: user.rol,       // Incluido explícitamente el `role`
-                message: 'Inicio de sesión exitoso.',
+                user: {
+                    id: user.id,
+                    username: user.username,
+                    role: user.rol,
+                },
             };
         } catch (error) {
-            // Manejar errores en la base de datos o generales
+            // Manejar errores inesperados
             if (!error.isBoom) {
                 console.error('Error inesperado en el login:', error);
                 throw boom.badImplementation('Ocurrió un error en el proceso de login.');
             }
-            throw error; // Re-lanzar errores gestionados (Boom)
+            throw error; // Relanzar errores controlados (Boom)
         }
     }
+    
     
 
     async findOne(id) {
@@ -326,34 +327,35 @@ class UserService {
     };
 
     async deleteUser(id) {
-        const user = await this.findOne(id);
-
-        if (!user) {
-        throw boom.notFound(`User with ID ${id} not found`);
+        if (!id) {
+            throw boom.badRequest('El ID del usuario es requerido para eliminar.');
         }
-
+    
         try {
+            // Intentar eliminar directamente el usuario
             const query = `
                 DELETE FROM Usuario
-                WHERE id = ?
+                WHERE id = ?;
             `;
             const [result] = await mysql.query(query, [id]);
-            
+    
             if (result.affectedRows === 0) {
-                throw boom.badImplementation('Error eliminando usuario');
+                throw boom.notFound(`Usuario con ID ${id} no encontrado.`);
             }
-
+    
             return {
                 success: true,
                 message: 'Usuario eliminado correctamente.',
             };
         } catch (error) {
+            // Verifica si el error ya es de tipo Boom
             if (!error.isBoom) {
-                throw boom.badImplementation('Ocurrió un error en la base de datos', error);
+                throw boom.badImplementation('Error durante la eliminación del usuario', error);
             }
-            throw error;
+            throw error; // Re-lanza el error original si ya es Boom
         }
     }
+    
 }
 
 module.exports = UserService;

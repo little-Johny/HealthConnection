@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs');
 
 class PersonalAdministrativoService {
-
     // Método para registrar un nuevo personal administrativo
     async registerPersonalAdministrativo(data) {
         const {
@@ -82,7 +81,6 @@ class PersonalAdministrativoService {
     
             await connection.commit();
             return {
-                success: true,
                 personalId: result.insertId,
                 nombres,
                 apellidos,
@@ -90,9 +88,6 @@ class PersonalAdministrativoService {
             };
         } catch (error) {
             await connection.rollback();
-            if (!error.isBoom) {
-                throw boom.badImplementation('Error en el registro del personal administrativo', error);
-            }
             throw error;
         } finally {
             connection.release();
@@ -104,9 +99,11 @@ class PersonalAdministrativoService {
     async getActivePersonal() {
         try {
             const query = `
-                SELECT p.*, u.username, u.rol
+                SELECT 
+                    p.id AS administrativoId,p.nombres, p.apellidos, p.foto, p.tipo_documento, p.numero_documento, p.genero, p.telefono, p.correo, p.horario, p.fecha_contratacion, u.username, u.rol
                 FROM PersonalAdministrativo p
                 JOIN Usuario u ON p.usuario_id = u.id
+                WHERE u.activo = true
             `;
 
             const [result] = await mysql.query(query);
@@ -115,39 +112,43 @@ class PersonalAdministrativoService {
                 throw boom.notFound('No hay personal administrativo activo');
             }
 
-            return { success: true, personal: result };
+            return { personal: result };
         } catch (error) {
             throw this.handleError(error, 'Ocurrió un error al obtener el personal administrativo');
         }
     }
 
     // Método para buscar personal administrativo por número de documento
-    async findByDocumento(numero_documento) {
-        const query = `
-            SELECT p.*, u.username, u.rol
-            FROM PersonalAdministrativo p
-            JOIN Usuario u ON p.usuario_id = u.id
-            WHERE p.numero_documento = ?;
-        `;
-
+    async findByDocumento(documento) {
         try {
-            const [result] = await mysql.query(query, [numero_documento]);
+            const query = `
+                SELECT 
+                    p.*, u.username, u.rol
+                FROM PersonalAdministrativo p
+                JOIN Usuario u ON p.usuario_id = u.id
+                WHERE p.numero_documento = ?;
+            `;
+            const [result] = await mysql.query(query, [documento]);
 
             if (result.length === 0) {
                 throw boom.notFound('Personal administrativo no encontrado');
             }
 
-            return { success: true, personal: result[0] };
+            return  result[0] ;
         } catch (error) {
-            throw this.handleError(error, 'Ocurrió un error al buscar el personal administrativo');
+            throw error;
         }
     }
 
     // Método para actualizar los datos del personal administrativo
     async updatePersonal(documento, updates) {
+        if (!documento) {
+            throw boom.badRequest('El documento es requerido para actualizar personal.');
+        }
+
         const personal = await this.findByDocumento(documento);
 
-        if (!personal.success) {
+        if (!personal) {
             throw boom.notFound(`Personal administrativo con documento ${documento} no encontrado.`);
         }
 
@@ -157,30 +158,26 @@ class PersonalAdministrativoService {
         try {
             const values = [];
             const fields = [];
-            const items = {
+            const validFields = {
                 foto: 'foto',
                 telefono: 'telefono',
                 correo: 'correo',
-                horario: 'horario'
+                horario: 'horario',
             };
 
 
             // Verificación de cambio de imagen
             if (updates.foto && personal.personal.foto) {
                 const oldFotoPath = path.join(__dirname, '../uploads', personal.personal.foto);
-                try {
                     if (fs.existsSync(oldFotoPath)) {
                         fs.unlinkSync(oldFotoPath); // Eliminación de imagen antigua
                     }
-                } catch (error) {
-                    throw boom.badImplementation('Error eliminando imagen antigua.');
-                }
             }
 
             // Construcción dinámica de campos para actualizar
             for (let key in updates) {
-                if (items[key]) {
-                    fields.push(`${items[key]} = ?`);
+                if (validFields[key]) {
+                    fields.push(`${validFields[key]} = ?`);
                     values.push(updates[key]);
                 }
             }
@@ -190,7 +187,7 @@ class PersonalAdministrativoService {
                 throw boom.badRequest('No hay campos válidos para actualizar.');
             }
 
-            values.push(personal.personal.id);
+            values.push(personal.id);
 
             const query = `
                 UPDATE PersonalAdministrativo
@@ -205,14 +202,14 @@ class PersonalAdministrativoService {
             }
 
             // Actualizar usuario si es necesario
-            if (updates.username || updates.correo) {
+            if ( updates.correo) {
                 const userService = new UserService();
                 const userUpdates = {};
 
-                if (updates.username) userUpdates.username = updates.username;
+                
                 if (updates.correo) userUpdates.correo = updates.correo;
 
-                const userResponse = await userService.updateUser(personal.personal.usuario_id, userUpdates);
+                const userResponse = await userService.updateUser(personal.usuario_id, userUpdates);
                 if (!userResponse.success) {
                     throw boom.badImplementation('Error actualizando el usuario relacionado.');
                 }
@@ -222,26 +219,35 @@ class PersonalAdministrativoService {
             await connection.commit();
 
             return {
-                success: true,
-                message: 'Personal administrativo actualizado correctamente',
-                personalId: personal.personal.id,
+                personalId: personal.id,
+                updatedFields: Object.keys(updates),
             };
         } catch (error) {
             await connection.rollback(); // Revertir cambios en caso de error
-            if (!error.isBoom) {
-                throw boom.badImplementation('Error durante la actualización del personal administrativo.', error);
-            }
             throw error;
         } finally {
             connection.release(); // Liberar la conexión
         }
     }
 
+    //metodfo para desactivar usuario y administrativo
+    async deactivatePersonal(documento) {
+        const personal = await this.findByDocumento(documento);
+        const userService = new UserService();
+        await userService.deactivateUser(personal.usuario_id);
+
+        return {
+            personalId: personal.id,
+            usuarioId: personal.usuario_id,
+        };
+    }
+
+
     // Método para eliminar el personal administrativo
     async deletePersonal(documento) {
         const personal = await this.findByDocumento(documento); // Busca el personal por documento
         
-        if (!personal.success) {
+        if (!personal) {
             throw boom.notFound(`Personal administrativo con documento ${documento} no encontrado.`);
         }
 
@@ -249,49 +255,23 @@ class PersonalAdministrativoService {
         await connection.beginTransaction();
 
         try {
-            // Eliminar el personal
-            const deletePersonalQuery = `
-                DELETE FROM PersonalAdministrativo WHERE numero_documento = ?;
-            `;
-            const [deletePersonalResult] = await connection.query(deletePersonalQuery, [documento]);
-
-            if (deletePersonalResult.affectedRows === 0) {
-                throw boom.badImplementation('Error eliminando los datos del personal administrativo.');
-            }
-
-            // Eliminar el usuario relacionado con el personal
-            const deleteUsuarioQuery = `
-                DELETE FROM Usuario WHERE id = ?;
-            `;
-            const [deleteUsuarioResult] = await connection.query(deleteUsuarioQuery, [personal.personal.usuario_id]);
-
-            if (deleteUsuarioResult.affectedRows === 0) {
-                throw boom.badImplementation('Error eliminando el usuario relacionado.');
-            }
+            await connection.query(`DELETE FROM PersonalArministrativo WHERE numero_documento = ?;`, [documento]);
+            await connection.query(`DELETE FROM Usuario WHERE id = ?;`, [personal.usuario_id]);
 
             await connection.commit();
             return {
-                success: true,
-                message: 'Personal administrativo y usuario eliminados correctamente.'
+                pacienteId: personal.id,
+                usuarioId: personal.usuario_id,
             };
         } catch (error) {
             await connection.rollback();
-            if (!error.isBoom) {
-                throw boom.badImplementation('Error durante la eliminación del personal administrativo.', error);
-            }
+            
             throw error;
         } finally {
             connection.release();
         }
     }
 
-    // Método para manejar errores
-    handleError(error, defaultMessage) {
-        if (!error.isBoom) {
-            throw boom.badImplementation(defaultMessage, error);
-        }
-        throw error;
-    }
 }
 
 module.exports = PersonalAdministrativoService;

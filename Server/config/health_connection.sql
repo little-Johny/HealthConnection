@@ -20,7 +20,7 @@ CREATE TABLE Paciente (
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
     foto VARCHAR(255) NULL, -- URL o ruta de la foto
-    tipo_documento ENUM('pasaporte', 'c.c', 't.i', 'c.e', 'rc') NOT NULL,
+    tipo_documento ENUM('c.c', 't.i', 'c.e', 'rc') NOT NULL,
     numero_documento VARCHAR(50) UNIQUE NOT NULL,
     fecha_nacimiento DATE NOT NULL,
     genero ENUM('masculino', 'femenino') NOT NULL,
@@ -81,9 +81,9 @@ CREATE TABLE Doctor (
     especialidad_id INT NOT NULL, -- Relación con Especialidades
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
-    foto VARCHAR(255) NULL, -- URL o ruta de la foto
-    tipo_documento ENUM('pasaporte', 'c.c', 't.i', 'c.e', 'rc') NOT NULL,
     numero_documento VARCHAR(20) UNIQUE NOT NULL,
+    foto VARCHAR(255) NULL, -- URL o ruta de la foto
+    tipo_documento ENUM('c.c', 't.i', 'c.e', 'rc') NOT NULL,
     genero ENUM('masculino', 'femenino'),
     telefono VARCHAR(30),
     correo VARCHAR(100),
@@ -135,8 +135,7 @@ CREATE TABLE Cita (
 -- Tabla de estados de citas
 CREATE TABLE Estado (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(255) NULL -- Descripción breve del estado
+    nombre VARCHAR(50) NOT NULL
 );
 
 -- Historial de estados de citas
@@ -155,6 +154,7 @@ CREATE TABLE Publicacion (
     titulo VARCHAR(255) NOT NULL, -- Título de la publicación
     contenido TEXT NULL, -- Contenido de la publicación
     imagen_url VARCHAR(255) NULL,
+    activo BOOLEAN DEFAULT true,
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP, -- Fecha de creación
     fecha_actualizacion DATETIME ON UPDATE CURRENT_TIMESTAMP, -- Fecha de última actualización
     autor_id INT NOT NULL, -- Relación con Personal Administrativo
