@@ -171,7 +171,7 @@ router.patch(
 router.patch(
     '/updatePaciente/:documento',
     authentication,
-    checkPermission('administrativo', 'asistente'),
+    checkPermission('administrador', 'asistente'),
     pacienteUpload.single('foto'),
     validatorHandler(updatePacienteSchema, 'body'),
     async (req, res, next) => {
@@ -201,7 +201,7 @@ router.patch(
 router.delete(
     '/deletePaciente/:documento',
     authentication,
-    checkPermission('administrativo'),
+    checkPermission('administrador'),
     async (req, res, next) => {
         try {
             const { documento } = req.params;

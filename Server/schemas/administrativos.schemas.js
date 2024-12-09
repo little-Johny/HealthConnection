@@ -37,12 +37,12 @@ const createAdministrativoSchema = Joi.object({
 });
 
 const updateAdministrativoSchema = Joi.object({
-    foto: foto.optional(),
-    tipo_documento: tipo_documento.optional(),
-    numero_documento: numero_documento.optional(),
-    telefono: telefono.optional(),
-    correo: correo.optional(),
-    horario: horario.optional(),
+    foto: foto.allow(''),
+    tipo_documento: tipo_documento.allow(''),
+    numero_documento: numero_documento.allow(''),
+    telefono: telefono.allow(''),
+    correo: correo.allow(''),
+    horario: horario.allow(''),
 });
 
 const getAdministrativoSchema = Joi.object({

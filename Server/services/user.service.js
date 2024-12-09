@@ -65,7 +65,7 @@ class UserService {
     
             // Generar token JWT con `userId` y `role`
             const token = jwt.sign(
-                { userId: user.id, role: user.rol },
+                { userId: user.id, rol: user.rol },
                 process.env.JWT_SECRET,
                 { expiresIn: '1h' }
             );

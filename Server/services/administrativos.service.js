@@ -140,21 +140,68 @@ class PersonalAdministrativoService {
         }
     }
 
+    async findById(id) {
+        try {
+            if (!id) {
+                throw boom.badRequest('El ID del usuario es requerido.');
+            }
+    
+            // Consultar al usuario por ID
+            const userQuery = `
+                SELECT id AS usuario_id, username, rol
+                FROM Usuario
+                WHERE id = ?;
+            `;
+            const [userResult] = await mysql.query(userQuery, [id]);
+    
+            if (userResult.length === 0) {
+                throw boom.notFound(`Usuario con ID ${id} no encontrado.`);
+            }
+    
+            const user = userResult[0];
+    
+            // Buscar información del paciente relacionado al usuario
+            const personalQuery = `
+                SELECT 
+                    p.*, u.username, u.rol
+                FROM PersonalAdministrativo p
+                JOIN Usuario u ON p.usuario_id = u.id
+                WHERE u.id = ?;
+            `;
+            const [personalResult] = await mysql.query(personalQuery, [id]);
+    
+            if (personalResult.length === 0) {
+                throw boom.notFound(`No se encontró un personal relacionado con el usuario ID ${id}.`);
+            }
+    
+            return {
+                usuario: {
+                    id: user.usuario_id,
+                    username: user.username,
+                    rol: user.rol,
+                },
+                personal: personalResult[0],
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
+
     // Método para actualizar los datos del personal administrativo
     async updatePersonal(documento, updates) {
         if (!documento) {
             throw boom.badRequest('El documento es requerido para actualizar personal.');
         }
-
+    
         const personal = await this.findByDocumento(documento);
-
+    
         if (!personal) {
             throw boom.notFound(`Personal administrativo con documento ${documento} no encontrado.`);
         }
-
+    
         const connection = await mysql.getConnection();
         await connection.beginTransaction();
-
+    
         try {
             const values = [];
             const fields = [];
@@ -164,16 +211,15 @@ class PersonalAdministrativoService {
                 correo: 'correo',
                 horario: 'horario',
             };
-
-
+    
             // Verificación de cambio de imagen
-            if (updates.foto && personal.personal.foto) {
-                const oldFotoPath = path.join(__dirname, '../uploads', personal.personal.foto);
-                    if (fs.existsSync(oldFotoPath)) {
-                        fs.unlinkSync(oldFotoPath); // Eliminación de imagen antigua
-                    }
+            if (updates.foto && personal.foto) {
+                const oldFotoPath = path.join(__dirname, '../uploads', personal.foto);
+                if (fs.existsSync(oldFotoPath)) {
+                    fs.unlinkSync(oldFotoPath); // Eliminación de imagen antigua
+                }
             }
-
+    
             // Construcción dinámica de campos para actualizar
             for (let key in updates) {
                 if (validFields[key]) {
@@ -181,54 +227,51 @@ class PersonalAdministrativoService {
                     values.push(updates[key]);
                 }
             }
-
-            // Verificar si hay campos válidos
+    
             if (fields.length === 0) {
                 throw boom.badRequest('No hay campos válidos para actualizar.');
             }
-
+    
             values.push(personal.id);
-
+    
             const query = `
                 UPDATE PersonalAdministrativo
                 SET ${fields.join(', ')}
                 WHERE id = ?;
             `;
-
+    
             const [result] = await connection.query(query, values);
-
+    
             if (result.affectedRows === 0) {
                 throw boom.badImplementation('Error actualizando los datos del personal administrativo.');
             }
-
+    
             // Actualizar usuario si es necesario
-            if ( updates.correo) {
+            if (updates.correo) {
                 const userService = new UserService();
                 const userUpdates = {};
-
-                
+    
                 if (updates.correo) userUpdates.correo = updates.correo;
-
+    
                 const userResponse = await userService.updateUser(personal.usuario_id, userUpdates);
                 if (!userResponse.success) {
                     throw boom.badImplementation('Error actualizando el usuario relacionado.');
                 }
             }
-
-            // Confirmar la transacción
+    
             await connection.commit();
-
             return {
                 personalId: personal.id,
                 updatedFields: Object.keys(updates),
             };
         } catch (error) {
-            await connection.rollback(); // Revertir cambios en caso de error
+            await connection.rollback();
             throw error;
         } finally {
-            connection.release(); // Liberar la conexión
+            connection.release();
         }
     }
+    
 
     //metodfo para desactivar usuario y administrativo
     async deactivatePersonal(documento) {

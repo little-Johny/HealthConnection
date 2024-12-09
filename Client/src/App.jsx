@@ -7,6 +7,7 @@ import ProtectedRoute from './pages/ProtectedRoute'; // Ruta protegida
 import Dashboard from'./pages/Dashboard';
 import UserTable from './pages/Manage-users';
 import PacienteRegister from './pages/PacienteRegister';
+import Profile from './pages/ProfileAdmin';
 
 // Componente que maneja las rutas
 const AppRoutes = () => {
@@ -20,6 +21,15 @@ const AppRoutes = () => {
         <ProtectedRoute>
           {/* Solo accede al Dashboard si el usuario está autenticado */}
           <Dashboard /> {/* Asegúrate de tener el componente Dashboard */}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/profile',
+      element: (
+        <ProtectedRoute>
+          {/* Solo accede al Dashboard si el usuario está autenticado */}
+          <Profile/> {/* Asegúrate de tener el componente Dashboard */}
         </ProtectedRoute>
       ),
     },

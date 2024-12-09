@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const PersonalAdministrativoService = require('../services/administrativos.service');
 const boom = require('@hapi/boom');
-const validatorHandler = require('../middlewares/validation.handler')
+const validatorHandler = require('../middlewares/validation.handler');
+const authentication = require('../middlewares/authentication.handler');
 const {createAdministrativoSchema, updateAdministrativoSchema, getAdministrativoSchema} = require('../schemas/administrativos.schemas')
 const {administrativoUpload} = require('../middlewares/files.handler');
 const ResponseHandler = require('../middlewares/response.handler');
@@ -63,6 +64,63 @@ router.get('/getActive', async (req, res, next) => {
         next(error);
     }
 });
+
+router.get(
+    '/profile',
+    authentication, // Middleware de autenticación
+    async (req, res, next) => {
+        try {
+            const id = req.user.userId; 
+            const result = await personalService.findById(id);
+
+            // No necesitas verificar permisos aquí porque el ID viene directamente del token
+            return ResponseHandler.success({
+                res,
+                message: 'Perfil obtenido exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error); // Manejar errores con el middleware global
+        }
+    }
+);
+
+//Actualizando perfil propio
+router.patch(
+    '/editProfile',
+    authentication, 
+    administrativoUpload.single('foto'),
+    validatorHandler(updateAdministrativoSchema, 'body'),
+    async (req, res, next) => {
+        try {
+            const id = req.user.userId; 
+            const result = await personalService.findById(id); 
+            if (!result) {
+                return next(boom.notFound('Administrativo no encontrado.'));
+            }
+            
+            const documento = result.personal.numero_documento; 
+            let update = { ...req.body};
+
+            // Verificar si se cargó una nueva foto
+            if (req.file) {
+                update.foto = `http://localhost:3000/Uploads/administrativos/${req.file.filename}`;
+            }
+
+            // Actualizar el perfil del usuario
+            const updatedUser = await personalService.updatePersonal(documento, update);
+
+            ResponseHandler.success({
+                res,
+                message: 'Administrativo actualizado exitosamente.',
+                data: updatedUser,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 
 // Endpoint para buscar personal administrativo por número de documento
 router.get(
