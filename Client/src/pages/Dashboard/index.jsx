@@ -24,7 +24,7 @@ const Dashboard = () => {
                     </h1>
 
                     <button
-                        onClick={() => navigate('/profile')}  // Regresar a la página anterior
+                        onClick={() => navigate('/admin-profile')}  // Regresar a la página anterior
                         className='bg-slate-400 text-white p-2 rounded-full hover:bg-slate-600 focus:outline-none transition ease-in-out duration-300'
                     >
                         <IoPerson size={24} />
@@ -37,7 +37,7 @@ const Dashboard = () => {
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
                     {/* Opción 1: Registrar Paciente */}
                     <Link to='/paciente-register' className='bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105'>
-                        <h2 className='text-orange-600 text-2xl font-semibold mb-3'>Registrar Paciente</h2>
+                        <h2 className='text-orange-400 text-2xl font-semibold mb-3'>Registrar Paciente</h2>
                         <p className='text-gray-600'>Añadir un nuevo paciente al sistema.</p>
                     </Link>
 
@@ -55,7 +55,7 @@ const Dashboard = () => {
 
                     {/* Opción 4: Gestionar Usuarios */}
                     <Link to='/manage-users' className='bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105'>
-                        <h2 className='text-indigo-600 text-2xl font-semibold mb-3'>Gestionar Usuarios</h2>
+                        <h2 className='text-orange-400 text-2xl font-semibold mb-3'>Gestionar Usuarios</h2>
                         <p className='text-gray-600'>Ver información de los usuarios.</p>
                     </Link>
                 </div>

@@ -105,8 +105,6 @@ const PacienteRegister = () => {
                         { label: 'Fecha de Nacimiento', name: 'fecha_nacimiento', type: 'date' },
                         { label: 'Teléfono', name: 'telefono', type: 'tel' },
                         { label: 'Correo Electrónico', name: 'correo', type: 'email' },
-                        { label: 'Dirección', name: 'direccion', type: 'text' },
-                        { label: 'Ciudad', name: 'ciudad', type: 'text' },
                     ].map((field, idx) => (
                         <div key={idx}>
                             <label className="block text-gray-600 mb-2 font-medium">{field.label}</label>
