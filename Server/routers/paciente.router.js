@@ -11,7 +11,6 @@ const ResponseHandler = require('../middlewares/response.handler');
 const {
     createPacienteSchema,
     updatePacienteSchema,
-    getPacienteSchema,
 } = require('../schemas/paciente.schema');
 
 const PacienteService = require('../services/paciente.service');
@@ -51,6 +50,7 @@ router.post(
 router.patch(
     '/deactivate/:documento',
     authentication,
+    checkPermission('administrador', 'asistente'),
     async (req, res, next) => {
         try {
             const { documento } = req.params;
@@ -70,6 +70,7 @@ router.patch(
 router.get(
     '/getActive',
     authentication,
+    checkPermission('administrador', 'asistente'),
     async (req, res, next) => {
         try {
             const result = await service.getActivePacientes();
@@ -87,6 +88,8 @@ router.get(
 // Endpoint para obtener un paciente por documento
 router.get(
     '/pacienteDocument/:documento', 
+    authentication,
+    checkPermission('administrador','asistente'),
     async (req, res, next) => {
         try {
             const { documento } = req.params;
@@ -105,10 +108,70 @@ router.get(
     }
 );
 
+// encontrar paciente logueado
+router.get(
+    '/profile',
+    authentication, // Middleware de autenticación
+    async (req, res, next) => {
+        try {
+            const id = req.user.userId; 
+            const result = await service.findById(id);
+
+            // No necesitas verificar permisos aquí porque el ID viene directamente del token
+            return ResponseHandler.success({
+                res,
+                message: 'Perfil obtenido exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error); // Manejar errores con el middleware global
+        }
+    }
+);
+
+//Actualizando perfil propio
+router.patch(
+    '/editProfile',
+    authentication,  // Asegúrate de que authHandler esté correctamente configurado
+    validatorHandler(updatePacienteSchema, 'body'),
+    pacienteUpload.single('foto'),
+    async (req, res, next) => {
+        try {
+            const id = req.user.userId;  // Obtienes el ID del usuario logueado
+            const result = await service.findById(id);  // Obtienes el paciente
+            if (!result) {
+                return next(boom.notFound('Paciente no encontrado.'));
+            }
+            
+            const documento = result.paciente.numero_documento;  // Suponiendo que el resultado tiene paciente.numero_documento
+            const body = req.body;
+
+            // Si se sube una foto, la agregas al cuerpo
+            if (req.file) {
+                body.foto = `http://localhost:3000/Uploads/pacientes/${req.file.filename}`;
+            }
+
+            // Actualizas el paciente usando el documento
+            const updatedUser = await service.updatePaciente(documento, body);
+
+            // Respuesta de éxito
+            ResponseHandler.success({
+                res,
+                message: 'Paciente actualizado exitosamente.',
+                data: updatedUser,  // Asegúrate de devolver los datos actualizados
+            });
+        } catch (error) {
+            next(error);  // Pasa el error al middleware global
+        }
+    }
+);
+
+
 // Ruta para actualizar paciente
 router.patch(
     '/updatePaciente/:documento',
     authentication,
+    checkPermission('administrativo', 'asistente'),
     pacienteUpload.single('foto'),
     validatorHandler(updatePacienteSchema, 'body'),
     async (req, res, next) => {
@@ -138,6 +201,7 @@ router.patch(
 router.delete(
     '/deletePaciente/:documento',
     authentication,
+    checkPermission('administrativo'),
     async (req, res, next) => {
         try {
             const { documento } = req.params;

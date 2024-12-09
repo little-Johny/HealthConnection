@@ -76,7 +76,7 @@ class UserService {
                 user: {
                     id: user.id,
                     username: user.username,
-                    role: user.rol,
+                    rol: user.rol,
                 },
             };
         } catch (error) {

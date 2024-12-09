@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
     const navigate = useNavigate();
 
-    const handleSubmit = () => {
-        navigate('/login'); // Redirige a la página de login
+    const handleSubmit = (route) => {
+        route === 'login' ? navigate('/login') : navigate('/paciente-register'); 
     };
 
     return (
         <div className="bg-gray-100">
             {/* Barra de Navegación */}
-            <nav className="bg-indigo-600 p-4">
+            <nav className="bg-orange-600 p-4">
                 <div className="container mx-auto flex justify-between items-center">
                     <a href="#" className="text-white text-xl">Health Connection</a>
                     <button
@@ -29,15 +29,24 @@ const Home = () => {
             </nav>
 
             {/* Encabezado */}
-            <header className="bg-blue-500 text-center text-white py-20">
+            <header className="bg-orange-500 text-center text-white py-20 ">
                 <h1 className="text-4xl font-bold">Bienvenido a Health Connection</h1>
                 <p className="text-xl mt-4">Tu salud, nuestra prioridad</p>
-                <button
-                    onClick={handleSubmit}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-4 inline-block"
-                >
-                    Ingresar
-                </button>
+                <div className="flex justify-around px-96">
+                    <button
+                        onClick={() => handleSubmit('login')}
+                        className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-4 inline-block"
+                    >
+                        Ingresar
+                    </button>
+                    <button
+                        onClick={() => handleSubmit('register')}
+                        className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-4 inline-block"
+                    >
+                        Registrate
+                    </button>
+
+                </div>
             </header>
 
             {/* Sección de Nosotros */}
@@ -53,7 +62,7 @@ const Home = () => {
             </section>
 
             {/* Sección de Servicios */}
-            <section id="services" className="py-20 bg-gray-200">
+            <section id="services" className="py-20 bg-gray-400">
                 <div className="container mx-auto px-4 text-center">
                     <h2 className="text-3xl text-white mb-5">Nuestros Servicios</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -124,7 +133,7 @@ const Home = () => {
             </section>
 
             {/* Sección de Contacto */}
-            <section id="contact" className="py-20 bg-gray-200 text-center">
+            <section id="contact" className="py-20 bg-gray-400 text-center">
                 <div className="container mx-auto px-4">
                     <h2 className="text-3xl font-semibold">Contacto</h2>
                     <p className="mt-4 text-lg">
@@ -141,7 +150,7 @@ const Home = () => {
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-800 text-white py-6">
+            <footer className="bg-black text-white py-6">
                 <div className="container mx-auto text-center">
                     <p>&copy; 2024 Health Connection. Todos los derechos reservados.</p>
                 </div>

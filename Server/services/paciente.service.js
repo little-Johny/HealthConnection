@@ -134,6 +134,56 @@ class PacienteService {
         }
     }
 
+    // Método para encontrar paciente por ID
+    async findById(id) {
+        try {
+            if (!id) {
+                throw boom.badRequest('El ID del usuario es requerido.');
+            }
+    
+            // Consultar al usuario por ID
+            const userQuery = `
+                SELECT id AS usuario_id, username, rol
+                FROM Usuario
+                WHERE id = ?;
+            `;
+            const [userResult] = await mysql.query(userQuery, [id]);
+    
+            if (userResult.length === 0) {
+                throw boom.notFound(`Usuario con ID ${id} no encontrado.`);
+            }
+    
+            const user = userResult[0];
+    
+            // Buscar información del paciente relacionado al usuario
+            const pacienteQuery = `
+                SELECT 
+                    p.*, u.username, u.rol
+                FROM Paciente p
+                JOIN Usuario u ON p.usuario_id = u.id
+                WHERE u.id = ?;
+            `;
+            const [pacienteResult] = await mysql.query(pacienteQuery, [id]);
+    
+            if (pacienteResult.length === 0) {
+                throw boom.notFound(`No se encontró un paciente relacionado con el usuario ID ${id}.`);
+            }
+    
+            return {
+                usuario: {
+                    id: user.usuario_id,
+                    username: user.username,
+                    rol: user.rol,
+                },
+                paciente: pacienteResult[0],
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+
+
     // Método para actualizar paciente
     async updatePaciente(documento, updates) {
         if (!documento) {
