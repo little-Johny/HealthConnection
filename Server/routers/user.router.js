@@ -34,7 +34,7 @@ router.post(
 router.patch(
     '/desactivacion/:id',
     authentication,
-    /* checkPermission('administrador'), */
+    checkPermission('administrador'), 
     validatorHandler(updateUserSchema, 'body'),
     async (req, res, next) => {
         try {

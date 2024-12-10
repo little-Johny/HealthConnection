@@ -20,7 +20,7 @@ CREATE TABLE Paciente (
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
     foto VARCHAR(255) NULL, -- URL o ruta de la foto
-    tipo_documento ENUM('c.c', 't.i', 'c.e', 'rc') NOT NULL,
+    tipo_documento ENUM('c.c', 't.i', 'c.e', 'r.c') NOT NULL,
     numero_documento VARCHAR(50) UNIQUE NOT NULL,
     fecha_nacimiento DATE NOT NULL,
     genero ENUM('masculino', 'femenino') NOT NULL,

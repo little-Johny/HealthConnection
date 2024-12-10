@@ -38,13 +38,15 @@ const createPacienteSchema = Joi.object({
 });
 
 const updatePacienteSchema = Joi.object({
-    foto: foto.optional(),
-    tipo_documento: tipo_documento.optional(),
-    numero_documento: numero_documento.optional(),
-    telefono: telefono.optional(),
-    correo: correo.optional(),
-    direccion: direccion.optional(),
-    ciudad: ciudad.optional(),
+    foto: foto.allow(''),
+    nombres: nombres.allow(''),
+    apellidos: apellidos.allow(''),
+    tipo_documento: tipo_documento.allow(''),
+    numero_documento: numero_documento.allow(''),
+    telefono: telefono.allow(''),
+    correo: correo.allow(''),
+    direccion: direccion.allow(''),
+    ciudad: ciudad.allow(''),
 });
 
 const getPacienteSchema = Joi.object({

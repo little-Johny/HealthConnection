@@ -84,6 +84,25 @@ router.get(
         }
     }
 );
+router.get(
+    '/profileAdministrativo/:id',
+    authentication, // Middleware de autenticación
+    async (req, res, next) => {
+        try {
+            const {id} = req.params; 
+            const result = await personalService.findById(id);
+
+            // No necesitas verificar permisos aquí porque el ID viene directamente del token
+            return ResponseHandler.success({
+                res,
+                message: 'Perfil obtenido exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error); // Manejar errores con el middleware global
+        }
+    }
+);
 
 //Actualizando perfil propio
 router.patch(

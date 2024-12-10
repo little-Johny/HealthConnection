@@ -4,7 +4,7 @@ import { useAuth } from  '../../hooks/useAuth';
 
 const Dashboard = () => {
     const navigate = useNavigate();  // Hook para navegar
-    const  { rol} = useAuth();
+    const  { rol,userId} = useAuth();
 
     return (
         <div className='min-h-screen bg-gray-100'>
@@ -24,7 +24,7 @@ const Dashboard = () => {
                     </h1>
 
                     <button
-                        onClick={() => navigate('/admin-profile')}  // Regresar a la página anterior
+                        onClick={() => navigate(`/admin-profile/${userId}`)}  // Regresar a la página anterior
                         className='bg-slate-400 text-white p-2 rounded-full hover:bg-slate-600 focus:outline-none transition ease-in-out duration-300'
                     >
                         <IoPerson size={24} />

@@ -11,6 +11,8 @@ import ProfileAdmin from './pages/ProfileAdmin';
 import ProfilePaciente from './pages/ProfilePaciente';
 import DoctorRegister from './pages/DoctorRegister';
 import AdministrativoRegister from './pages/AdminRegister';
+import ProfileDoctor from './pages/ProfileDoctor';
+import { ToastContainer } from 'react-toastify';
 
 // Componente que maneja las rutas
 const AppRoutes = () => {
@@ -28,11 +30,20 @@ const AppRoutes = () => {
       ),
     },
     {
-      path: '/admin-profile',
+      path: '/admin-profile/:userId',
       element: (
         <ProtectedRoute>
           {/* Solo accede al Dashboard si el usuario está autenticado */}
           <ProfileAdmin/> {/* Asegúrate de tener el componente Dashboard */}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/doctor-profile/:userId',
+      element: (
+        <ProtectedRoute>
+          {/* Solo accede al Dashboard si el usuario está autenticado */}
+          <ProfileDoctor/> {/* Asegúrate de tener el componente Dashboard */}
         </ProtectedRoute>
       ),
     },
@@ -80,6 +91,7 @@ const AppRoutes = () => {
 function App() {
   return (
     <AuthProvider>
+      <ToastContainer />
       <AppRoutes />
     </AuthProvider>
   );

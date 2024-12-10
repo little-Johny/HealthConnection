@@ -4,6 +4,7 @@ const DoctorService = require('../services/doctor.service');
 const boom = require('@hapi/boom');
 const { doctoresUpload } = require('../middlewares/files.handler');
 const validatorHandler = require('../middlewares/validation.handler');
+const authentication = require('../middlewares/authentication.handler');
 const ResponseHandler = require('../middlewares/response.handler');
 const {
     createDoctorSchema,
@@ -26,9 +27,6 @@ router.post(
             const body = req.body;
 
             if (req.file) {
-                if (!req.file.mimetype.startsWith('image/')) {
-                    throw boom.badRequest('El archivo debe ser una imagen.');
-                }
                 body.foto = `http://localhost:3000/Uploads/doctores/${req.file.filename}`;
             }
             
@@ -82,6 +80,45 @@ router.get(
     }
 );
 
+router.get(
+    '/profile',
+    authentication, // Middleware de autenticación
+    async (req, res, next) => {
+        try {
+            const id = req.user.userId; 
+            const result = await doctorService.findById(id);
+
+            // No necesitas verificar permisos aquí porque el ID viene directamente del token
+            return ResponseHandler.success({
+                res,
+                message: 'Perfil obtenido exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error); // Manejar errores con el middleware global
+        }
+    }
+);
+router.get(
+    '/profileDoctor/:id',
+    authentication, // Middleware de autenticación
+    async (req, res, next) => {
+        try {
+            const {id} = req.params; 
+            const result = await doctorService.findById(id);
+
+            // No necesitas verificar permisos aquí porque el ID viene directamente del token
+            return ResponseHandler.success({
+                res,
+                message: 'Perfil obtenido exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error); // Manejar errores con el middleware global
+        }
+    }
+);
+
 // Buscar doctor por número de documento
 router.get(
     '/doctorDocument/:documento', 
@@ -128,7 +165,7 @@ router.patch(
             const { documento } = req.params;
             let updates = { ...req.body };
 
-            if (req.files && req.files['foto']) {
+            if (req.file) {
                 updates.foto = `http://localhost:3000/Uploads/doctores/${req.file.filename}`;
             }
 

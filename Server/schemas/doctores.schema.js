@@ -39,14 +39,16 @@ const createDoctorSchema = Joi.object({
 });
 
 const updateDoctorSchema = Joi.object({
-    especialidad_id: especialidad_id.optional(),
-    foto: foto.optional(),
-    tipo_documento: tipo_documento.optional(),
-    numero_documento: numero_documento.optional(),
-    telefono: telefono.optional(),
-    correo: correo.optional(),
-    horario: horario.optional(),
-    fecha_contratacion: fecha_contratacion.optional(),
+    especialidad_id: especialidad_id.allow(''),
+    nombres: nombres.allow(''),
+    apellidos: apellidos.allow(''),
+    foto: foto.allow(''),
+    tipo_documento: tipo_documento.allow(''),
+    numero_documento: numero_documento.allow(''),
+    telefono: telefono.allow(''),
+    correo: correo.allow(''),
+    horario: horario.allow(''),
+    fecha_contratacion: fecha_contratacion.allow(''),
 });
 
 const getDoctorSchema = Joi.object({

@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 const mysql = require('../config/db');
 const UserService = require('./user.service');
+const path = require('path');
+const fs = require('fs');
 
 class DoctorService {
     async registerDoctor(data) {
@@ -183,7 +185,7 @@ class DoctorService {
             };
 
             if (updates.foto && doctor.foto) {
-                const oldFotoPath = path.join(__dirname, '../uploads', doctor.foto);
+                const oldFotoPath = path.join(__dirname, '../Uploads', doctor.foto);
                 
                     if (fs.existsSync(oldFotoPath)) {
                         fs.unlinkSync(oldFotoPath);
@@ -296,6 +298,55 @@ class DoctorService {
             return result;
         } catch (error) {
             throw  error;
+        }
+    }
+
+    
+    async findById(id) {
+        try {
+            if (!id) {
+                throw boom.badRequest('El ID del usuario es requerido.');
+            }
+    
+            // Consultar al usuario por ID
+            const userQuery = `
+                SELECT id AS usuario_id, username, rol
+                FROM Usuario
+                WHERE id = ?;
+            `;
+            const [userResult] = await mysql.query(userQuery, [id]);
+    
+            if (userResult.length === 0) {
+                throw boom.notFound(`Usuario con ID ${id} no encontrado.`);
+            }
+    
+            const user = userResult[0];
+    
+            // Buscar información del paciente relacionado al usuario
+            const doctorQuery = `
+                SELECT 
+                    d.*, u.username, u.rol, e.nombre AS especialidad
+                FROM Doctor d
+                JOIN Usuario u ON d.usuario_id = u.id
+                JOIN Especialidad e ON d.especialidad_id = e.id
+                WHERE u.id = ?;
+            `;
+            const [doctorResult] = await mysql.query(doctorQuery, [id]);
+    
+            if (doctorResult.length === 0) {
+                throw boom.notFound(`No se encontró un doctor relacionado con el usuario ID ${id}.`);
+            }
+    
+            return {
+                usuario: {
+                    id: user.usuario_id,
+                    username: user.username,
+                    rol: user.rol,
+                },
+                doctor: doctorResult[0],
+            };
+        } catch (error) {
+            throw error;
         }
     }
 }

@@ -2,97 +2,255 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { IoChevronBackOutline } from 'react-icons/io5';
-import { useAuth } from '../../hooks/useAuth'; // Hook de autenticación
+import { useAuth } from '../../hooks/useAuth';
+import { toast, ToastContainer } from 'react-toastify'; // Importar toast
 
 const UserPaciente = () => {
-    const { userId } = useParams(); // Capturar el parámetro de la URL
+    const { userId } = useParams();
     const { token } = useAuth();
+    const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const navigate = useNavigate(); // Agregar useNavigate
+    const [modalOpen, setModalOpen] = useState(false);
+    const [formData, setFormData] = useState({});
+    const [previewFoto, setPreviewFoto] = useState(null);
+
+    const validFields = {
+        foto: 'foto',
+        tipo_documento: 'tipo_documento',
+        numero_documento: 'numero_documento',
+        nombres: 'nombres',
+        apellidos: 'apellidos',
+        telefono: 'telefono',
+        correo: 'correo',
+        direccion: 'direccion',
+        ciudad: 'ciudad',
+    };
+
+    // Lista de tipos de documentos disponibles
+    const documentTypes = ['c.c', 't.i', 'c.e', 'r.c'];;
+
+    // Función para obtener los datos del paciente
+    const fetchUser = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:3000/health_connection/v1/paciente/profilePaciente/${userId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setUserData(response.data.data);
+        } catch (err) {
+            console.error('Error al obtener los datos:', err.response?.data?.message || err.message);
+            setError(err.response ? err.response.data.message : 'Error al obtener los datos');
+            toast.error(err.response?.data?.message || 'Hubo un error al cargar los datos del paciente.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await axios.get(
-                    `http://localhost:3000/health_connection/v1/paciente/profilePaciente/${userId}`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,  // Agregar el token en los headers
-                        }
-                    }
-                );
-                setUserData(response.data.data); // Guardar los datos de la respuesta
-            } catch (err) {
-                // Verificamos si hay un error específico
-                if (err.response) {
-                    setError(`Error al cargar los datos: ${err.response.data.message || 'Error desconocido'}`);
-                } else {
-                    setError('Error al conectar con el servidor');
+        if (token) {
+            fetchUser();
+        }
+    }, [token]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleFotoChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData((prev) => ({ ...prev, foto: file }));
+            setPreviewFoto(URL.createObjectURL(file));
+        }
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        const formDataToSend = new FormData();
+        for (let key in formData) {
+            formDataToSend.append(key, formData[key]);
+        }
+
+        try {
+            const response = await axios.patch(
+                `http://localhost:3000/health_connection/v1/paciente/updatePaciente/${userData.paciente.numero_documento}`,
+                formDataToSend,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
                 }
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+            );
+            toast.success(response.data.message || 'Datos del paciente actualizados correctamente.');
+            setModalOpen(false);
+            fetchUser();
+        } catch (err) {
+            console.error('Error al actualizar:', err.response?.data?.message || err.message || err);
+            toast.error(err.response?.data?.message || 'Ocurrió un error al actualizar los datos.');
+        }
+    };
 
-        fetchUser();
-    }, [userId, token]);
+    const openModal = () => {
+        if (userData && userData.paciente) {
+            setFormData({
+                foto: userData.paciente.foto,
+                tipo_documento: userData.paciente.tipo_documento,
+                numero_documento: userData.paciente.numero_documento,
+                nombres: userData.paciente.nombres,
+                apellidos: userData.paciente.apellidos,
+                telefono: userData.paciente.telefono,
+                correo: userData.paciente.correo,
+                direccion: userData.paciente.direccion,
+                ciudad: userData.paciente.ciudad,
+            });
+            setPreviewFoto(userData.paciente.foto); // Para mostrar la foto previa
+            setModalOpen(true);
+        }
+    };
 
-    // Mientras se cargan los datos
-    if (loading) return <div className="text-center py-4 text-gray-500">Cargando perfil...</div>;
+    const closeModal = () => {
+        setModalOpen(false);
+        setPreviewFoto(null);
+    };
 
-    // Si ocurre un error al cargar los datos
-    if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
+    if (loading) {
+        return <div className="flex justify-center items-center h-screen">Cargando...</div>;
+    }
 
-    // Si no hay datos del usuario
-    if (!userData) return <div className="text-center py-4">No se encontraron datos del usuario.</div>;
-
-    const { paciente = {}, usuario = {} } = userData; // Datos del paciente y usuario con valores por defecto
+    if (error) {
+        return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
+    }
 
     return (
-        <div className="container mx-auto p-6">
-            {/* Header */}
-            <header className="bg-amber-600 shadow-lg py-4 mb-8">
-                <div className="container mx-auto px-4 flex items-center">
+        <div className="min-h-screen bg-gray-100">
+            <header className="bg-orange-400 p-6 shadow-lg">
+                <div className="flex justify-between items-center">
                     <button
                         onClick={() => navigate(-1)}
-                        className="bg-blue-500 p-3 rounded-full text-white hover:bg-blue-400 focus:ring-2 focus:ring-blue-300 transition"
+                        className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-500"
                     >
                         <IoChevronBackOutline size={24} />
                     </button>
-                    <h1 className="flex-grow text-center text-white text-2xl font-semibold">
+                    <h1 className="text-white text-3xl font-semibold flex-grow text-center">
                         Perfil del Paciente
                     </h1>
                 </div>
             </header>
-            
-            {/* Foto de perfil */}
-            <div className="flex justify-center mb-6">
-                <img
-                    src={paciente.foto || 'default-foto-url.jpg'} // URL por defecto si no hay foto
-                    alt="Foto de perfil"
-                    className="w-32 h-32 object-cover rounded-full border-4 border-indigo-500 shadow-xl"
-                />
-            </div>
 
-            {/* Información personal */}
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-semibold mb-4">Información Personal</h2>
-                <p><strong>Nombre de Usuario:</strong> {usuario.username}</p>
-                <p><strong>Rol:</strong> {usuario.rol}</p>
-                <p><strong>Género:</strong> {paciente.genero === 'masculino' ? 'Masculino' : 'Femenino'}</p>
-                <p><strong>Fecha de Nacimiento:</strong> {new Date(paciente.fecha_nacimiento).toLocaleDateString()}</p>
-                <p><strong>Tipo de Documento:</strong> {paciente.tipo_documento}</p>
-                <p><strong>Número de Documento:</strong> {paciente.numero_documento}</p>
+            <main className="p-8">
+                <div className="bg-white p-8 rounded-xl shadow-lg">
+                    <div className="flex items-center space-x-6">
+                        <img
+                            src={userData?.paciente?.foto || 'https://via.placeholder.com/150'}
+                            alt="Foto del paciente"
+                            className="w-24 h-24 rounded-full object-cover border-4 border-gray-300"
+                        />
+                        <div>
+                            <h2 className="text-3xl font-semibold">{userData?.paciente?.nombres} {userData?.paciente?.apellidos}</h2>
+                            <p className="text-xl text-gray-600">Rol: {userData?.usuario?.rol}</p>
+                        </div>
+                    </div>
 
-                <h2 className="text-2xl font-semibold mt-6 mb-4">Contacto</h2>
-                <p><strong>Correo:</strong> {paciente.correo}</p>
-                <p><strong>Teléfono:</strong> {paciente.telefono}</p>
-                <p><strong>Dirección:</strong> {paciente.direccion}</p>
-                <p><strong>Ciudad:</strong> {paciente.ciudad}</p>
-            </div>
+                    <div className="mt-8">
+                        <h3 className="text-2xl font-semibold text-gray-700">Detalles del Paciente</h3>
+                        <div className="mt-4 space-y-2 text-lg text-gray-600">
+                            <p><strong>Tipo de Documento:</strong> {userData?.paciente?.tipo_documento}</p>
+                            <p><strong>Número de Documento:</strong> {userData?.paciente?.numero_documento}</p>
+                            <p><strong>Teléfono:</strong> {userData?.paciente?.telefono}</p>
+                            <p><strong>Correo:</strong> {userData?.paciente?.correo}</p>
+                            <p><strong>Dirección:</strong> {userData?.paciente?.direccion}</p>
+                            <p><strong>Ciudad:</strong> {userData?.paciente?.ciudad}</p>
+                        </div>
+                        <button
+                            onClick={openModal}
+                            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500"
+                        >
+                            Editar Información
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            {modalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <form
+                        className="bg-white p-6 rounded-lg shadow-lg w-1/3"
+                        onSubmit={handleUpdate}
+                    >
+                        <h2 className="text-2xl font-semibold mb-4">Editar Información del Paciente</h2>
+
+                        {/* Form fields */}
+                        {Object.entries(validFields).map(([field, label]) => (
+                            field !== 'foto' ? (
+                                field === 'tipo_documento' ? (
+                                    <label key={field} className="block">
+                                        Tipo de Documento
+                                        <select
+                                            name={field}
+                                            value={formData[field] || ''}
+                                            onChange={handleInputChange}
+                                            className="w-full mt-1 p-2 border rounded"
+                                        >
+                                            {documentTypes.map((type) => (
+                                                <option key={type} value={type}>{type}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                ) : (
+                                    <label key={field} className="block">
+                                        {label.charAt(0).toUpperCase() + label.slice(1)}
+                                        <input
+                                            type={field === 'correo' ? 'email' : 'text'}
+                                            name={field}
+                                            value={formData[field] || ''}
+                                            onChange={handleInputChange}
+                                            className="w-full mt-1 p-2 border rounded"
+                                        />
+                                    </label>
+                                )
+                            ) : null
+                        ))}
+
+                        {/* Foto */}
+                        <label className="block">
+                            Foto
+                            <input
+                                type="file"
+                                name="foto"
+                                accept="image/*"
+                                onChange={handleFotoChange}
+                                className="w-full mt-1 p-2 border rounded"
+                            />
+                            {previewFoto && <img src={previewFoto} alt="Vista previa" className="w-24 h-24 mt-2 rounded-full" />}
+                        </label>
+
+                        <div className="flex justify-end mt-4">
+                            <button
+                                type="button"
+                                onClick={closeModal}
+                                className="bg-gray-300 px-4 py-2 rounded mr-2"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="submit"
+                                className="bg-blue-600 text-white px-4 py-2 rounded"
+                            >
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
+            <ToastContainer />
         </div>
     );
 };

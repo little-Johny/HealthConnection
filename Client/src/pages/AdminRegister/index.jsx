@@ -84,13 +84,13 @@ const AdministrativoRegister = () => {
                 }
             );
 
-            toast.success('Doctor registrado exitosamente', { position: 'top-right' });
-            console.log('Doctor registrado:', response.data.data);
+            toast.success('Administrativo registrado exitosamente', { position: 'top-right' });
+            console.log('Administrativo registrado:', response.data.data);
             navigate('/manage-users');
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Error al registrar doctor';
+            const errorMessage = error.response?.data?.message || 'Error al registrar Administrativo';
             toast.error(errorMessage, { position: 'top-right' });
-            console.error('Error al registrar doctor:', errorMessage);
+            console.error('Error al registrar Administrativo:', errorMessage);
         }
     };
 

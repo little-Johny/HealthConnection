@@ -214,7 +214,7 @@ class PersonalAdministrativoService {
     
             // Verificación de cambio de imagen
             if (updates.foto && personal.foto) {
-                const oldFotoPath = path.join(__dirname, '../uploads', personal.foto);
+                const oldFotoPath = path.join(__dirname, '../Uploads', personal.foto);
                 if (fs.existsSync(oldFotoPath)) {
                     fs.unlinkSync(oldFotoPath); // Eliminación de imagen antigua
                 }
