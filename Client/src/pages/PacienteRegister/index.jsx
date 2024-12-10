@@ -66,6 +66,7 @@ const PacienteRegister = () => {
 
             toast.success('Paciente registrado exitosamente', { position: 'top-right' });
             console.log('Paciente registrado:', response.data);
+            navigate('/manage-users');
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Error al registrar paciente';
             toast.error(errorMessage, { position: 'top-right' });
@@ -92,7 +93,6 @@ const PacienteRegister = () => {
 
             {/* Formulario */}
             <div className="w-full max-w-3xl px-6 py-8 bg-white shadow-lg rounded-lg mt-4">
-                <h2 className="text-center text-2xl font-bold text-orange-400 mb-6">Registrar Paciente</h2>
                 <form
                     onSubmit={handleSubmit}
                     className="space-y-6 max-h-[75vh] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-200"
@@ -121,6 +121,19 @@ const PacienteRegister = () => {
                     ))}
 
                     <div className="flex gap-4">
+                        <div className="flex-1">
+                            <label className="block text-gray-600 mb-2 font-medium">Genero</label>
+                            <select
+                                name="genero"
+                                value={formData.genero}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400"
+                            >
+                                <option value="">Selecciona</option>
+                                <option value="masculino">masculino</option>
+                                <option value="femenino">femenino</option>
+                            </select>
+                        </div>
                         <div className="flex-1">
                             <label className="block text-gray-600 mb-2 font-medium">Tipo de Documento</label>
                             <select

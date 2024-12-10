@@ -281,6 +281,23 @@ class DoctorService {
             connection.release();
         }
     }
+
+    //Metodo para obtener especialidades
+    async getEspecialidades() {
+        try {
+            const  query = `SELECT id, nombre, costo FROM Especialidad;`;
+
+            const [result]= await mysql.query(query);
+            
+            if(result.length === 0) {
+                throw boom.notFound('No se encuentran especialidades');
+            }
+
+            return result;
+        } catch (error) {
+            throw  error;
+        }
+    }
 }
 
 module.exports = DoctorService;

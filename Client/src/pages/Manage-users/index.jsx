@@ -44,7 +44,7 @@ const UserTable = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
-            <header className="bg-amber-600 shadow-md py-4">
+            <header className="bg-orange-400 shadow-md py-4">
                 <div className="container mx-auto px-4 flex items-center">
                     <button
                         onClick={() => navigate(-1)}

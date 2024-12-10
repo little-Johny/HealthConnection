@@ -217,7 +217,7 @@ class UserService {
             const [result] = await mysql.query(query);
     
             if (result.length === 0) {
-                throw boom.notFound('No users found');
+                throw boom.notFound('No se encuentran usuarios');
             }
     
             return {

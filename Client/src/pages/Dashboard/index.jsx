@@ -42,14 +42,14 @@ const Dashboard = () => {
                     </Link>
 
                     {/* Opción 2: Registrar Doctor */}
-                    <Link to='/register-doctor' className='bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105'>
-                        <h2 className='text-indigo-600 text-2xl font-semibold mb-3'>Registrar Doctor</h2>
+                    <Link to='/doctor-register' className='bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105'>
+                        <h2 className='text-orange-400 text-2xl font-semibold mb-3'>Registrar Doctor</h2>
                         <p className='text-gray-600'>Registrar un nuevo doctor en el sistema.</p>
                     </Link>
 
                     {/* Opción 3: Registrar Personal Administrativo */}
-                    <Link to='/register-staff' className='bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105'>
-                        <h2 className='text-indigo-600 text-2xl font-semibold mb-3'>Registrar Personal Administrativo</h2>
+                    <Link to='/administrativo-register' className='bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105'>
+                        <h2 className='text-orange-400 text-2xl font-semibold mb-3'>Registrar Personal Administrativo</h2>
                         <p className='text-gray-600'>Añadir personal administrativo al sistema.</p>
                     </Link>
 

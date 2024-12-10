@@ -101,6 +101,23 @@ router.get(
     }
 );
 
+//obtener todas las especialidades
+router.get(
+    '/especialidades',
+    async (req, res, next) => {
+        try {
+            const result = await doctorService.getEspecialidades();
+            ResponseHandler.success({
+                res,
+                message: 'Especialidades obtenidas exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+)
+
 // Actualizar doctor
 router.patch(
     '/updateDoctor/:documento',

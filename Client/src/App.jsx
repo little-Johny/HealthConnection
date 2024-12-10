@@ -9,6 +9,8 @@ import UserTable from './pages/Manage-users';
 import PacienteRegister from './pages/PacienteRegister';
 import ProfileAdmin from './pages/ProfileAdmin';
 import ProfilePaciente from './pages/ProfilePaciente';
+import DoctorRegister from './pages/DoctorRegister';
+import AdministrativoRegister from './pages/AdminRegister';
 
 // Componente que maneja las rutas
 const AppRoutes = () => {
@@ -31,6 +33,24 @@ const AppRoutes = () => {
         <ProtectedRoute>
           {/* Solo accede al Dashboard si el usuario está autenticado */}
           <ProfileAdmin/> {/* Asegúrate de tener el componente Dashboard */}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/doctor-register',
+      element: (
+        <ProtectedRoute>
+          {/* Solo accede al Dashboard si el usuario está autenticado */}
+          <DoctorRegister/> {/* Asegúrate de tener el componente Dashboard */}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/administrativo-register',
+      element: (
+        <ProtectedRoute>
+          {/* Solo accede al Dashboard si el usuario está autenticado */}
+          <AdministrativoRegister/> {/* Asegúrate de tener el componente Dashboard */}
         </ProtectedRoute>
       ),
     },

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { IoChevronBackOutline  } from 'react-icons/io5';
+import { IoChevronBackOutline } from 'react-icons/io5';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const PacienteRegister = () => {
+const DoctorRegister = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
@@ -14,16 +14,41 @@ const PacienteRegister = () => {
         apellidos: '',
         tipo_documento: '',
         numero_documento: '',
-        fecha_nacimiento: '',
         genero: '',
         telefono: '',
         correo: '',
-        direccion: '',
-        ciudad: '',
+        especialidad_id: '',
     });
 
-    const [photo, setPhoto] = useState(null); // Archivo de la foto
-    const [photoPreview, setPhotoPreview] = useState(null); // URL para previsualización
+    const [photo, setPhoto] = useState(null);
+    const [photoPreview, setPhotoPreview] = useState(null);
+    const [especialidades, setEspecialidades] = useState([]);
+
+    useEffect(() => {
+        const fetchEspecialidades = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/health_connection/v1/doctor/especialidades');
+                if (response.data.success) {
+                    setEspecialidades(response.data.data);
+                } else {
+                    throw new Error('No se encontraron especialidades');
+                }
+            } catch (error) {
+                toast.error(error.message || 'Error al cargar especialidades', { position: 'top-right' });
+                console.error('Error al obtener especialidades:', error);
+            }
+        };
+
+        fetchEspecialidades();
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            if (photoPreview) {
+                URL.revokeObjectURL(photoPreview);
+            }
+        };
+    }, [photoPreview]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,8 +67,21 @@ const PacienteRegister = () => {
         }
     };
 
+    const validateForm = () => {
+        const requiredFields = ['username', 'password', 'nombres', 'apellidos', 'tipo_documento', 'numero_documento', 'especialidad_id', 'genero'];
+        for (const field of requiredFields) {
+            if (!formData[field]) {
+                toast.error(`El campo ${field} es obligatorio`, { position: 'top-right' });
+                return false;
+            }
+        }
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateForm()) return;
 
         const formDataToSend = new FormData();
         for (const key in formData) {
@@ -55,7 +93,7 @@ const PacienteRegister = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:3000/health_connection/v1/paciente/registerPaciente',
+                'http://localhost:3000/health_connection/v1/doctor/registerDoctor',
                 formDataToSend,
                 {
                     headers: {
@@ -64,19 +102,20 @@ const PacienteRegister = () => {
                 }
             );
 
-            toast.success('Paciente registrado exitosamente', { position: 'top-right' });
-            console.log('Paciente registrado:', response.data);
+            toast.success('Doctor registrado exitosamente', { position: 'top-right' });
+            console.log('Doctor registrado:', response.data.data);
+            navigate('/manage-users');
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Error al registrar paciente';
+            const errorMessage = error.response?.data?.message || 'Error al registrar doctor';
             toast.error(errorMessage, { position: 'top-right' });
-            console.error('Error al registrar paciente:', errorMessage);
+            console.error('Error al registrar doctor:', errorMessage);
         }
     };
 
     return (
         <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-indigo-50 to-indigo-200">
             {/* Header */}
-            <header className="bg-amber-600 p-6 shadow-lg shadow-gray-500 min-w-full">
+            <header className="bg-orange-400 p-6 shadow-lg shadow-gray-500 min-w-full">
                 <div className="flex justify-between items-center">
                     <button
                         onClick={() => navigate(-1)}
@@ -85,14 +124,13 @@ const PacienteRegister = () => {
                         <IoChevronBackOutline size={24} />
                     </button>
                     <h1 className="flex-grow text-center text-white text-xl font-semibold">
-                        Registrar Paciente
+                        Registrar Doctor
                     </h1>
                 </div>
             </header>
 
             {/* Formulario */}
             <div className="w-full max-w-3xl px-6 py-8 bg-white shadow-lg rounded-lg mt-4">
-                <h2 className="text-center text-2xl font-bold text-orange-400 mb-6">Registrar Paciente</h2>
                 <form
                     onSubmit={handleSubmit}
                     className="space-y-6 max-h-[75vh] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-200"
@@ -102,11 +140,11 @@ const PacienteRegister = () => {
                         { label: 'Contraseña', name: 'password', type: 'password' },
                         { label: 'Nombres', name: 'nombres', type: 'text' },
                         { label: 'Apellidos', name: 'apellidos', type: 'text' },
-                        { label: 'Fecha de Nacimiento', name: 'fecha_nacimiento', type: 'date' },
                         { label: 'Teléfono', name: 'telefono', type: 'tel' },
                         { label: 'Correo Electrónico', name: 'correo', type: 'email' },
+                        { label: 'Horario', name: 'horario', type: 'text' },
                     ].map((field, idx) => (
-                        <div key={idx}>
+                        <div key={idx} className='px-6'>
                             <label className="block text-gray-600 mb-2 font-medium">{field.label}</label>
                             <input
                                 type={field.type}
@@ -144,6 +182,38 @@ const PacienteRegister = () => {
                         </div>
                     </div>
 
+                    <div className="flex gap-4">
+                        <div className="flex-1">
+                            <label className="block text-gray-600 mb-2 font-medium">Especialidad</label>
+                            <select
+                                name="especialidad_id"
+                                value={formData.especialidad_id}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400"
+                            >
+                                <option value="">Selecciona una especialidad</option>
+                                {especialidades.map((especialidad) => (
+                                    <option key={especialidad.id} value={especialidad.id}>
+                                        {especialidad.nombre}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="flex-1">
+                            <label className="block text-gray-600 mb-2 font-medium">Género</label>
+                            <select
+                                name="genero"
+                                value={formData.genero}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400"
+                            >
+                                <option value="">Selecciona</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="femenino">Femenino</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div>
                         <label className="block text-gray-600 mb-2 font-medium">Foto</label>
                         <input
@@ -175,4 +245,4 @@ const PacienteRegister = () => {
     );
 };
 
-export default PacienteRegister;
+export default DoctorRegister;
