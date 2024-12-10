@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 const ProfileDoctor = () => {
     const { userId } = useParams();
     const navigate = useNavigate();
-    const { token } = useAuth();
+    const { token, logout } = useAuth();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -125,6 +125,12 @@ const ProfileDoctor = () => {
                     <h1 className="text-white text-3xl font-semibold flex-grow text-center">
                         Perfil {data?.usuario?.rol}
                     </h1>
+                    <button
+                        onClick={()=> {logout()}}
+                        className="bg-red-600 text-white p-2 rounded-full hover:bg-red-500"
+                    >
+                        logout
+                    </button>
                 </div>
             </header>
 
