@@ -7,7 +7,7 @@ import { toast, ToastContainer } from 'react-toastify'; // Importar toast
 
 const ProfileAdmin = () => {
     const { userId } = useParams();
-    const { token } = useAuth();
+    const { token, logout } = useAuth();
     const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -131,6 +131,12 @@ const ProfileAdmin = () => {
                     <h1 className="text-white text-3xl font-semibold flex-grow text-center">
                         Perfil del {userData?.usuario?.rol}
                     </h1>
+                    <button
+                        onClick={()=> {logout()}}
+                        className="bg-red-600 text-white p-2 rounded-full hover:bg-red-500"
+                    >
+                        logout
+                    </button>
                 </div>
             </header>
 

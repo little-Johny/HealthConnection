@@ -36,10 +36,7 @@ const Login = () => {
             // Llama a la función login del contexto
             login(token, rol, id);
     
-            // Redirige según el rol
-            rol === 'administrador' || rol === 'asistente'
-                ? navigate('/dashboard')
-                : navigate('/');
+            navigate('/dashboard')
         }  catch (error) {
             if (error.response) {
                 // Si el error viene del servidor, mostramos el mensaje con toast
