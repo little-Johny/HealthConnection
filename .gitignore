@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 #ignorar carpeta
-/uploads
+/Uploads
