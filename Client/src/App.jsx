@@ -12,7 +12,10 @@ import ProfilePaciente from './pages/ProfilePaciente';
 import DoctorRegister from './pages/DoctorRegister';
 import AdministrativoRegister from './pages/AdminRegister';
 import ProfileDoctor from './pages/ProfileDoctor';
+import CreateCita from './pages/RegisterCita';
 import { ToastContainer } from 'react-toastify';
+import AgendaDoctor from './pages/AgendaDoctor';
+import PacietneCitas from './pages/PacienteCitas';
 
 // Componente que maneja las rutas
 const AppRoutes = () => {
@@ -26,6 +29,33 @@ const AppRoutes = () => {
         <ProtectedRoute>
           {/* Solo accede al Dashboard si el usuario está autenticado */}
           <Dashboard /> {/* Asegúrate de tener el componente Dashboard */}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/solicitar-cita/:userId',
+      element: (
+        <ProtectedRoute>
+          {/* Solo accede al Dashboard si el usuario está autenticado */}
+          <CreateCita /> {/* Asegúrate de tener el componente Dashboard */}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/agenda-doctor',
+      element: (
+        <ProtectedRoute>
+          {/* Solo accede al Dashboard si el usuario está autenticado */}
+          <AgendaDoctor /> {/* Asegúrate de tener el componente Dashboard */}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/mis-citas',
+      element: (
+        <ProtectedRoute>
+          {/* Solo accede al Dashboard si el usuario está autenticado */}
+          <PacietneCitas /> {/* Asegúrate de tener el componente Dashboard */}
         </ProtectedRoute>
       ),
     },

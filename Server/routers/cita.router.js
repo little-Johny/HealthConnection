@@ -2,20 +2,82 @@ const express = require('express');
 const router = express.Router();
 const CitaService = require('../services/cita.service');
 const boom = require('@hapi/boom');
-
+const PacienteService = require('../services/paciente.service');
+const ResponseHandler = require('../middlewares/response.handler');
 // Instanciar el servicio
 const citaService = new CitaService();
+const pacienteService = new PacienteService();
 
 // Registrar una nueva cita
-router.post('/registerCita', async (req, res, next) => {
+router.post('/registerCita/:id', async (req, res, next) => {
     try {
-        const body = req.body;
-        const result = await citaService.registerCita(body);
-        res.status(201).json(result);
+        const {id} = req.params;  // Obtienes el ID del usuario logueado
+        const result = await pacienteService.findById(id);  // Obtienes el paciente
+        if (!result) {
+            return next(boom.notFound('Paciente no encontrado.'));
+        }
+
+        pacienteId = result.paciente.id;
+        const data = req.body;
+        const cita = await citaService.registerCita(data, pacienteId);
+
+       // Respuesta de éxito
+        ResponseHandler.success({
+            res,
+            message: 'Cita creada exitosamente.',
+            data: cita,  // Asegúrate de devolver los datos actualizados
+        });
     } catch (error) {
         next(error);
     }
 });
+
+router.get(
+    '/tipoCita',
+    async (req, res, next) => {
+        try {
+            const result = await citaService.getTipoCita();
+            ResponseHandler.success({
+                res,
+                message: 'Tipos de citas obtenidas exitosamente.',
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+)
+
+//obtener citas de paciente
+router.get('/pacienteCita/:id',async ( req, res, next) => {
+    try {
+        const {id} = req.params;  // Obtienes el ID del usuario logueado
+        const citas = await citaService.getCitasByPaciente( id);
+        ResponseHandler.success({
+            res,
+            message: 'Citas obtenidas exitosamente.',
+            data: citas,  // Asegúrate de devolver los datos actualizados
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+//obtener citas de doctor
+router.get('/doctorCita/:id',async ( req, res, next) => {
+    try {
+        const {id} = req.params;  // Obtienes el ID del usuario logueado
+        const citas = await citaService.getCitasByDoctor( id);
+        ResponseHandler.success({
+            res,
+            message: 'Citas obtenidas exitosamente.',
+            data: citas,  // Asegúrate de devolver los datos actualizados
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 // Obtener todas las citas
 router.get('/', async (req, res, next) => {

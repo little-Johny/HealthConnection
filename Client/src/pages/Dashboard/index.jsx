@@ -92,13 +92,14 @@ const Dashboard = () => {
                         {/* Opción 5: Solicitar cita */}
                         {rol !== 'doctor' && (
                             <Link
-                                to='/solicitar-cita'
-                                className='bg-white p-6 rounded-3xl shadow-xl hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105'
+                                to={rol === 'paciente' ? `/solicitar-cita/${userId}` : `/solicitar-cita/:id`}
+                                className="bg-white p-6 rounded-3xl shadow-xl hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105"
                             >
-                                <h2 className='text-orange-500 text-2xl font-semibold mb-3'>Solicita una cita</h2>
-                                <p className='text-gray-700'>Agenda tu cita.</p>
+                                <h2 className="text-orange-500 text-2xl font-semibold mb-3">Solicita una cita</h2>
+                                <p className="text-gray-700">Agenda tu cita.</p>
                             </Link>
                         )}
+
 
                         {/* Opción 6: citas de paciente */}
                         {rol === 'paciente' && (
@@ -114,7 +115,7 @@ const Dashboard = () => {
                         {/* Opción 7: Agenda de doctor */}
                         {rol === 'doctor' && (
                             <Link
-                                to='/mis-agenda'
+                                to='/agenda-doctor'
                                 className='bg-white p-6 rounded-3xl shadow-xl hover:shadow-2xl hover:bg-gray-50 transition transform hover:scale-105'
                             >
                                 <h2 className='text-orange-500 text-2xl font-semibold mb-3'>Mi Agenda</h2>
