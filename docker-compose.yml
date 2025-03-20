@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: healthconnection
+    restart: always
+    environment:
+      POSTGRES_USER: toby
+      POSTGRES_PASSWORD: toby3312
+      POSTGRES_DB: healthconnection
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  
+  pgadmin: 
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@mail.com
+      - PGADMIN_DEFAULT_PASSWORD=3312
+    ports:
+      - 5050:80
+
+volumes:
+  pgdata:

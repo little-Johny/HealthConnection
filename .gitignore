@@ -130,4 +130,5 @@ dist
 .pnp.*
 
 #ignorar carpeta
-/Uploads
+Uploads/
+.vscode/
