@@ -4,9 +4,9 @@ services:
     container_name: healthconnection
     restart: always
     environment:
-      POSTGRES_USER: toby
-      POSTGRES_PASSWORD: toby3312
-      POSTGRES_DB: healthconnection
+      - POSTGRES_USER=toby
+      - POSTGRES_PASSWORD=toby3312
+      - POSTGRES_DB=healthconnection
     ports:
       - "5432:5432"
     volumes:

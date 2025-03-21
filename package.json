@@ -31,5 +31,11 @@
     "react-router-dom": "^7.0.2",
     "react-toastify": "^10.0.6",
     "sequelize": "^6.37.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0",
+    "sequelize-cli": "^6.6.2"
   }
 }
