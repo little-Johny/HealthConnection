@@ -88,7 +88,6 @@ CREATE TABLE Doctor (
     telefono VARCHAR(30),
     correo VARCHAR(100),
     horario TEXT,
-    fecha_contratacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES Usuario(id),
     FOREIGN KEY (especialidad_id) REFERENCES Especialidad(id)
 );
