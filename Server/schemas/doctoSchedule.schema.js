@@ -1,0 +1,59 @@
+const Joi = require('joi');
+
+const id = Joi.number().integer().positive();
+const doctorId = Joi.number().integer().positive().required();
+const dayOfWeek = Joi.string().valid('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday').required();
+const startTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).messages({
+    'string.pattern.base': 'El formato de la hora de inicio debe ser HH:mm (24h).',
+});
+const endTime = Joi.string()
+    .pattern(/^([01]\d|2[0-3]):([0-5]\d)$/)
+    .messages({
+        'string.pattern.base': 'El formato de la hora de finalización debe ser HH:mm (24h).',
+    })
+    .custom((value, helpers) => {
+    const start = helpers.state.ancestors[0].startTime;
+    if (start && value <= start) {
+        return helpers.error('any.invalid', { message: 'La hora de finalización debe ser mayor que la hora de inicio.' });
+    }
+    return value;
+});
+const startDate = Joi.date().iso();
+const endDate = Joi.date().iso().greater(Joi.ref('startDate'));
+const limit = Joi.number().integer().positive().default(10);
+const offset = Joi.number().integer().min(0).default(0);
+
+const createDoctorScheduleSchema = Joi.object({
+    doctorId,
+    dayOfWeek,
+    startTime: startTime.required(),
+    endTime: endTime.required(),
+});
+
+const updateDoctorScheduleSchema = Joi.object({
+    doctorId: doctorId.optional(),
+    dayOfWeek: dayOfWeek.optional(),
+    startTime: startTime.optional(),
+    endTime: endTime.optional(),
+});
+
+const getDoctorScheduleSchema = Joi.object({
+    id: id.required(),
+});
+
+const getQueryDoctorScheduleSchema = Joi.object({
+    id: id.optional(),
+    doctorId: doctorId.optional(),
+    dayOfWeek: dayOfWeek.optional(),
+    startDate: startDate.optional(),
+    endDate: endDate.optional(),
+    limit: limit.optional(),
+    offset: offset.optional(),
+}).and('startDate', 'endDate');
+
+module.exports = {
+    createDoctorScheduleSchema,
+    updateDoctorScheduleSchema,
+    getDoctorScheduleSchema,
+    getQueryDoctorScheduleSchema,
+};
