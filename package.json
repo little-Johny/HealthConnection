@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "nodemon Server/index.js",
     "start": "node Server/index.js",
-    "client": " vite Client/"
+    "client": " vite Client/",
+    "migrations:generate": "sequelize-cli migration:generate --name",
+    "migrations:run": "sequelize-cli db:migrate",
+    "migrations:revert": "sequelize-cli db:migrate:undo",
+    "migrations:delete": "sequelize-cli db:migrate:undo:all"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +21,8 @@
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3",
     "express": "^4.21.1",
     "express-async-errors": "^3.1.1",
     "joi": "^17.13.3",
