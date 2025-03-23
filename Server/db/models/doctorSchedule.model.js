@@ -59,7 +59,7 @@ const DoctorScheduleSchema = {
         allowNull: true,
         type: DataTypes.DATE,
     },
-}
+};
 
 class DoctorSchedule extends Model {
     static associate(models) {

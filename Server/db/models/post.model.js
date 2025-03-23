@@ -3,7 +3,7 @@ const { USER_TABLE } = require('./user.model');
 
 const POST_TABLE = 'post';
 
-const  PostsSchema = {
+const  PostSchema = {
     id: {
         allowNull: false,
         type: DataTypes.INTEGER,
@@ -33,7 +33,7 @@ const  PostsSchema = {
         allowNull: true,
         type: DataTypes.STRING,
     },
-    reatedAt: {
+    createdAt: {
         field: 'created_at',
         allowNull: false,
         type: DataTypes.DATE,
@@ -69,5 +69,4 @@ class Post extends Model {
     };
 };
 
-
-
+module.exports = { POST_TABLE, Post, PostSchema };

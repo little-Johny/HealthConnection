@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes, Model, Sequelize } = require('sequelize');
 
 const SPECIALITY_TABLE = 'specialities';
 
@@ -13,6 +13,22 @@ const SpecialitySchema = {
         allowNull: false,
         type: DataTypes.STRING,
         unique: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: Sequelize.NOW,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        allowNull: true,
+        type: DataTypes.DATE,
+    },
+    deletedAt: {
+        field: 'deleted_at',
+        allowNull: true,
+        type: DataTypes.DATE,
     },
 };
 
