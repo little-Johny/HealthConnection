@@ -54,6 +54,10 @@ const UserSchema = {
         type: DataTypes.STRING,
         unique: true,
     },
+    phone: {
+        allowNull: true,
+        type: DataTypes.STRING,
+    },
     role: {
         allowNull: false,
         type: DataTypes.ENUM('admin', 'staff', 'doctor', 'patient'),
