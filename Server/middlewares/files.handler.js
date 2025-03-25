@@ -1,66 +1,54 @@
-const multer =  require('multer');
-const path= require('path');
+const multer = require('multer');
+const path = require('path');
 const fs = require('fs');
-const { object, date } = require('joi');
-const { application } = require('express');
 
-//funcion para crear directorios dinamicamente
-function createDirectory(dir) {
+// Ruta de la carpeta para almacenar imágenes de usuarios
+const usersUploadDir = path.join(__dirname, '../../Uploads/users');
+const postsUploadDir = path.join(__dirname, '../../Uploads/posts');
+
+// Crear la carpeta si no existe
+[usersUploadDir, postsUploadDir].forEach((dir) => {
     if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, {recursive: true});
+        fs.mkdirSync(dir, { recursive: true});
     }
-};
+});
 
-//configuracion de directorios
-const uploadsDir = path.join(__dirname, '../../Uploads');
-const directories = {
-    pacientes: path.join(uploadsDir, 'pacientes'),
-    doctores: path.join(uploadsDir, 'doctores'),
-    administrativos: path.join(uploadsDir, 'administrativos'),
-    publicaciones: path.join(uploadsDir, 'publicaciones'),
-};
-
-//creamos las carpetas necesarias para almacenar los documentos
-for(const dir of Object.values(directories)){
-    createDirectory(dir);
-};
-
-// Configuración de almacenamiento dinámico
-function createStorage(folder) {
-    return multer.diskStorage({
-        destination: (req, file, cb) => {
-            createDirectory(folder); // Asegurarse de que el folder exista
-            cb(null, folder);
+// Configuración de almacenamiento
+const createStorage = (uploadDir) => 
+    multer.diskStorage({
+        destination: (req, res, cb) => {
+            cb(null, uploadDir);
         },
         filename: (req, file, cb) => {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+            const  uniqueSuffix = Date.now() + '_' + Math.round(Math.random() * 1e8);
             cb(null, uniqueSuffix + path.extname(file.originalname));
-        }
+        },
     });
-}
 
-//validacion de tipos de archivos
+
+// Validación de archivos permitidos
 const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
 const fileFilter = (req, file, cb) => {
     if (!allowedTypes.includes(file.mimetype)) {
-        const error = new Error(`Tipo de archivo no permitido: ${file.mimetype}`);
-        error.code = 'FILE_TYPE_NOT_ALLOWED';
-        return cb(error, false);
+        return cb(new Error(`Tipo de archivo no permitido: ${file.mimetype}`), false);
     }
     cb(null, true);
 };
 
+// Límite de tamaño de archivo (5MB)
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024;
 
-// Crear middleware dinámico
-const createUploadMiddleware = (folder) => multer({
-    storage: createStorage(folder),
+// Middleware de subida
+const userUpload = multer({
+    storage: createStorage(usersUploadDir),
     fileFilter,
     limits: { fileSize: FILE_SIZE_LIMIT },
 });
 
-const pacienteUpload = createUploadMiddleware(directories.pacientes);
-const doctoresUpload = createUploadMiddleware(directories.doctores);
-const administrativoUpload = createUploadMiddleware(directories.administrativos);
+const postsUpload = multer({
+    storage: createStorage(postsUploadDir),
+    fileFilter,
+    limits: { fileSize: FILE_SIZE_LIMIT },
+})
 
-module.exports = { pacienteUpload, doctoresUpload,  administrativoUpload };
+module.exports = { userUpload, postsUpload };
