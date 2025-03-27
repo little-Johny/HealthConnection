@@ -1,61 +1,191 @@
 const express = require('express');
-const boom = require('@hapi/boom');
-
-const authentication = require('../middlewares/authentication.handler');
 const validatorHandler = require('../middlewares/validation.handler');
-const ResponseHandler = require('../middlewares/response.handler');
-const checkPermission = require('../middlewares/permission.handler');
 const UserService = require('../services/user.service');
-const { updateUserSchema } = require('../schemas/user.schema');
+const { userUpload, getUploadedFileURL } = require('./../middlewares/files.handler');
+const { createUserSchema, getQueryUserSchema, getUserSchema, updateUserSchema } = require('../schemas/user.schema');
+const ResponseHandler = require('./../middlewares/response.handler');
+const { ARRAY } = require('sequelize');
 
 const router = express.Router();
 const service = new UserService();
 
+// Función para procesar datos del usuario
+const processUserData = (req) => {
+    let data = { ...req.body };
+    if (req.file) {
+        data.photo = getUploadedFileURL('users', req.file.filename);
+    }
+    return data;
+};
+
+// Crear usuario
 router.post(
-    '/login',
+    '/',
+    userUpload.single('photo'),
+    validatorHandler(createUserSchema, 'body'),
     async (req, res, next) => {
         try {
-            const { username, password } = req.body;
-            const result = await service.login(username, password);
-
-            // Enviar una respuesta estructurada
+            const userData = processUserData(req);
+            const newUser = await service.create(userData);
             ResponseHandler.success({
                 res,
-                message: 'Inicio de sesion exitoso',
-                data: result,
-                status: 201,
+                req,
+                message: 'Usuario creado exitosamente',
+                data: newUser,
+                statusCode: 201
             });
         } catch (error) {
-            next(error);  // Manejo de errores
+            next(error);
+        }
+    }
+);
+
+// Obtener usuarios con filtros
+router.get(
+    '/',
+    validatorHandler(getQueryUserSchema, 'query'),
+    async (req, res, next) => {
+        try {
+            const users = await service.find(req.query);
+            ResponseHandler.success({
+                res,
+                req,
+                message: 'Usuarios encontrados',
+                data: users,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+// obtener todos los usuarios incluso los eliminados
+router.get(
+    '/all',
+    async (req, res, next) => {
+        try {
+            const users = await service.findAll();
+            ResponseHandler.success({
+                res,
+                req,
+                message: `Usuarios encontrados`,
+                data: users,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+// Obtener un usuario por ID
+router.get(
+    '/:id',
+    validatorHandler(getUserSchema, 'params'),
+    async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const user = await service.findOne(id);
+            ResponseHandler.success({
+                res,
+                req,
+                message: `Usuario con ID ${id} encontrado`,
+                data: user,
+                statusCode,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+// Actualizar parcialmente un usuario
+router.patch(
+    '/:id',
+    userUpload.single('photo'),
+    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(updateUserSchema, 'body'),
+    async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const changes = processUserData(req);
+
+            const originalUser = await service.findOne(id);
+            
+            const updatedUser = await service.update(id, changes);
+
+            //mensaje de respuesta
+            const  updatedFields = Object.keys(changes).map(
+                (key) =>  `${key}: '${originalUser[key] }' → '${updatedUser[key]}'`,
+            )
+            ResponseHandler.success({
+                res,
+                req,
+                message: `Usuario actualizado exitosamente. Cambios: ${updatedFields.join(', ')}.`,
+                data: updatedUser
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+// Eliminar usuario por ID
+router.delete(
+    '/:id',
+    validatorHandler(getUserSchema, 'params'),
+    async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            await service.delete(id);
+            ResponseHandler.success({
+                res,
+                req,
+                message: 'Usuario eliminado exitosamente',
+                data: { id }
+            });
+        } catch (error) {
+            next(error);
         }
     }
 );
 
 router.patch(
-    '/desactivacion/:id',
-    authentication,
-    checkPermission('administrador'), 
-    validatorHandler(updateUserSchema, 'body'),
+    '/restore/:id', 
+    validatorHandler(getUserSchema, 'params'),
     async (req, res, next) => {
         try {
-            const { id } = req.params; 
-            const result = await service.deactivateUser(id); 
-            res.json(result); 
+            const { id } = req.params;
+            const restoredUser = await service.restore(id);
+            ResponseHandler.success({
+                res,
+                req,
+                message: 'Usuario restaurado exitosamente',
+                data: restoredUser
+            });
         } catch (error) {
-            next(error); 
+            next(error);
         }
     }
 );
 
-// Endpoint para obtener la lista de usuarios
-router.get('/getAll', async (req, res, next) => {
-    try {
-        const result = await service.find();
-        res.status(200).json(result);
-    } catch (error) {
-        // Manejo de errores utilizando Boom
-        next(error); // Si no es un error Boom, pasa al manejador global
+router.delete(
+    '/force/:id',
+    validatorHandler(getUserSchema, 'params'),
+    async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const fullDelete = await service.forceDelete(id);
+            ResponseHandler.success({
+                req,
+                res,
+                message: fullDelete.message,
+                data: id,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
+
 
 module.exports = router;

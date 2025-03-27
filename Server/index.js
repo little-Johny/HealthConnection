@@ -3,24 +3,24 @@ require('express-async-errors'); // Se cargará globalmente si se usa en rutas
 const cors = require('cors');
 const path = require('path');
 const sequelize = require('./libs/sequelize');
-
 const {
     logError, 
     errorHandler, 
-    boomErrorHandler
+    boomErrorHandler,
 } = require('./middlewares/error.handler');
-/* const routerApi = require('./routers'); */
+const routerApi = require('./routers');
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Procesa form-data
 app.use(cors());
 
 // Servir archivos estáticos de la carpeta "uploads"
-app.use('/uploads', express.static(path.resolve(__dirname, '../uploads'))); // Ruta absoluta
+app.use('/Uploads', express.static(path.resolve(__dirname, '../Uploads'))); // Ruta absoluta
 
-/* routerApi(app); */
+routerApi(app);
 
 // Implementación de middlewares
 app.use(logError);
@@ -31,7 +31,7 @@ app.use(errorHandler);
 const testDbConnection = async () => {
     try {
         await sequelize.authenticate(); // Verifica la conexión con Sequelize
-        console.log('☑️  Database connection successful.');
+        console.log('☑️  Database connection successfully');
     } catch (error) {
         console.error(`❌ Error connecting to database: ${error.message}`);
         throw new Error('Database connection failed.');
@@ -46,7 +46,7 @@ const testDbConnection = async () => {
         // Opcional: sincronizar modelos (solo en desarrollo, evita usar en producción)
         // await sequelize.sync({ force: false }); 
 
-        app.listen(port, () => {
+        app.listen(port,'0.0.0.0', () => {
             console.log(`🚀 Server is running on port: ${port}`);
         });
     } catch (error) {
