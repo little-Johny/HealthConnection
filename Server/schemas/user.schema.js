@@ -11,7 +11,7 @@ const password = Joi.string()
         'string.pattern.base': 'La contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener una longitud mínima de 8 caracteres y máxima de 12 caracteres.',
     });
 const name = Joi.string();
-const lastname = Joi.string();
+const lastName = Joi.string();
 const photo = Joi.string();
 const typeDocument = Joi.string().valid(...DocTypes);
 const numberDocument = Joi.string().pattern(/^\d{5,20}$/).optional();
@@ -30,7 +30,7 @@ const createUserSchema = Joi.object({
     username: username.required(),
     password: password.required(),
     name: name.required(),
-    lastname: lastname.required(),
+    lastName: lastName.required(),
     photo: photo.optional(),
     typeDocument: typeDocument.required(),
     numberDocument: numberDocument.required(),
@@ -44,7 +44,7 @@ const updateUserSchema = Joi.object({
     username: username.optional(),
     password: password.optional(),
     name: name.optional(),
-    lastname: lastname.optional(),
+    lastName: lastName.optional(),
     photo: photo.optional(),
     typeDocument: typeDocument.optional(),
     numberDocument: numberDocument.optional(),
@@ -58,8 +58,7 @@ const getUserSchema = Joi.object({
     id: id.required(),
 });
 
-const getQueryUserSchema = Joi.object({
-    id: id.optional(),
+const getQueryUserSchema = Joi.object({ 
     username: username.optional(),
     email: email.optional(),
     phone: phone.optional(),
