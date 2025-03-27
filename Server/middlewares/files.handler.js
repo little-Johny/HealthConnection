@@ -1,6 +1,24 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
+
+//Metodo para obtener la ip
+function getWSLIP() {
+    const interfaces = os.networkInterfaces();
+    for (const name of Object.keys(interfaces)) {
+        for (const net of interfaces[name]) {
+            if (net.family === 'IPv4' && !net.internal && net.address.startsWith('172.')) {
+                return net.address; //Devuelve la Ip de WSL 
+            }
+        }
+    }
+
+    return 'localhost'; // en caso de error
+}
+
+const serverIP = getWSLIP();
+
 
 // Ruta de la carpeta para almacenar imágenes de usuarios
 const usersUploadDir = path.join(__dirname, '../../Uploads/users');
@@ -49,6 +67,12 @@ const postsUpload = multer({
     storage: createStorage(postsUploadDir),
     fileFilter,
     limits: { fileSize: FILE_SIZE_LIMIT },
-})
+});
 
-module.exports = { userUpload, postsUpload };
+function getUploadedFileURL(folder, filename) {
+    return `http://${serverIP}:3000/Uploads/${folder}/${filename}`;
+}
+
+
+
+module.exports = { userUpload, postsUpload, getUploadedFileURL };

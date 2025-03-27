@@ -1,32 +1,40 @@
-//Capturador de errores 
+const ResponseHandler = require('./response.handler');
+
+// Capturador de errores 
 function logError(error, req, res, next) {
-    console.log(`LogErrors`);
     console.error(error);
     next(error);
-};
+}
 
-//Mostrar el error en un formato legible
+// Manejo de errores generales
 function errorHandler(error, req, res, next) {
-    console.log(`ErrorHandler`);
-    res.status(500).json({
-        message: error.message,
-        stack: error.stack
+    ResponseHandler.error({
+        res,  // ❌ Faltaba res
+        req,
+        message: 'Error interno del servidor',
+        error: process.env.NODE_ENV === 'development' ? error : null, // Muestra detalles solo en desarrollo
+        statusCode: 500,
     });
-    next();
-};
+}
 
-//Errores tipo boom
+// Manejo de errores tipo Boom
 function boomErrorHandler(error, req, res, next) {
-    //validar si el error es creado por la libreria boom
     if (error.isBoom) {
         const { output } = error;
-    //estatus code dinamico y json leidos desde el output de boom
-        res.status(output.statusCode).json(output.payload);
-    } else {
-    //si no es un errore de tipo boom ira a ejecutar un middleware de errores normales
-        next(error);
+        
+        ResponseHandler.error({
+            res,
+            req,
+            message: output.payload.message,
+            error, // Opcional: puedes incluir el error completo si estás en desarrollo
+            statusCode: output.statusCode
+        });
+
+        return; // ⛔ Detenemos la ejecución para que no llame a next(error)
     }
-};
+
+    next(error);
+}
 
 module.exports = {
     logError,
