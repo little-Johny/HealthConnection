@@ -4,8 +4,6 @@ const UserService = require('../services/user.service');
 const { userUpload, getUploadedFileURL } = require('./../middlewares/files.handler');
 const { createUserSchema, getQueryUserSchema, getUserSchema, updateUserSchema } = require('../schemas/user.schema');
 const ResponseHandler = require('./../middlewares/response.handler');
-const { ARRAY } = require('sequelize');
-
 const router = express.Router();
 const service = new UserService();
 
@@ -90,7 +88,6 @@ router.get(
                 req,
                 message: `Usuario con ID ${id} encontrado`,
                 data: user,
-                statusCode,
             });
         } catch (error) {
             next(error);
@@ -115,12 +112,12 @@ router.patch(
 
             //mensaje de respuesta
             const  updatedFields = Object.keys(changes).map(
-                (key) =>  `${key}: '${originalUser[key] }' → '${updatedUser[key]}'`,
+                (key) =>  `${key}: '${ originalUser[key] }' → '${ updatedUser[key] }'`,
             )
             ResponseHandler.success({
                 res,
                 req,
-                message: `Usuario actualizado exitosamente. Cambios: ${updatedFields.join(', ')}.`,
+                message: `Usuario actualizado exitosamente. Cambios: ${updatedFields.join(', ')}`,
                 data: updatedUser
             });
         } catch (error) {

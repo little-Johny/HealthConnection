@@ -52,6 +52,14 @@ const updateUserSchema = Joi.object({
     email: email.optional(),
     phone: phone.optional(),
     role: role.optional(),
+    birthdate: Joi.date().iso().max('now').messages({
+        'date.max': 'La fecha de nacimiento debe ser en el pasado.',
+    }),
+    address: Joi.string().min(5).max(100),
+    city: Joi.string().min(5).max(50),
+    licenseNumber: Joi.string().alphanum().min(5).max(20),
+    consultationFee: Joi.number().precision(2).positive(),
+    specialityId: Joi.number().integer().positive(),
 });
 
 const getUserSchema = Joi.object({
@@ -60,6 +68,8 @@ const getUserSchema = Joi.object({
 
 const getQueryUserSchema = Joi.object({ 
     username: username.optional(),
+    name: name.optional(),
+    lastName: lastName.optional(),
     email: email.optional(),
     phone: phone.optional(),
     role: role.optional(),
@@ -68,6 +78,15 @@ const getQueryUserSchema = Joi.object({
     gender: gender.optional(),
     startDate: Joi.date().iso().optional(),
     endDate: Joi.date().iso().greater(Joi.ref('startDate')).optional(),
+    birthdate: Joi.date().iso().max('now').messages({
+        'date.max': 'La fecha de nacimiento debe ser en el pasado.',
+    }),
+    address: Joi.string().max(100),
+    city: Joi.string().max(50),
+    licenseNumber: Joi.string().alphanum().max(20),
+    consultationFee: Joi.number().precision(2).positive(),
+    specialityId: Joi.number().integer().positive(),
+    search: Joi.string(),
     limit: limit.optional(),
     offset: offset.optional(),
 }).and('startDate', 'endDate');
