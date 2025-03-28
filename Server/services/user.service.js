@@ -126,7 +126,24 @@ class UserService {
     
 
     async findOne(id) {
-        const user = await models.User.findByPk(id, { attributes: { exclude: ['password'] } });
+        const user = await models.User.findByPk(
+            id, 
+            { 
+                attributes: { exclude: ['password'] },
+                include: [
+                    {
+                        model: models.Doctor,
+                        as: 'doctor',
+                        required: false,
+                    },
+                    {
+                        model: models.Patient,
+                        as: 'patient',
+                        required: false,
+                    }
+                ]
+            },
+        );
 
         if (!user) {
             throw boom.notFound(`No se encuentra usuario con ID ${id}`);
