@@ -82,11 +82,11 @@ const UserSchema = {
 
 class User extends Model {
     static associate(models) {
-        this.hasMany(models.Patient, {
+        this.hasOne(models.Patient, {
             as: 'patient',
             foreignKey: 'userId',
         });
-        this.hasMany(models.Doctor, {
+        this.hasOne(models.Doctor, {
             as: 'doctor',
             foreignKey: 'userId',
         });
