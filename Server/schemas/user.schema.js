@@ -55,8 +55,8 @@ const updateUserSchema = Joi.object({
     birthdate: Joi.date().iso().max('now').messages({
         'date.max': 'La fecha de nacimiento debe ser en el pasado.',
     }),
-    address: Joi.string().min(5).max(100),
-    city: Joi.string().min(5).max(50),
+    address: Joi.string().max(100),
+    city: Joi.string().max(50),
     licenseNumber: Joi.string().alphanum().min(5).max(20),
     consultationFee: Joi.number().precision(2).positive(),
     specialityId: Joi.number().integer().positive(),

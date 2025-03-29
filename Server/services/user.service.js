@@ -126,31 +126,40 @@ class UserService {
     
 
     async findOne(id) {
-        const user = await models.User.findByPk(
-            id, 
-            { 
-                attributes: { exclude: ['password'] },
-                include: [
-                    {
-                        model: models.Doctor,
-                        as: 'doctor',
-                        required: false,
-                    },
-                    {
-                        model: models.Patient,
-                        as: 'patient',
-                        required: false,
-                    }
-                ]
-            },
-        );
-
+        const user = await models.User.findByPk(id, {
+            attributes: { exclude: ['password'] },
+            include: [
+                {
+                    model: models.Doctor,
+                    as: 'doctor',
+                    required: false,
+                },
+                {
+                    model: models.Patient,
+                    as: 'patient',
+                    required: false,
+                }
+            ]
+        });
+    
         if (!user) {
             throw boom.notFound(`No se encuentra usuario con ID ${id}`);
         }
-
-        return user;
-    };
+        /* console.log(`User:`);
+        console.log(user); */
+        // Convertir a objeto plano
+        const userPlain = user.toJSON();
+    
+        // Eliminar la relación innecesaria según el rol
+        if (userPlain.role === 'patient') {
+            delete userPlain.doctor;
+        } else if (userPlain.role === 'doctor') {
+            delete userPlain.patient;
+        }
+    
+        return userPlain;
+    }
+    
 
     async findAll() {
         return await models.User.findAll({
@@ -176,24 +185,12 @@ class UserService {
             }
     
             // Manejo de actualización de pacientes y doctores
-            if (user.role === 'patient') {
-                const patient = await models.Patient.findOne({ where: { userId: id }, transaction });
-                if (patient) {
-                    const patientChanges = { ...changes };
-                    delete patientChanges.id;
-                    delete patientChanges.password;
-                    await patient.update(patientChanges, { transaction });
-                }
+            if (user.role === 'patient' && user.patient) {
+                await user.patient.update(changes, { transaction });
             }
-    
-            if (user.role === 'doctor') {
-                const doctor = await models.Doctor.findOne({ where: { userId: id }, transaction });
-                if (doctor) {
-                    const doctorChanges = { ...changes };
-                    delete doctorChanges.id;
-                    delete doctorChanges.password;
-                    await doctor.update(doctorChanges, { transaction });
-                }
+            
+            if (user.role === 'doctor' && user.doctor) {
+                await user.doctor.update(changes, { transaction });
             }
     
             // Si el usuario tiene una foto y se actualiza, eliminar la anterior

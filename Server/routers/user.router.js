@@ -13,6 +13,7 @@ const processUserData = (req) => {
     if (req.file) {
         data.photo = getUploadedFileURL('users', req.file.filename);
     }
+    console.log({...req.body}, data)
     return data;
 };
 
@@ -107,13 +108,27 @@ router.patch(
             const changes = processUserData(req);
 
             const originalUser = await service.findOne(id);
-            
-            const updatedUser = await service.update(id, changes);
+            await service.update(id, changes);
+            const updatedUser = await service.findOne(id); // Asegurar que los datos sean frescos
 
-            //mensaje de respuesta
-            const  updatedFields = Object.keys(changes).map(
-                (key) =>  `${key}: '${ originalUser[key] }' → '${ updatedUser[key] }'`,
-            )
+            // Mensaje de respuesta con los campos actualizados
+            const updatedFields = Object.keys(changes).map((key) => {
+                let originalValue = originalUser[key] ?? null;
+                let updatedValue = updatedUser[key] ?? null;
+
+                // Verificar si el campo pertenece a patient o doctor
+                if (originalUser.role === 'patient' && originalUser.patient) {
+                    originalValue = originalUser.patient[key] ?? originalValue;
+                    updatedValue = updatedUser.patient ? updatedUser.patient[key] ?? updatedValue : updatedValue;
+                }
+                if (originalUser.role === 'doctor' && originalUser.doctor) {
+                    originalValue = originalUser.doctor[key] ?? originalValue;
+                    updatedValue = updatedUser.doctor ? updatedUser.doctor[key] ?? updatedValue : updatedValue;
+                }
+
+                return `${key}: '${originalValue}' → '${updatedValue}'`;
+            });
+
             ResponseHandler.success({
                 res,
                 req,
@@ -125,6 +140,9 @@ router.patch(
         }
     }
 );
+
+
+
 
 // Eliminar usuario por ID
 router.delete(
