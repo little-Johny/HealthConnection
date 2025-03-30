@@ -81,6 +81,11 @@ class Doctor extends Model {
             foreignKey: 'doctorId'
         });
 
+        this.hasMany(models.DoctorScheduleBlock, {
+            as: 'scheduleBlock',
+            foreignKey: 'doctorId',
+        });
+
         this.hasMany(models.Appointment, {
             as: 'appointment',
             foreignKey: 'doctorId',

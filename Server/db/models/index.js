@@ -2,6 +2,7 @@ const { User, UserSchema } = require('./user.model');
 const { Patient, PatientSchema } = require('./patient.model');
 const { Doctor, DoctorSchema } = require('./doctor.model');
 const { DoctorSchedule, DoctorScheduleSchema } = require('./doctorSchedule.model');
+const { DoctorScheduleBlockSchema, DoctorScheduleBlock } = require('./doctorScheduleBlock.model');
 const { ClinicalHistory, ClinicalHistorySchema } = require('./clinicalHistory.model');
 const { Speciality, SpecialitySchema } = require('./speciality.model');
 const { Observation, ObservationSchema } = require('./observation.model');
@@ -14,6 +15,7 @@ function setUpModels(sequelize) {
     Patient.init(PatientSchema, Patient.config(sequelize));
     Doctor.init(DoctorSchema, Doctor.config(sequelize));
     DoctorSchedule.init(DoctorScheduleSchema, DoctorSchedule.config(sequelize));
+    DoctorScheduleBlock.init(DoctorScheduleBlockSchema, DoctorScheduleBlock.config(sequelize));
     ClinicalHistory.init(ClinicalHistorySchema, ClinicalHistory.config(sequelize));
     Appointment.init(AppointmentSchema, Appointment.config(sequelize));
     Speciality.init(SpecialitySchema, Speciality.config(sequelize));
@@ -25,6 +27,7 @@ function setUpModels(sequelize) {
     Patient.associate(sequelize.models);
     Doctor.associate(sequelize.models);
     DoctorSchedule.associate(sequelize.models);
+    DoctorScheduleBlock.associate(sequelize.models);
     ClinicalHistory.associate(sequelize.models);
     Appointment.associate(sequelize.models);
     Speciality.associate(sequelize.models);
