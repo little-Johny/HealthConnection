@@ -1,10 +1,9 @@
 const boom = require('@hapi/boom');
-const { Op, Sequelize, where } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 const path = require('path');
 const fs = require('fs');
 const { models } = require('./../libs/sequelize');
 const sequelize = require('./../libs/sequelize');
-const { required } = require('joi');
 
 class UserService {
     async create(data) {
@@ -21,9 +20,8 @@ class UserService {
             }
             throw error;
         }
-    }
+    };
     
-
     async find(query) {
         const options = {
             where: {},
@@ -121,10 +119,8 @@ class UserService {
         }
     
         return users;
-    }
+    };
     
-    
-
     async findOne(id) {
         const user = await models.User.findByPk(id, {
             attributes: { exclude: ['password'] },
@@ -158,9 +154,8 @@ class UserService {
         }
     
         return userPlain;
-    }
+    };
     
-
     async findAll() {
         return await models.User.findAll({
             attributes: [...Object.keys(models.User.getAttributes()),
@@ -168,7 +163,7 @@ class UserService {
             ],
             paranoid: false,
         });
-    }
+    };
 
     async update(id, changes) {
         const transaction = await sequelize.transaction();
@@ -200,7 +195,7 @@ class UserService {
     
             // Actualizar usuario, excluyendo campos no permitidos
             const userUpdated = await user.update(changes, {
-                fields: Object.keys(changes).filter(field => field !== 'id' && field !== 'password'),
+                fields: Object.keys(changes).filter(field => field !== 'id' && field !== 'password' && field !== 'patientId' && field !== 'doctorId' ),
                 transaction
             });
     

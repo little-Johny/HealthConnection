@@ -5,8 +5,6 @@ const ResponseHandler = require('../middlewares/response.handler');
 const {
     createPatientSchema,
     getPatientSchema,
-    getQueryPatientSchema,
-    updatePacienteSchema,
 } = require('../schemas/patient.schema');
 const PatientService = require('../services/patient.service');
 const router = express.Router();

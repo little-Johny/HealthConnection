@@ -38,7 +38,8 @@ class PatientService {
             return newPatient;
         } catch (error) {
             await transaction.rollback();
-            throw boom.badImplementation(`Error al crear el paciente`, error);
+            console.error(error);
+            throw boom.badImplementation(`Error al crear el paciente`);
         }
     };
 
@@ -49,6 +50,10 @@ class PatientService {
                     model: models.User,
                     as: 'user',
                     attributes: { exclude: 'password'}
+                },
+                {
+                    model: models.ClinicalHistory,
+                    as: 'clinical_history',
                 }
             ]
         });
