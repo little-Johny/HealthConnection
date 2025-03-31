@@ -49,7 +49,7 @@ router.get(
 // Obtener un usuario por su ID
 router.get(
     '/:id',
-    validatorHandler(getSpecialitySchema, params),
+    validatorHandler(getSpecialitySchema, 'params'),
     async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -116,3 +116,5 @@ router.delete(
         }
     }
 );
+
+module.exports = router;
