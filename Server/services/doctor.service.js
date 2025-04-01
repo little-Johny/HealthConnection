@@ -31,7 +31,7 @@ class DoctorService {
 
             const newUser = await userService.create(userData, { transaction });
 
-            const newDoctor = await models.Doctor.create({ ... doctorData, userId: newUser.id }, { transaction });
+            const newDoctor = await models.Doctor.create({ ...doctorData, userId: newUser.id }, { transaction });
 
             await transaction.commit();
 
@@ -53,6 +53,10 @@ class DoctorService {
                         as: 'user',
                         attributes: { exclude: 'password' },
                     },
+                    {
+                        model: models.DoctorSchedule,
+                        as: 'schedule',
+                    }
                 ],
             },
         );

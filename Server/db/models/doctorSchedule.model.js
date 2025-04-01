@@ -18,7 +18,7 @@ const DoctorScheduleSchema = {
             model: DOCTOR_TABLE,
             key: 'id'
         },
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     },
     dayOfWeek: {
@@ -37,7 +37,7 @@ const DoctorScheduleSchema = {
         type: DataTypes.TIME,
         validate: {
             isGreaterThanStart(value) {
-                if (value <= this.startTime || value === this.startTime) {
+                if (value <= this.startTime || !value || value === this.startTime) {
                     throw new Error(`The end time must be greater than the start time.`);
                 }
             }
@@ -76,6 +76,12 @@ class DoctorSchedule extends Model {
             modelName: 'DoctorSchedule',
             timestamps: true,
             paranoid: true,
+            indexes: [
+                {
+                    unique: true,
+                    fields: ['doctor_id', 'day_of_week'],
+                }
+            ],
         } 
     };
 };

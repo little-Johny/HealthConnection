@@ -36,11 +36,14 @@ const DoctorScheduleBlockSchema = {
         type: DataTypes.TIME,
         validate: {
             isGreaterThanStart(value) {
-                if (value <= this.startTime || value === this.startTime) {
+                const start = new Date(`1970-01-01T${this.startTime}Z`);
+                const end = new Date(`1970-01-01T${value}Z`);
+                if (end <= start) {
                     throw new Error(`The end time must be greater than the start time.`);
                 }
             }
         }
+        
     },
     reason: {
         allowNull: false,

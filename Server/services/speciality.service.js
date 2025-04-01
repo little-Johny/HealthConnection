@@ -26,7 +26,7 @@ class SpecialityService {
         }
 
         if (name) {
-            options.where.name = { [Op.like]: [`%${name}%`] };
+            options.where.name = { [Op.iLike]: `%${name}%` };
             message.push(`con el nombre: ${name}`);
         }
 
