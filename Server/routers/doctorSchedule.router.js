@@ -2,12 +2,15 @@ const express = require('express');
 const validatorHandler = require('./../middlewares/validation.handler');
 const ScheduleService = require('./../services/schedule.service');
 const ResponseHandler = require('./../middlewares/response.handler');
+const { createDoctorScheduleSchema, createDoctorBlockSchema, getScheduleByDoctorIdSchema, getDoctorScheduleSchema, updateDoctorScheduleSchema } = require('../schemas/doctoSchedule.schema');
+const { DateTime } = require('luxon');
 const router = express.Router();
 const service = new ScheduleService();
 
 // Crear horario
 router.post(
     '/',
+    validatorHandler(createDoctorScheduleSchema, 'body'),
     async (req, res, next) => {
         try {
             const body = { ...req.body };
@@ -28,6 +31,7 @@ router.post(
 // Crear bloqueo en el horario 
 router.post(
     '/block',
+    validatorHandler(createDoctorBlockSchema, 'body'),
     async (req, res, next) => {
         try {
             const body = {...req.body};
@@ -42,7 +46,7 @@ router.post(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Bloqueo para el dia ${body.dayOfWeek} ${body.date} desde ${body.startTime} a las ${body.endTime} creado exitosamente.`,
+                message: `Bloqueo para el dia ${DateTime.fromISO(body.date, {zone: 'America/Bogota'}).toFormat('EEEE')} ${body.date} desde ${body.startTime} a las ${body.endTime} creado exitosamente.`,
                 data: newBlock,
                 statusCode: 201,
             });
@@ -55,6 +59,7 @@ router.post(
 // Obtener horario por id de doctor
 router.get(
     '/doc/:doctorId',
+    validatorHandler(getScheduleByDoctorIdSchema, 'params'),
     async (req, res, next) => {
         try {
             const { doctorId } = req.params;
@@ -74,6 +79,7 @@ router.get(
 // Obtener horario por su id
 router.get(
     '/:id',
+    validatorHandler(getDoctorScheduleSchema, 'params'),
     async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -93,6 +99,7 @@ router.get(
 // Obtener horario disponible/ocupado de doctor
 router.get(
     '/provision/:doctorId',
+    validatorHandler(getScheduleByDoctorIdSchema, 'params'),
     async (req, res, next) => {
         try {
             const { doctorId } = req.params;
@@ -114,6 +121,8 @@ router.get(
 // actualizar parcialmente un horario
 router.patch(
     '/:id',
+    validatorHandler(getDoctorScheduleSchema, 'params'),
+    validatorHandler(updateDoctorScheduleSchema, 'body'),
     async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -143,6 +152,7 @@ router.patch(
 // Eliminar horario de un dia por su id
 router.delete(
     '/:id',
+    validatorHandler(getDoctorScheduleSchema, 'params'),
     async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -162,6 +172,7 @@ router.delete(
 // Remover bloqueo 
 router.delete(
     '/unblock/:id',
+    validatorHandler(getDoctorScheduleSchema, 'params'),
     async (req, res, next) => {
         try {
             const { id } = req.params;

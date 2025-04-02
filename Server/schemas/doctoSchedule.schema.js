@@ -3,11 +3,11 @@ const Joi = require('joi');
 const id = Joi.number().integer().positive();
 const doctorId = Joi.number().integer().positive().required();
 const dayOfWeek = Joi.string().valid('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday').required();
-const startTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).messages({
+const startTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/).messages({
     'string.pattern.base': 'El formato de la hora de inicio debe ser HH:mm (24h).',
 });
 const endTime = Joi.string()
-    .pattern(/^([01]\d|2[0-3]):([0-5]\d)$/)
+    .pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
     .messages({
         'string.pattern.base': 'El formato de la hora de finalización debe ser HH:mm (24h).',
     })
@@ -30,8 +30,15 @@ const createDoctorScheduleSchema = Joi.object({
     endTime: endTime.required(),
 });
 
+const createDoctorBlockSchema = Joi.object({
+    doctorId,
+    date: Joi.date().iso(),
+    startTime: startTime.required(),
+    endTime: endTime.required(),
+    reason: Joi.string().required(),
+});
+
 const updateDoctorScheduleSchema = Joi.object({
-    doctorId: doctorId.optional(),
     dayOfWeek: dayOfWeek.optional(),
     startTime: startTime.optional(),
     endTime: endTime.optional(),
@@ -41,19 +48,16 @@ const getDoctorScheduleSchema = Joi.object({
     id: id.required(),
 });
 
-const getQueryDoctorScheduleSchema = Joi.object({
-    id: id.optional(),
-    doctorId: doctorId.optional(),
-    dayOfWeek: dayOfWeek.optional(),
-    startDate: startDate.optional(),
-    endDate: endDate.optional(),
-    limit: limit.optional(),
-    offset: offset.optional(),
-}).and('startDate', 'endDate');
+const getScheduleByDoctorIdSchema = Joi.object({
+    doctorId,
+});
+
+
 
 module.exports = {
     createDoctorScheduleSchema,
+    createDoctorBlockSchema,
     updateDoctorScheduleSchema,
     getDoctorScheduleSchema,
-    getQueryDoctorScheduleSchema,
+    getScheduleByDoctorIdSchema,
 };
