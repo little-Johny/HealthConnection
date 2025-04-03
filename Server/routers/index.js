@@ -6,6 +6,8 @@ const doctorRouter = require('./doctor.router');
 const specialityRouter = require('./speciality.router');
 const clinicalHistoryRouter = require('./clinicalHistory.router');
 const scheduleRouter = require('./doctorSchedule.router');
+const appointmentRouter = require('./appointment.router');
+
 
 function routerApi(app) {
     const router = express.Router();
@@ -17,6 +19,7 @@ function routerApi(app) {
     router.use('/speciality', specialityRouter);
     router.use('/clinical-history', clinicalHistoryRouter);
     router.use('/doctor-schedule', scheduleRouter);
+    router.use('/appointment', appointmentRouter);
 }  
 
 module.exports = routerApi;

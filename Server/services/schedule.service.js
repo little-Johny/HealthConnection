@@ -62,7 +62,7 @@ class ScheduleService {
     };
 
     //bloquear o marcar como ocupado un intervalo de tiempo especifico
-    async blockSchedule(doctorId, data) {
+    async blockSchedule(doctorId, data, transactionOptions = {}) {
         const nowInBogota = DateTime.now().setZone('America/Bogota');
         const currentDate = nowInBogota.toFormat('yyyy-MM-dd');
         const currentTime = nowInBogota.toFormat('HH:mm:ss');
@@ -135,14 +135,17 @@ class ScheduleService {
         }
     
         // Crear el bloqueo
-        const newBlock = await models.DoctorScheduleBlock.create({
-            doctorId,
-            date: data.date,
-            scheduleId: schedule.id,
-            startTime: data.startTime,
-            endTime: data.endTime,
-            reason: data.reason,
-        });
+        const newBlock = await models.DoctorScheduleBlock.create(
+            {
+                doctorId,
+                date: data.date,
+                scheduleId: schedule.id,
+                startTime: data.startTime,
+                endTime: data.endTime,
+                reason: data.reason,
+            },
+            transactionOptions
+        );
     
         return newBlock;
     }
