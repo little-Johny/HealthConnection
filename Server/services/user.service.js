@@ -10,6 +10,17 @@ class UserService {
         const transaction = await sequelize.transaction();
 
         try {
+            const existingUser = await models.User.findAll({
+                where: {
+                    numberDocument: data.numberDocument,
+                    role: data.role,
+                },
+            });
+
+            if (existingUser) {
+                throw boom.conflict(`Ya existe un usuario con el documento ${data.numberDocument} y el rol ${data.role}.`);
+            }
+
             const newUser = await models.User.create(data);
             await transaction.commit();
             return newUser;

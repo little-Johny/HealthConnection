@@ -43,7 +43,6 @@ const UserSchema = {
         field: 'number_document',
         allowNull: false,
         type: DataTypes.STRING,
-        unique: true,
     },
     gender: {
         allowNull: false,

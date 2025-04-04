@@ -60,15 +60,138 @@ class AppointmentService {
     }
     
 
-    async find() {};
+    async find(query) {
+        const options = {
+            where: {}
+        };
 
-    async findOne() {};
+        const filterableFields = ['numberDocument', 'date', 'startTime', 'endTime', 'status']; 
+        const { limit, offset, patient, doctor, speciality, ...filters} = query;
+        let filterMessages = [];
 
-    async update() {};
+        if(limit) {
+            options.limit = parseInt(limit) || 10;
+        };
 
-    async delete() {};
+        if (offset) {
+            options.offset = parseInt(offset) || 0;
+        };
 
-    async changeState() {};
+        for (const field of filterableFields) {
+            if (filters[field]) {
+                options.where[field] = filters[field];
+                filterMessages.push(`con ${field}: ${filters[field]}`);
+            };
+        };
+
+        const appointments = await models.Appointment.findAll(options);
+            
+        if (appointments.length === 0) {
+            throw boom.notFound(`No se encuentra ningúna cita ${filterMessages.join(', ')}`);
+        }
+    
+        return appointments;
+    };
+
+    async findOne(id) {
+        const appointment = await models.Appointment.findByPk(id);
+        if (!appointment) {
+            throw boom.notFound(`No se encontro ninguna cita con ID ${id}`);
+        };
+        return appointment;
+    };
+
+    async update(id, changes) {
+        const transaction = await sequelize.transaction();
+        try {
+            const appointment = await this.findOne(id);
+    
+            if (appointment.status !== 'pending') {
+                throw boom.badRequest('Solo se pueden actualizar citas con estado pendiente.');
+            }
+    
+            const updatedFields = {};
+    
+            // Detectar si se cambió horario o doctor
+            const isTimeChanged =
+                changes.date || changes.startTime || changes.endTime || changes.doctorId;
+    
+            if (isTimeChanged) {
+                const newDate = changes.date || appointment.date;
+                const newStartTime = changes.startTime || appointment.startTime;
+                const newEndTime = changes.endTime || appointment.endTime;
+                const newDoctorId = changes.doctorId || appointment.doctorId;
+    
+                const blockData = {
+                    date: newDate,
+                    startTime: newStartTime,
+                    endTime: newEndTime,
+                    reason: 'appointment',
+                    confirm: changes.confirm || false, // en caso de que se confirme bloqueo
+                };
+    
+                const blockResponse = await scheduleService.blockSchedule(
+                    newDoctorId,
+                    blockData,
+                    { transaction }
+                );
+    
+                if (blockResponse.requireConfirmation) {
+                    await transaction.rollback();
+                    return blockResponse;
+                }
+    
+                updatedFields.date = newDate;
+                updatedFields.startTime = newStartTime;
+                updatedFields.endTime = newEndTime;
+                updatedFields.doctorId = newDoctorId;
+            }
+    
+            if (changes.specialityId && changes.specialityId !== appointment.specialityId) {
+                const speciality = await specialityService.findOne(changes.specialityId);
+                updatedFields.specialityId = speciality.id;
+            }
+    
+            if (changes.patientId && changes.patientId !== appointment.patientId) {
+                const patient = await patientService.findOne(changes.patientId);
+                updatedFields.patientId = patient.id;
+            }
+    
+            if (changes.status && changes.status !== appointment.status) {
+                updatedFields.status = changes.status;
+            }
+    
+            // Si se cambió el doctor, actualizamos la tarifa
+            if (updatedFields.doctorId) {
+                const doctor = await doctorService.findOne(updatedFields.doctorId);
+                updatedFields.price = doctor.consultationFee;
+            }
+    
+            const updatedAppointment = await appointment.update(updatedFields, { transaction });
+            await transaction.commit();
+            return updatedAppointment;
+    
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
+    }
+    
+
+    async delete(id) {
+        const appointment = await this.findOne(id);
+        if (appointment.status === 'canceled' || appointment.status === 'completed') {
+            throw boom.badRequest(`Esta cita no se puede eliminar por que  ya fue cancelada o completada`);
+        };
+        const deletedAppointment = await appointment.destroy();
+        return deletedAppointment;
+    };
+
+    async changeState(id, status) {
+        const appointment = await this.findOne(id);
+        const updatedAppointment = await appointment.update({ status: status });
+        return updatedAppointment;
+    };
 
 };
 
