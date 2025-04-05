@@ -151,13 +151,13 @@ class ScheduleService {
     }
     
     //desbloquear un intervalo especifico de tiempo que haya sido bloqueado
-    async unblockSchedule(blockId) {
+    async unblockSchedule(blockId, transactionOptions = {}) {
         const block = await models.DoctorScheduleBlock.findByPk(blockId);
         if (!block) {
             throw boom.notFound(`El bloqueo de este horario no existe`);
         }
 
-        const deletedBlock = await block.destroy();
+        const deletedBlock = await block.destroy(transactionOptions);
         return deletedBlock;
     };
 

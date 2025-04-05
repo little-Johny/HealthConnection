@@ -68,9 +68,62 @@ router.patch(
     async (req, res, next) => {
         try {
             const { id } = req.params;
-            const body = {...req.body};
-            const updatedAppointment = await service.update(id, body);
+            const changes = {...req.body};
+            const originalAppointment = await service.findOne(id);
 
+            const updatedAppointment = await service.update(id, changes);
+            
+            const updatedFields = Object.keys(changes).map(
+                (key) => `${key}: '${originalAppointment[key]}' → '${updatedAppointment[key]}'`,
+            );
+            
+            ResponseHandler.success({
+                res,
+                req,
+                message: `Cita actualizada exitosamente. Cambios: ${updatedFields.join(', ')}`,
+                data: updatedAppointment,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+// Eliminar una cita
+router.delete(
+    '/:id',
+    async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            await service.delete(id);
+            ResponseHandler.success({
+                res,
+                req,
+                message: `Cita eliminada`,
+                data: id,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+// Cambiar el estado de una cita
+router.patch(
+    '/:id/status',
+    async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const { status } = req.body;
+
+            const updatedAppointment = await service.changeState(id, status);
+
+            ResponseHandler.success({
+                res,
+                req,
+                message: `El estado de la cita ahora es ${status}`,
+                data: updatedAppointment,
+            });
         } catch (error) {
             next(error);
         }

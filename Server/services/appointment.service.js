@@ -57,9 +57,8 @@ class AppointmentService {
             await transaction.rollback();
             throw error;
         }
-    }
+    };
     
-
     async find(query) {
         const options = {
             where: {}
@@ -75,6 +74,27 @@ class AppointmentService {
 
         if (offset) {
             options.offset = parseInt(offset) || 0;
+        };
+
+        if (patient) {
+            const patient = await models.User.findOne({
+                where: { name: patient, role: 'patient' },
+            });
+            options.where.patientId = patient.id;
+        };
+        
+        if (doctor) {
+            const doctor = await models.User.findOne({
+                where: { name: doctor, role: 'doctor' },
+            });
+            options.where.doctorId = doctor.id;
+        };
+
+        if (speciality) {
+            const speciality = await models.speciality.findOne({
+                where: { name: speciality },
+            });
+            options.where.specialityId = speciality.id;
         };
 
         for (const field of filterableFields) {
@@ -117,6 +137,23 @@ class AppointmentService {
                 changes.date || changes.startTime || changes.endTime || changes.doctorId;
     
             if (isTimeChanged) {
+                // Buscar el bloqueo asociado
+                const block = await models.DoctorScheduleBlock.findOne({
+                    where: {
+                        doctorId: appointment.doctorId,
+                        date: appointment.date,
+                        startTime: appointment.startTime,
+                        endTime: appointment.endTime,
+                        reason: 'appointment',
+                    },
+                    transaction,
+                });
+        
+                // Si hay un bloqueo, eliminarlo
+                if (block) {
+                    await scheduleService.unblockSchedule(block.id, transaction);
+                }
+
                 const newDate = changes.date || appointment.date;
                 const newStartTime = changes.startTime || appointment.startTime;
                 const newEndTime = changes.endTime || appointment.endTime;
@@ -175,23 +212,79 @@ class AppointmentService {
             await transaction.rollback();
             throw error;
         }
-    }
+    };
     
 
     async delete(id) {
-        const appointment = await this.findOne(id);
-        if (appointment.status === 'canceled' || appointment.status === 'completed') {
-            throw boom.badRequest(`Esta cita no se puede eliminar por que  ya fue cancelada o completada`);
-        };
-        const deletedAppointment = await appointment.destroy();
-        return deletedAppointment;
+        const transaction = await sequelize.transaction();
+        try {
+            const appointment = await this.findOne(id);
+    
+            if (appointment.status === 'canceled' || appointment.status === 'completed') {
+                throw boom.badRequest(`Esta cita no se puede eliminar porque ya fue cancelada o completada`);
+            }
+    
+            // Eliminar la cita
+            await appointment.destroy({ transaction });
+    
+            // Buscar el bloqueo asociado
+            const block = await models.DoctorScheduleBlock.findOne({
+                where: {
+                    doctorId: appointment.doctorId,
+                    date: appointment.date,
+                    startTime: appointment.startTime,
+                    endTime: appointment.endTime,
+                    reason: 'appointment',
+                },
+                transaction,
+            });
+    
+            // Si hay un bloqueo, eliminarlo
+            if (block) {
+                await scheduleService.unblockSchedule(block.id, transaction);
+            }
+    
+            await transaction.commit();
+            return appointment;
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
     };
+    
 
     async changeState(id, status) {
-        const appointment = await this.findOne(id);
-        const updatedAppointment = await appointment.update({ status: status });
-        return updatedAppointment;
-    };
+        const transaction = await sequelize.transaction();
+        try {
+            const appointment = await this.findOne(id);
+    
+            const updatedAppointment = await appointment.update({ status }, { transaction });
+    
+            if (status === 'canceled') {
+                const block = await models.DoctorScheduleBlock.findOne({
+                    where: {
+                        doctorId: appointment.doctorId,
+                        date: appointment.date,
+                        startTime: appointment.startTime,
+                        endTime: appointment.endTime,
+                        reason: 'appointment',
+                    },
+                    transaction,
+                });
+    
+                if (block) {
+                    await scheduleService.unblockSchedule(block.id, { transaction });
+                }
+            }
+    
+            await transaction.commit();
+            return updatedAppointment;
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
+    }
+    
 
 };
 
