@@ -1,9 +1,7 @@
 const boom = require('@hapi/boom');
 const { models } = require('./../libs/sequelize');
-const AppointmentService = require('./appointment.service');
 const ClinicalHistoryService = require('./clinicalHistory.service');
 const DoctorService = require('./doctor.service');
-const appointmentService = new AppointmentService();
 const clinicalHistoryService = new ClinicalHistoryService();
 const doctorService = new DoctorService();
 
