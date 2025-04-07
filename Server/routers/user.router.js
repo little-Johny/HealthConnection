@@ -156,7 +156,7 @@ router.delete(
                 res,
                 req,
                 message: 'Usuario eliminado exitosamente',
-                data: { id }
+                data: id 
             });
         } catch (error) {
             next(error);
@@ -164,6 +164,7 @@ router.delete(
     }
 );
 
+// Restaurar un usuario
 router.patch(
     '/restore/:id', 
     validatorHandler(getUserSchema, 'params'),
@@ -183,6 +184,7 @@ router.patch(
     }
 );
 
+// Eliminacion definitiva de un usuario
 router.delete(
     '/force/:id',
     validatorHandler(getUserSchema, 'params'),

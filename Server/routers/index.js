@@ -8,7 +8,7 @@ const clinicalHistoryRouter = require('./clinicalHistory.router');
 const scheduleRouter = require('./doctorSchedule.router');
 const appointmentRouter = require('./appointment.router');
 const observationRouter = require('./observation.router');
-
+const postRouter = require('./post.router');
 
 function routerApi(app) {
     const router = express.Router();
@@ -22,6 +22,7 @@ function routerApi(app) {
     router.use('/doctor-schedule', scheduleRouter);
     router.use('/appointment', appointmentRouter);
     router.use('/observation', observationRouter);
+    router.use('/post', postRouter);
 }  
 
 module.exports = routerApi;
