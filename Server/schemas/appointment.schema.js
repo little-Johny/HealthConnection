@@ -7,12 +7,14 @@ const specialityId = Joi.number().integer().positive();
 const date = Joi.date().iso().greater('now').messages({
     'date.greater': 'La fecha de la cita debe ser en el futuro.',
 });
-const startTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).messages({
-    'string.pattern.base': 'El formato de la hora de inicio debe ser HH:mm (24h).',
+const startTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/).messages({
+    'string.pattern.base': 'El formato de la hora de inicio debe ser HH:mm:ss (24h).',
 });
-const endTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).messages({
-    'string.pattern.base': 'El formato de la hora de finalización debe ser HH:mm (24h).',
+
+const endTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/).messages({
+    'string.pattern.base': 'El formato de la hora de finalización debe ser HH:mm:ss (24h).',
 });
+
 const price = Joi.number().precision(2).positive();
 const status = Joi.string().valid('pending', 'confirmed', 'completed', 'canceled');
 const startDate = Joi.date().iso();
@@ -27,8 +29,8 @@ const createAppointmentSchema = Joi.object({
     date: date.required(),
     startTime: startTime.required(),
     endTime: endTime.required(),
-    price: price.required(),
-    status: status.required(),
+    price: price,
+    status: status,
 });
 
 const updateAppointmentSchema = Joi.object({
@@ -47,10 +49,10 @@ const getAppointmentSchema = Joi.object({
 });
 
 const getQueryAppointmentSchema = Joi.object({
-    id: id.optional(),
-    patientId: patientId.optional(),
-    doctorId: doctorId.optional(),
-    specialityId: specialityId.optional(),
+    patient: Joi.string().optional(),
+    doctor: Joi.string().optional(),
+    speciality: Joi.string().optional(),
+    numberDocument: Joi.string().pattern(/^\d{5,20}$/).optional(),
     date: date.optional(),
     startDate: startDate.optional(),
     endDate: endDate.optional(),
@@ -59,9 +61,15 @@ const getQueryAppointmentSchema = Joi.object({
     offset: offset.optional(),
 }).and('startDate', 'endDate');
 
+
+const updateStatusAppointmentSchema = Joi.object({
+    status: status.required()
+});
+
 module.exports = {
     createAppointmentSchema,
     updateAppointmentSchema,
+    updateStatusAppointmentSchema,
     getAppointmentSchema,
     getQueryAppointmentSchema,
 };

@@ -20,8 +20,6 @@ const createObservationSchema = Joi.object({
 });
 
 const updateObservationSchema = Joi.object({
-    clinicalHistoryId: clinicalHistoryId.optional(),
-    doctorId: doctorId.optional(),
     diagnosis: diagnosis.optional(),
     treatment: treatment.optional(),
     notes: notes.optional(),

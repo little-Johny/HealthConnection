@@ -1,13 +1,15 @@
 const express = require('express');
-const ValidatorHandler = require('./../middlewares/validation.handler');
 const ResponseHandler = require('./../middlewares/response.handler');
+const validatorHandler = require('./../middlewares/validation.handler');
 const ObservationService = require('./../services/observation.service');
+const { createObservationSchema, getObservationSchema, updateObservationSchema } = require('./../schemas/observation.schema');
 const router = express.Router();
 const service = new ObservationService();
 
 // Crear observacion
 router.post(
     '/',
+    validatorHandler(createObservationSchema, 'body'),
     async (req, res, next) => {
         try {
             const body = {...req.body};
@@ -46,6 +48,7 @@ router.get(
 // Obtener observacion por su id
 router.get(
     '/:id',
+    validatorHandler(getObservationSchema, 'params'),
     async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -65,6 +68,8 @@ router.get(
 // Actualizar parcialmente una observacion
 router.patch(
     '/:id',
+    validatorHandler(getObservationSchema, 'params'),
+    validatorHandler(updateObservationSchema, 'body'),
     async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -92,6 +97,7 @@ router.patch(
 // Eliminar una observacion
 router.delete(
     '/:id',
+    validatorHandler(getObservationSchema, 'params'),
     async (req, res, next) => {
         try {
             const { id } = req.params;
