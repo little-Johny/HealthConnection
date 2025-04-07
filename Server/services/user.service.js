@@ -154,17 +154,9 @@ class UserService {
         }
         /* console.log(`User:`);
         console.log(user); */
-        // Convertir a objeto plano
-        const userPlain = user.toJSON();
+        
     
-        // Eliminar la relación innecesaria según el rol
-        if (userPlain.role === 'patient') {
-            delete userPlain.doctor;
-        } else if (userPlain.role === 'doctor') {
-            delete userPlain.patient;
-        }
-    
-        return userPlain;
+        return user;
     };
     
     async findAll() {
