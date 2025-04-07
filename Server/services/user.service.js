@@ -10,7 +10,7 @@ class UserService {
         const transaction = await sequelize.transaction();
 
         try {
-            const existingUser = await models.User.findAll({
+            const existingUser = await models.User.findOne({
                 where: {
                     numberDocument: data.numberDocument,
                     role: data.role,
@@ -23,6 +23,7 @@ class UserService {
 
             const newUser = await models.User.create(data);
             await transaction.commit();
+            delete newUser.dataValues.password;
             return newUser;
         } catch (error) {
             await transaction.rollback();
