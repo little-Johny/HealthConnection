@@ -80,6 +80,25 @@ router.get(
     }
 );
 
+// Obtener el usuario loggeado
+router.get(
+    '/profile',
+    passport.authenticate('jwt', { session: false }),
+    async (req, res, next) => {
+        try {
+            const user = await service.findOne(req.user.sub);
+            ResponseHandler.success({
+                res,
+                req,
+                message: `Ingresando al perfil de ${user.username}`,
+                data: user,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 // Obtener un usuario por ID
 router.get(
     '/:id',
@@ -99,6 +118,7 @@ router.get(
         }
     }
 );
+
 
 // Actualizar parcialmente un usuario
 router.patch(
