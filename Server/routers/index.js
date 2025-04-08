@@ -9,6 +9,7 @@ const scheduleRouter = require('./doctorSchedule.router');
 const appointmentRouter = require('./appointment.router');
 const observationRouter = require('./observation.router');
 const postRouter = require('./post.router');
+const authRouter = require('./auth.router');
 
 function routerApi(app) {
     const router = express.Router();
@@ -23,6 +24,7 @@ function routerApi(app) {
     router.use('/appointment', appointmentRouter);
     router.use('/observation', observationRouter);
     router.use('/post', postRouter);
-}  
+    router.use('/auth', authRouter);
+};
 
 module.exports = routerApi;

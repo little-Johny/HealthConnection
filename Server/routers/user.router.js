@@ -1,9 +1,11 @@
 const express = require('express');
+const passport = require('passport');
 const validatorHandler = require('../middlewares/validation.handler');
-const UserService = require('../services/user.service');
 const { userUpload, getUploadedFileURL } = require('./../middlewares/files.handler');
-const { createUserSchema, getQueryUserSchema, getUserSchema, updateUserSchema } = require('../schemas/user.schema');
 const ResponseHandler = require('./../middlewares/response.handler');
+const { checkRole } = require('./../middlewares/authentication.handler');
+const UserService = require('../services/user.service');
+const { createUserSchema, getQueryUserSchema, getUserSchema, updateUserSchema } = require('../schemas/user.schema');
 const router = express.Router();
 const service = new UserService();
 
@@ -61,6 +63,8 @@ router.get(
 // obtener todos los usuarios incluso los eliminados
 router.get(
     '/all',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']),
     async (req, res, next) => {
         try {
             const users = await service.findAll();

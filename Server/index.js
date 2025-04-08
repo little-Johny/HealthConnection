@@ -9,6 +9,7 @@ const {
     boomErrorHandler,
 } = require('./middlewares/error.handler');
 const routerApi = require('./routers');
+const passport = require('passport');
 
 const app = express();
 const port = 3000;
@@ -16,10 +17,12 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Procesa form-data
 app.use(cors());
+require('./utils/auth');
 
 // Servir archivos estáticos de la carpeta "uploads"
 app.use('/Uploads', express.static(path.resolve(__dirname, '../Uploads'))); // Ruta absoluta
 
+app.use(passport.initialize());
 routerApi(app);
 
 // Implementación de middlewares

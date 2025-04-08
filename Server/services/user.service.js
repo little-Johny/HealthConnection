@@ -159,6 +159,23 @@ class UserService {
     
         return user;
     };
+
+    async findByUsername(username) {
+        const user = await models.User.findOne({
+            where: { username },
+            include: [
+                { model: models.Patient, as: 'patient', required: false },
+                { model: models.Doctor, as: 'doctor', required: false }
+            ]
+        });
+    
+        if (!user) {
+            throw boom.notFound('Usuario no encontrado');
+        }
+    
+        return user;
+    };
+
     
     async findAll() {
         return await models.User.findAll({
