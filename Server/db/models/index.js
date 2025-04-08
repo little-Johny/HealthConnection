@@ -8,6 +8,7 @@ const { Speciality, SpecialitySchema } = require('./speciality.model');
 const { Observation, ObservationSchema } = require('./observation.model');
 const { Post, PostSchema } = require('./post.model');
 const { Appointment, AppointmentSchema } = require('./appointment.model');
+const { RecoveryLog, RecoveryLogSchema } = require('./recoveryLogs.model');
 
 function setUpModels(sequelize) {
     //Iniciacion de modelos
@@ -21,6 +22,7 @@ function setUpModels(sequelize) {
     Speciality.init(SpecialitySchema, Speciality.config(sequelize));
     Observation.init(ObservationSchema, Observation.config(sequelize));
     Post.init(PostSchema, Post.config(sequelize));
+    RecoveryLog.init(RecoveryLogSchema, RecoveryLog.config(sequelize));
 
     //Asociaciones de modelos
     User.associate(sequelize.models);
@@ -33,6 +35,7 @@ function setUpModels(sequelize) {
     Speciality.associate(sequelize.models);
     Observation.associate(sequelize.models);
     Post.associate(sequelize.models);
-}
+    RecoveryLog.associate(sequelize.models);
+};
 
 module.exports = setUpModels;

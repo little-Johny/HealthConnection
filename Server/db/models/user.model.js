@@ -100,6 +100,10 @@ class User extends Model {
             as: 'post',
             foreignKey: 'userId',
         });
+        this.hasMany(models.RecoveryLog, {
+            as: 'recovery_logs',
+            foreignKey: 'userId',
+        });
     }
 
     static config(sequelize) {
