@@ -61,6 +61,12 @@ const UserSchema = {
     role: {
         allowNull: false,
         type: DataTypes.ENUM('admin', 'staff', 'doctor', 'patient'),
+    },
+    recoveryToken: {
+        field: 'recovery_token',
+        allowNull: true,
+        type: DataTypes.STRING,
+        defaultValue: null,
     },    
     createdAt: {
         field: 'created_at',
