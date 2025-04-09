@@ -31,8 +31,10 @@ router.post(
     '/recovery',
     async (req, res, next) => {
         try {
-            const { email } = req.body;
-            const mailSent = await service.sendRecoveryPassword(email);
+            const data = req.body|| {};
+            data.ipAddress = req.ip || req.headers['x-forwarded-for'];
+            data.userAgent = req.headers['user-agent'];
+            const mailSent = await service.sendRecoveryPassword(data);
             ResponseHandler.success({
                 res,
                 req,
@@ -43,7 +45,7 @@ router.post(
             next(error);
         }
     }
-)
+);
 
 
 // Cambio de contraseña 
@@ -56,7 +58,7 @@ router.post(
             ResponseHandler.success({
                 res,
                 req,
-                message: changedPassword,
+                message: changedPassword.message,
             });
         } catch (error) {
             next(error);

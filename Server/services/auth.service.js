@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 const { models } = require('./../libs/sequelize');
 const config = require('./../config/config');
 const UserService = require('./user.service');
+const { Op } = require('sequelize');
 const userService = new UserService();
 
 class AuthService {
@@ -53,18 +54,42 @@ class AuthService {
         }
     };
 
-    async sendRecoveryPassword(email) {
+    async sendRecoveryPassword(data) {
+        const { email } = data
         const user = await models.User.findOne({
             where: { email },
         });
         if (!user) {
             throw boom.unauthorized();   
         };
+
+        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        const requestLast24h = await models.RecoveryLog.count({
+            where: {
+                userId: user.id,
+                requestedAt: { [Op.gte]: twentyFourHoursAgo },
+            },
+        });
+
+        if (requestLast24h >= 5) {
+            throw boom.tooManyRequests(`Has alcanzado el mimite de 5 solicitudes de recuperacion en las ultimas 24 horas,`);
+        };
+
+        const lastRequest = await models.RecoveryLog.findOne({
+            where: { userId: user.id },
+            order: [['requested_at', 'DESC']],
+        });
+
+        if (lastRequest && (new Date() - new Date(lastRequest.requestedAt)) < 10 * 60 * 1000) {
+            throw boom.tooManyRequests(`Debes esperar 10 minutos antes de solicitar un correo nuevo`);
+        };
+        
         const payload = {
             sub: user.id,
         };
         const token = jwt.sign(payload, config.recoverySecret, { expiresIn: '15m' });
         const link = `http://myfrontend.com/recovery?token=${token}`;
+
         await user.update({ recoveryToken: token });
         const mail = {
             from: config.mailerUser,
@@ -74,6 +99,7 @@ class AuthService {
         };
 
         await this.sendMail(mail);
+        await models.RecoveryLog.create({ userId: user.id, requestedAt: new Date(), ...data});
         return {
             message: `The recovery mail, has been sent`,
         };
@@ -82,10 +108,12 @@ class AuthService {
     async changePassword(token, newPassword) {
         try {
             const payload = jwt.verify(token, config.recoverySecret);
-            const user = await userService.findOne(payload.sub);
-            if (user.recoveryToken !== token) {
+            const user = await models.User.findByPk(payload.sub);
+
+            if (!user || user.recoveryToken !== token) {
                 throw boom.unauthorized();
-            };
+            }
+
             const newPasswordHashed = await bcrypt.hash(newPassword, 10);
             await user.update({ recoveryToken: null, password: newPasswordHashed });
             return {

@@ -10,7 +10,7 @@
     "dev:all": "concurrently \"npm run dev\" \"npm run client\"",
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
-    "migrations:revert": "sequelize-cli db:migrate:undo",
+    "migrations:revert": "sequelize-cli db:migrate:undo --name",
     "migrations:delete": "sequelize-cli db:migrate:undo:all"
   },
   "keywords": [],
