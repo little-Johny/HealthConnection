@@ -23,7 +23,7 @@ const limit = Joi.number().integer().positive().default(10);
 const offset = Joi.number().integer().min(0).default(0);
 
 const createAppointmentSchema = Joi.object({
-    patientId: patientId.required(),
+    patientId: patientId,
     doctorId: doctorId.required(),
     specialityId: specialityId.required(),
     date: date.required(),

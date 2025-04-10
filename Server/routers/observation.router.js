@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('passport');
+const { checkRole, resolveUserRole } = require('./../middlewares/authentication.handler');
 const ResponseHandler = require('./../middlewares/response.handler');
 const validatorHandler = require('./../middlewares/validation.handler');
 const ObservationService = require('./../services/observation.service');
@@ -9,10 +11,17 @@ const service = new ObservationService();
 // Crear observacion
 router.post(
     '/',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['doctor', 'admin']),
     validatorHandler(createObservationSchema, 'body'),
+    resolveUserRole,
     async (req, res, next) => {
         try {
             const body = {...req.body};
+            const { role, doctorId: userDoctorId } = req.user;
+            if (role === 'doctor') {
+                body.doctorId = userDoctorId
+            };
             const newObservation = await service.create(body);
             ResponseHandler.success({
                 res,
@@ -30,6 +39,8 @@ router.post(
 // Obtener observaciones con filtros
 router.get(
     '/',
+    passport.authenticate('jwr', { session: false }),
+    checkRole(['doctor', 'admin', 'staff']),
     async (req, res, next) => {
         try {
             const observations = await service.find(req.query);
@@ -48,6 +59,7 @@ router.get(
 // Obtener observacion por su id
 router.get(
     '/:id',
+    passport.authenticate('jwt', { sesison: false }),
     validatorHandler(getObservationSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -68,6 +80,8 @@ router.get(
 // Actualizar parcialmente una observacion
 router.patch(
     '/:id',
+    passport.authenticate('jwt', { sesison: false }),
+    checkRole(['doctor', 'admin']),
     validatorHandler(getObservationSchema, 'params'),
     validatorHandler(updateObservationSchema, 'body'),
     async (req, res, next) => {
@@ -97,6 +111,8 @@ router.patch(
 // Eliminar una observacion
 router.delete(
     '/:id',
+    passport.authenticate('jwt', { sesison: false }),
+    checkRole(['doctor', 'admin']),
     validatorHandler(getObservationSchema, 'params'),
     async (req, res, next) => {
         try {

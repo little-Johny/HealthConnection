@@ -44,6 +44,7 @@ router.post(
 // Obtener usuarios con filtros
 router.get(
     '/',
+    passport.authenticate('jwt', { session: false }),
     validatorHandler(getQueryUserSchema, 'query'),
     async (req, res, next) => {
         try {
@@ -102,6 +103,8 @@ router.get(
 // Obtener un usuario por ID
 router.get(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['doctor', 'admin', 'staff']),
     validatorHandler(getUserSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -123,6 +126,7 @@ router.get(
 // Actualizar parcialmente un usuario
 router.patch(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
     userUpload.single('photo'),
     validatorHandler(getUserSchema, 'params'),
     validatorHandler(updateUserSchema, 'body'),
@@ -171,6 +175,8 @@ router.patch(
 // Eliminar usuario por ID
 router.delete(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']),
     validatorHandler(getUserSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -190,7 +196,9 @@ router.delete(
 
 // Restaurar un usuario
 router.patch(
-    '/restore/:id', 
+    '/restore/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']), 
     validatorHandler(getUserSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -211,6 +219,8 @@ router.patch(
 // Eliminacion definitiva de un usuario
 router.delete(
     '/force/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']),
     validatorHandler(getUserSchema, 'params'),
     async (req, res, next) => {
         try {

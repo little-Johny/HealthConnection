@@ -1,19 +1,36 @@
 const express = require('express');
-const router = express.Router();
+const passport = require('passport');
 const ResponseHandler = require('./../middlewares/response.handler');
 const validatorHandler = require('./../middlewares/validation.handler');
-const { createAppointmentSchema, getAppointmentSchema, getQueryAppointmentSchema, updateAppointmentSchema, updateStatusAppointmentSchema } = require('./../schemas/appointment.schema');
+const { checkRole, resolveUserRole } = require('./../middlewares/authentication.handler');
+const { 
+    createAppointmentSchema, 
+    getAppointmentSchema, 
+    getQueryAppointmentSchema, 
+    updateAppointmentSchema, 
+    updateStatusAppointmentSchema,
+} = require('./../schemas/appointment.schema');
 const AppointmentService = require('./../services/appointment.service'); 
 const service = new AppointmentService();
+const router = express.Router();
 
 
 // Registrar una nueva cita
 router.post(
     '/',
+    passport.authenticate('jwt', { session: false }),
+    resolveUserRole,
     validatorHandler(createAppointmentSchema, 'body'),
     async (req, res, next) => {
         try {
-            const body = {...req.body};
+            const body = { ...req.body };
+            const { role, patientId: userPatientId } = req.user;
+
+            // Si es paciente, forzamos su propio ID
+            if (role === 'patient') {
+                body.patientId = userPatientId;
+            }
+
             const newAppointment = await service.create(body);
             ResponseHandler.success({
                 res,
@@ -28,9 +45,12 @@ router.post(
     }
 );
 
+
 // Obtener citas con varios filtros
 router.get(
     '/',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['doctor', 'admin', 'staff']),
     validatorHandler(getQueryAppointmentSchema, 'query'),
     async (req, res, next) => {
         try {
@@ -50,6 +70,7 @@ router.get(
 // Obtener una cita por su id
 router.get(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
     validatorHandler(getAppointmentSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -70,6 +91,8 @@ router.get(
 // Actualizar parcialmente una cita
 router.patch(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['patient', 'admin', 'doctor']),
     validatorHandler(getAppointmentSchema, 'params'),
     validatorHandler(updateAppointmentSchema, 'body'),
     async (req, res, next) => {
@@ -99,6 +122,8 @@ router.patch(
 // Eliminar una cita
 router.delete(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['doctor', 'admin']),
     validatorHandler(getAppointmentSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -119,6 +144,8 @@ router.delete(
 // Cambiar el estado de una cita
 router.patch(
     '/:id/status',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin', 'doctor', 'staff']),
     validatorHandler(getAppointmentSchema, 'params'),
     validatorHandler(updateStatusAppointmentSchema, 'body'),
     async (req, res, next) => {

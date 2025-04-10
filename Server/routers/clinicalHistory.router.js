@@ -1,7 +1,13 @@
 const express = require('express');
+const passport = require('passport');
 const validatorHandler = require('./../middlewares/validation.handler');
 const ResponseHandler = require('./../middlewares/response.handler');
-const { createClinicalHistorySchema, getClinicalHistorySchema, updateClinicalHistorySchema } = require('./../schemas/clinicalHistory.schema');
+const { checkRole, resolveUserRole } = require('./../middlewares/authentication.handler');
+const { 
+    createClinicalHistorySchema, 
+    getClinicalHistorySchema, 
+    updateClinicalHistorySchema,
+} = require('./../schemas/clinicalHistory.schema');
 const ClinicalHistoryService = require('./../services/clinicalHistory.service');
 const service = new ClinicalHistoryService();
 const router = express.Router();
@@ -9,10 +15,16 @@ const router = express.Router();
 // Crear historia clinica de paciente
 router.post(
     '/',
+    passport.authenticate('jwt', { session: false }),
     validatorHandler(createClinicalHistorySchema, 'body'),
+    resolveUserRole,
     async (req, res, next) => {
         try {
             const body = { ...req.body };
+            const { role, patientId: userPatientId } = req.user;
+            if (role === 'patient') {
+                body.patientId = userPatientId
+            };
             const newClinicalHistory = await service.create(body);
             ResponseHandler.success({
                 res,
@@ -31,6 +43,7 @@ router.post(
 // Obtener una historia clinica por su id
 router.get(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
     validatorHandler(getClinicalHistorySchema, 'params'),
     async (req, res, next) => {
         try {
@@ -51,6 +64,7 @@ router.get(
 // Actualizar parcialmente una historia clinica
 router.patch(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
     validatorHandler(getClinicalHistorySchema, 'params'),
     validatorHandler(updateClinicalHistorySchema, 'body'),
     async (req, res, next) => {

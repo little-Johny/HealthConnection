@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('passport');
+const { checkRole } = require('./../middlewares/authentication.handler');
 const validatorHandler = require('../middlewares/validation.handler');
 const { userUpload, getUploadedFileURL } = require('../middlewares/files.handler');
 const ResponseHandler = require('../middlewares/response.handler');
@@ -44,6 +46,8 @@ router.post(
 // Encontrar un paciente por su id
 router.get(
     '/:id',
+    passport.authenticate('jwt', { session: false}),
+    checkRole('doctor', 'staff', 'admin'),
     validatorHandler(getPatientSchema, 'params'),
     async (req, res, next) => {
         try {

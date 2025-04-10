@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('passport');
+const { checkRole } = require('./../middlewares/authentication.handler');
 const validatorHandler = require('./../middlewares/validation.handler');
 const ResponseHandler = require('./../middlewares/response.handler');
 const { postsUpload, getUploadedFileURL } = require('./../middlewares/files.handler');
@@ -18,11 +20,14 @@ const processPostData = (req) => {
 // Crear publicacion
 router.post(
     '/',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['staff', 'admin']),
     postsUpload.single('image'),
     validatorHandler(createPostSchema, 'body'),
     async (req, res, next) => {
         try {
             const postData = processPostData(req);
+            processPostData.userId = req.user.sub;
             const newPost = await service.create(postData);
             ResponseHandler.success({
                 res,

@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('passport');
+const { checkRole } = require('./../middlewares/authentication.handler');
 const validatorHandler = require('./../middlewares/validation.handler');
 const ResponseHandler = require('./../middlewares/response.handler');
 const SpecialityService = require('./../services/speciality.service');
@@ -9,6 +11,8 @@ const service = new SpecialityService();
 // crear especialidad
 router.post(
     '/',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']),
     validatorHandler(createSpecialitySchema, 'body'),
     async (req, res, next) => {
         try {
@@ -30,6 +34,8 @@ router.post(
 // Obtener especialidad con filtros
 router.get(
     '/',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']),
     validatorHandler(getQuerySpecialitySchema, 'query'),
     async (req, res, next) => {
         try {
@@ -46,9 +52,11 @@ router.get(
     }
 );
 
-// Obtener un usuario por su ID
+// Obtener una especialidad por su ID
 router.get(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']),
     validatorHandler(getSpecialitySchema, 'params'),
     async (req, res, next) => {
         try {
@@ -69,6 +77,8 @@ router.get(
 // Actualizar parcialmente una especialidad
 router.patch(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']),
     validatorHandler(getSpecialitySchema, 'params'),
     validatorHandler(updateSpecialitySchema, 'body'),
     async (req, res, next) => {
@@ -100,6 +110,8 @@ router.patch(
 // Eliminar una especialidad por ID
 router.delete(
     '/:id',
+    passport.authenticate('jwt', { session: false }),
+    checkRole(['admin']),
     validatorHandler(getSpecialitySchema, 'params'),
     async (req, res, next) => {
         try {
