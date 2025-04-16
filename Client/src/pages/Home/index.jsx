@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import MainLayout from '../../components/Layout';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -8,46 +9,42 @@ const Home = () => {
     };
 
     return (
-        <div className="bg-gray-100">
+
+        <MainLayout>
             {/* Barra de Navegación */}
-            <nav className="bg-orange-600 p-4">
-                <div className="container mx-auto flex justify-between items-center">
-                    <a href="#" className="text-white text-xl">Health Connection</a>
-                    <button
-                        className="text-white block lg:hidden"
-                        aria-label="Toggle Navigation"
-                    >
-                        <span className="navbar-toggler-icon">☰</span>
-                    </button>
-                    <div className="lg:flex space-x-6 hidden">
-                        <a href="#about" className="text-white hover:text-indigo-300">Nosotros</a>
-                        <a href="#services" className="text-white hover:text-indigo-300">Servicios</a>
-                        <a href="#team" className="text-white hover:text-indigo-300">Equipo Médico</a>
-                        <a href="#contact" className="text-white hover:text-indigo-300">Contacto</a>
+            <nav className="bg-orange-500 py-4 shadow-md">
+                <div className="container mx-auto px-4 flex justify-between items-center">
+                    <h1 className="text-white text-2xl font-bold">Health Connection</h1>
+                    <div className="hidden lg:flex space-x-6">
+                        <a href="#about" className="text-white hover:underline">Nosotros</a>
+                        <a href="#services" className="text-white hover:underline">Servicios</a>
+                        <a href="#team" className="text-white hover:underline">Equipo Médico</a>
+                        <a href="#contact" className="text-white hover:underline">Contacto</a>
                     </div>
                 </div>
             </nav>
 
+
             {/* Encabezado */}
-            <header className="bg-orange-500 text-center text-white py-20 ">
+            <header className="bg-orange-400 text-white text-center py-20 px-4">
                 <h1 className="text-4xl font-bold">Bienvenido a Health Connection</h1>
                 <p className="text-xl mt-4">Tu salud, nuestra prioridad</p>
-                <div className="flex justify-around px-96">
+                <div className="flex flex-col md:flex-row justify-center gap-4 mt-6">
                     <button
-                        onClick={() => handleSubmit('login')}
-                        className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-4 inline-block"
+                    onClick={() => handleSubmit('login')}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition"
                     >
-                        Ingresar
+                    Ingresar
                     </button>
                     <button
-                        onClick={() => handleSubmit('register')}
-                        className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-4 inline-block"
+                    onClick={() => handleSubmit('register')}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition"
                     >
-                        Registrate
+                    Registrarse
                     </button>
-
                 </div>
             </header>
+
 
             {/* Sección de Nosotros */}
             <section id="about" className="py-20 bg-white text-center">
@@ -62,36 +59,24 @@ const Home = () => {
             </section>
 
             {/* Sección de Servicios */}
-            <section id="services" className="py-20 bg-gray-400">
-                <div className="container mx-auto px-4 text-center">
-                    <h2 className="text-3xl text-white mb-5">Nuestros Servicios</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <h5 className="text-xl font-bold">Consulta Médica</h5>
-                            <p className="mt-3">
-                                Ofrecemos consultas médicas con especialistas en diversas
-                                áreas, garantizando un diagnóstico preciso y un tratamiento
-                                adecuado.
-                            </p>
-                        </div>
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <h5 className="text-xl font-bold">Exámenes de Laboratorio</h5>
-                            <p className="mt-3">
-                                Realiza tus exámenes de laboratorio con nosotros, contamos con
-                                tecnología avanzada para obtener resultados confiables y
-                                rápidos.
-                            </p>
-                        </div>
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <h5 className="text-xl font-bold">Afiliaciones</h5>
-                            <p className="mt-3">
-                                Nuestros planes de afiliación ajustables a cualquier tipo de
-                                necesidad.
-                            </p>
-                        </div>
+            <section id="services" className="py-20 bg-gray-300 text-center">
+                <h2 className="text-3xl font-bold mb-10 text-gray-800">Nuestros Servicios</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-10">
+                    <div className="bg-white shadow-xl p-6 rounded-lg hover:shadow-2xl transition">
+                        <h5 className="text-xl font-bold">Consulta Médica</h5>
+                        <p className="mt-3 text-gray-600">Ofrecemos consultas con especialistas...</p>
+                    </div>
+                    <div className="bg-white shadow-xl p-6 rounded-lg hover:shadow-2xl transition">
+                        <h5 className="text-xl font-bold">Checkeos cuando quieras</h5>
+                        <p className="mt-3 text-gray-600">Posibilidad de solicitar un chequeo cuando y como quieras</p>
+                    </div>
+                    <div className="bg-white shadow-xl p-6 rounded-lg hover:shadow-2xl transition">
+                        <h5 className="text-xl font-bold">Doctores de la mejor calidad</h5>
+                        <p className="mt-3 text-gray-600">Especialistas capacitados y dispuestos a darte su 100%</p>
                     </div>
                 </div>
             </section>
+
 
             {/* Sección de Equipo Médico */}
             <section id="team" className="py-20 bg-white text-center">
@@ -99,9 +84,9 @@ const Home = () => {
                     <h2 className="text-3xl font-semibold mb-5">Nuestro Equipo Médico</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Miembro del equipo 1 */}
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <div className="bg-white p-6 rounded-lg shadow-2xl">
                             <img
-                                src="../public/images/Doctor.png"
+                                src="./../../../public/img/doctor2.png"
                                 alt="Doctor 1"
                                 className="w-32 h-32 mx-auto rounded-full mb-4"
                             />
@@ -109,9 +94,9 @@ const Home = () => {
                             <p>Cardiólogo</p>
                         </div>
                         {/* Miembro del equipo 2 */}
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <div className="bg-white p-6 rounded-lg shadow-2xl">
                             <img
-                                src="../public/images/Doctor.png"
+                                src="./../../../public/img/doctor2.png"
                                 alt="Doctor 2"
                                 className="w-32 h-32 mx-auto rounded-full mb-4"
                             />
@@ -119,9 +104,9 @@ const Home = () => {
                             <p>Dermatóloga</p>
                         </div>
                         {/* Miembro del equipo 3 */}
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <div className="bg-white p-6 rounded-lg shadow-2xl ">
                             <img
-                                src="../public/images/Doctor.png"
+                                src="./../../../public/img/doctor2.png"
                                 alt="Doctor 3"
                                 className="w-32 h-32 mx-auto rounded-full mb-4"
                             />
@@ -148,14 +133,7 @@ const Home = () => {
                     </a>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className="bg-black text-white py-6">
-                <div className="container mx-auto text-center">
-                    <p>&copy; 2024 Health Connection. Todos los derechos reservados.</p>
-                </div>
-            </footer>
-        </div>
+        </MainLayout>
     );
 };
 
