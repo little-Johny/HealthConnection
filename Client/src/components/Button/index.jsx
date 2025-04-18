@@ -26,7 +26,7 @@ export default function Button({
         <button
             type={type}
             onClick={onClick}
-            className={`px-4 py-2 rounded-2xl text-white font-semibold ${getVariantStyles(variant)} ${className}`}
+            className={`py-2 rounded-2xl text-white font-semibold ${getVariantStyles(variant)} ${className}`}
         >
             { children }
         </button>
