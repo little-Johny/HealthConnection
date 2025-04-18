@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.dashboard-card {
+    @apply bg-white p-6 rounded-3xl shadow-xl hover:shadow-2xl hover:bg-gray-50 transition-transform transform hover:scale-105 border border-gray-200;
+  }
+  

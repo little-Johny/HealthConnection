@@ -34,8 +34,6 @@ router.post(
 // Obtener especialidad con filtros
 router.get(
     '/',
-    passport.authenticate('jwt', { session: false }),
-    checkRole(['admin']),
     validatorHandler(getQuerySpecialitySchema, 'query'),
     async (req, res, next) => {
         try {

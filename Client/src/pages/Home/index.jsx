@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '../../components/Layout';
+import Button from '../../components/Button';
 
 const Home = () => {
     const navigate = useNavigate();
 
     const handleSubmit = (route) => {
-        route === 'login' ? navigate('/login') : navigate('/paciente-register'); 
+        route === 'login' ? navigate('/login') : navigate('/register'); 
     };
 
     return (
@@ -30,18 +31,22 @@ const Home = () => {
                 <h1 className="text-4xl font-bold">Bienvenido a Health Connection</h1>
                 <p className="text-xl mt-4">Tu salud, nuestra prioridad</p>
                 <div className="flex flex-col md:flex-row justify-center gap-4 mt-6">
-                    <button
-                    onClick={() => handleSubmit('login')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition"
+                    <Button
+                        type='submit'
+                        onClick={() => handleSubmit('login')}
+                        className='transition'
+                        variant='primary'
                     >
-                    Ingresar
-                    </button>
-                    <button
-                    onClick={() => handleSubmit('register')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition"
+                        Acceder
+                    </Button>
+                    <Button
+                        type='submit'
+                        onClick={() => handleSubmit('register')}
+                        className='transition'
+                        variant='primary'
                     >
-                    Registrarse
-                    </button>
+                        Registrarse
+                    </Button>
                 </div>
             </header>
 
@@ -86,7 +91,7 @@ const Home = () => {
                         {/* Miembro del equipo 1 */}
                         <div className="bg-white p-6 rounded-lg shadow-2xl">
                             <img
-                                src="./../../../public/img/doctor2.png"
+                                src="/img/doctor2.png"
                                 alt="Doctor 1"
                                 className="w-32 h-32 mx-auto rounded-full mb-4"
                             />
@@ -96,7 +101,7 @@ const Home = () => {
                         {/* Miembro del equipo 2 */}
                         <div className="bg-white p-6 rounded-lg shadow-2xl">
                             <img
-                                src="./../../../public/img/doctor2.png"
+                                src="/img/doctor2.png"
                                 alt="Doctor 2"
                                 className="w-32 h-32 mx-auto rounded-full mb-4"
                             />
@@ -106,7 +111,7 @@ const Home = () => {
                         {/* Miembro del equipo 3 */}
                         <div className="bg-white p-6 rounded-lg shadow-2xl ">
                             <img
-                                src="./../../../public/img/doctor2.png"
+                                src="/img/doctor2.png"
                                 alt="Doctor 3"
                                 className="w-32 h-32 mx-auto rounded-full mb-4"
                             />

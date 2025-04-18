@@ -1,13 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';  // Importar ToastContainer
-import { IoChevronBackOutline } from 'react-icons/io5'
+import { IoChevronBackOutline } from 'react-icons/io5';
+import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';  // Estilos de Toastify
 import { useAuth } from './../../hooks/useAuth';
 import { login as LoginRequest } from './../../api/auth';
-import MainLayout from '../../components/Layout';
+import MainLayout from './../../components/Layout';
+import Button from './../../components/Button';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -28,7 +28,8 @@ const Login = () => {
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             const response = await LoginRequest(values)
-            const token = response.data;
+            const token = response.data.data;
+            console.log(token);
             login(token);//almacenamiento de token en el contexto
             toast.success('Bienvenido!');
             navigate('/dashboard');
@@ -44,7 +45,7 @@ const Login = () => {
 
 
     return (
-        <MainLayout containerClass=' flex items-center justify-center px-4'>
+        <MainLayout containerClass='flex items-center px-2'>
             <button
                 onClick={() => navigate(-1)}
                 className="absolute top-6 left-6 bg-orange-500 text-white p-2 rounded-full shadow-md hover:bg-orange-600 transition"
@@ -74,13 +75,14 @@ const Login = () => {
                             <ErrorMessage name="password" component="div" className="text-red-500 text-sm font-semibold" />
                         </div>
 
-                        <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            variant="primary"
+                            className="w-full"
                         >
-                        {isSubmitting ? 'Ingresando...' : 'Iniciar Sesión'}
-                        </button>
+                            {isSubmitting ? 'Ingresando...' : 'Iniciar Sesión'}
+                        </Button>
                     </Form>
                     )}
                 </Formik>
