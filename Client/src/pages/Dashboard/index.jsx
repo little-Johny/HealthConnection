@@ -4,6 +4,7 @@ import { IoChevronBackOutline, IoPerson } from 'react-icons/io5';
 import { useAuth } from './../../hooks/useAuth';
 import MainLayout from './../../components/Layout';
 import Button from './../../components/Button';
+import { getDisplayRole } from './../../utils/roleUtils';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Dashboard = () => {
         );
     }
 
-    const displayRol = rol?.charAt(0).toUpperCase() + rol?.slice(1) || 'Administrador';
+    const displayRol = getDisplayRole(rol) || 'Admin'
 
     return (
         <MainLayout >
@@ -31,10 +32,9 @@ const Dashboard = () => {
                 <div className='flex justify-between items-center'>
                     <Button
                         onClick={() => navigate(-1)}
-                        className="absolute top-6 left-6 bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition"
-                        aria-label="Volver"
+                        className="absolute  text-white p-2 rounded-full shadow-md transition"
                     >
-                        <IoChevronBackOutline className='w-5 h-5' />
+                        <IoChevronBackOutline className="w-5 h-5" />
                     </Button>
 
                     <h1 className='text-white text-3xl font-semibold flex-grow text-center'>
@@ -42,11 +42,7 @@ const Dashboard = () => {
                     </h1>
 
                     <button
-                        onClick={() => navigate(
-                            rol === 'paciente' ? `/paciente-profile/${userId}` :
-                            rol === 'doctor' ? `/doctor-profile/${userId}` :
-                            `/admin-profile/${userId}`
-                        )}
+                        onClick={() => navigate(`/profile`)}
                         className='bg-slate-400 text-white p-3 rounded-full hover:bg-slate-600'
                     >
                         <IoPerson size={24} />

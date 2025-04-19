@@ -3,7 +3,9 @@ import ProtectedRoute from './ProtectedRoute';
 import Home from './../pages/Home';
 import Login from './../pages/Login';
 import Register from './../pages/Register';
-import Dashboard from '../pages/Dashboard';
+import Dashboard from './../pages/Dashboard';
+import UserTable from './../pages/Manage-users';
+import Profile from './../pages/Profile';
 
 
 const AppRoutes = () => {
@@ -14,13 +16,38 @@ const AppRoutes = () => {
         
         // Rutas protegidas
         {
-        path: '/dashboard',
-        element: (
-            <ProtectedRoute>
-                <Dashboard />
-            </ProtectedRoute>
-        ),
-        }/* ,
+            path: '/dashboard',
+            element: (
+                <ProtectedRoute>
+                    <Dashboard />
+                </ProtectedRoute>
+            ),
+        },
+        {
+            path: '/manage-users',
+            element: (
+                <ProtectedRoute>
+                    <UserTable />
+                </ProtectedRoute>
+            ),
+        },
+        {
+            path: '/profile',
+            element: (
+                <ProtectedRoute>
+                    <Profile/>
+                </ProtectedRoute>
+            ),
+        },
+        {
+            path: '/profile/:userId',
+            element: (
+                <ProtectedRoute>
+                    <Profile/>
+                </ProtectedRoute>
+            ),
+        },
+        /* ,
         {
         path: '/solicitar-cita/:userId',
         element: (
@@ -85,14 +112,7 @@ const AppRoutes = () => {
             </ProtectedRoute>
         ),
         },
-        {
-        path: '/manage-users',
-        element: (
-            <ProtectedRoute>
-                <UserTable />
-            </ProtectedRoute>
-        ),
-        }, */
+         */
     ]);
 
     return routes;

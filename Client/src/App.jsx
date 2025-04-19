@@ -5,11 +5,22 @@ import AppRoutes from './routes/AppRoutes';
 
 function App() {
   return (
-    <AuthProvider>
-      <ToastContainer />
-      <AppRoutes />
-    </AuthProvider>
+      <>
+        <ToastContainer
+          position="bottom-left"
+          autoClose={4000}
+          hideProgressBar={true}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+        <AppRoutes />
+      </>
   );
-}
+};
 
 export default App;

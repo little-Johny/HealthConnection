@@ -48,13 +48,6 @@ export default function Register() {
         },
         { name: 'email', type: 'email', initialValue: '', label: 'Correo electrónico' },
         { name: 'phone', type: 'text', initialValue: '', label: 'Teléfono' },
-        {
-            name: 'role',
-            type: 'select',
-            options: ['admin', 'staff', 'doctor', 'patient'],
-            initialValue: '',
-            label: 'Rol',
-        },
     ];
 
     const patientFields = [
@@ -111,7 +104,7 @@ export default function Register() {
         return field;
     });
 
-    let selectedFields = isAdmin ? [...comunFields] : comunFields.filter(field => field.name !== 'role');
+    let selectedFields =[...comunFields];
 
     if (selectedRole === 'doctor') selectedFields.push(...updatedDoctorFields);
     if (selectedRole === 'patient') selectedFields.push(...patientFields);
@@ -147,6 +140,13 @@ export default function Register() {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
+            // Asignar el rol desde el filtro (si es admin)
+            if (isAdmin && selectedRole) {
+                values.role = selectedRole;
+            } else {
+                values.role ='patient'
+            }
+
             if (selectedRole === 'doctor') {
                 await createDoctor(values);
             } else if (selectedRole === 'patient') {
@@ -192,25 +192,25 @@ export default function Register() {
             </Button>
             <div className="w-full max-w-xl bg-white shadow-lg rounded-lg p-6">
                 {isAdmin && (
-                    <div className="container mx-auto px-4 pt-6">
-                    <div className="flex items-center gap-4">
-                        <label htmlFor="roleFilter" className="text-sm font-medium">
-                            Filtrar por rol:
-                        </label>
-                        <select
-                            id="roleFilter"
-                            value={setSelectedRole}
-                            onChange={handleRoleChange}
-                            className="p-2 border rounded shadow-sm"
-                        >
-                            <option value="">Todos</option>
-                            <option value="admin">Admin</option>
-                            <option value="doctor">Doctor</option>
-                            <option value="patient">patient</option>
-                            <option value="staff">staff</option>
-                        </select>
+                    <div className={`container mx-auto px-4 pt-6`}>
+                        <div className="flex items-center gap-4">
+                            <label htmlFor="roleFilter" className="text-sm font-medium">
+                                Seleccionar rol para crear:
+                            </label>
+                            <select
+                                id="roleFilter"
+                                value={setSelectedRole}
+                                onChange={handleRoleChange}
+                                className="p-2 border rounded shadow-sm"
+                            >
+                                <option value="">Todos</option>
+                                <option value="admin">Admin</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="patient">patient</option>
+                                <option value="staff">staff</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
                 )}
 
                 {isAdmin && (

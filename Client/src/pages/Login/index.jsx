@@ -45,7 +45,7 @@ const Login = () => {
 
 
     return (
-        <MainLayout containerClass='flex items-center px-2'>
+        <MainLayout containerClass='flex items-center px-2' LayoutClass='bg-gray-400'>
             <Button
                 onClick={() => navigate(-1)}
                 className="absolute top-6 left-6 bg-orange-500 text-white p-2 rounded-full shadow-md hover:bg-orange-600 transition"

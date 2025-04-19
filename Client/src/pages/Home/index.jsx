@@ -34,7 +34,7 @@ const Home = () => {
                     <Button
                         type='submit'
                         onClick={() => handleSubmit('login')}
-                        className='transition'
+                        className='transition px-4'
                         variant='primary'
                     >
                         Acceder
@@ -42,7 +42,7 @@ const Home = () => {
                     <Button
                         type='submit'
                         onClick={() => handleSubmit('register')}
-                        className='transition'
+                        className='transition px-4'
                         variant='primary'
                     >
                         Registrarse
@@ -72,7 +72,7 @@ const Home = () => {
                         <p className="mt-3 text-gray-600">Ofrecemos consultas con especialistas...</p>
                     </div>
                     <div className="bg-white shadow-xl p-6 rounded-lg hover:shadow-2xl transition">
-                        <h5 className="text-xl font-bold">Checkeos cuando quieras</h5>
+                        <h5 className="text-xl font-bold">Chequeos cuando quieras</h5>
                         <p className="mt-3 text-gray-600">Posibilidad de solicitar un chequeo cuando y como quieras</p>
                     </div>
                     <div className="bg-white shadow-xl p-6 rounded-lg hover:shadow-2xl transition">

@@ -1,61 +1,101 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { IoChevronBackOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { toast, ToastContainer } from 'react-toastify';
+import { IoChevronBackOutline } from 'react-icons/io5';
+import { toast } from 'react-toastify';
+import { useAuth } from './../../hooks/useAuth';
+import Modal from './../../components/Modal';
+import Button from './../../components/Button';
+import SearchBar from './../../components/SearchBar';
+import MainLayout from './../../components/Layout';
+import { deleteUser, getUsers } from './../../api/user';
+import { getDisplayRole } from '../../utils/roleUtils';
 
 const UserTable = () => {
-    const { token } = useAuth();
+    const { token, rol } = useAuth();
+    const isAdmin = token && rol === 'admin';
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [tableLoading, setTableLoading] = useState(false);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedRole, setSelectedRole] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10);
+    const [totalPages, setTotalPages] = useState(1);
 
-    // Cierra el modal y resetea el usuario seleccionado
     const closeModal = () => {
         setShowModal(false);
         setSelectedUser(null);
     };
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/health_connection/v1/user/getAll');
-                setUsers(response.data.users);
-            } catch (err) {
-                setError('Error al cargar los usuarios');
+    const getApiUsers = async (query = {}) => {
+        setTableLoading(true);
+        setError(null);
+    
+        // Calcular el offset en función de la página actual
+        const offset = (page - 1) * limit;
+    
+        const cleanQuery = Object.fromEntries(
+            Object.entries({
+                ...query,
+                offset, 
+                limit,
+            }).filter(([_, v]) => v !== "")
+        );
+    
+        try {
+            const response = await getUsers(cleanQuery);
+            const users = response.data.data;
+            const meta = response.data.meta;
+    
+            setUsers(users);
+            setTotalPages(meta.totalPages || 1);
+        } catch (error) {
+            if (error.response?.status === 404) {
+                setUsers([]);
+                setError(error.response.data.message || 'No se encontraron usuarios.');
+            } else {
+                setError('Error al cargar los usuarios.');
                 toast.error('Hubo un error al cargar la lista de usuarios.', { position: 'top-right' });
-                console.error(err);
-            } finally {
-                setLoading(false);
             }
-        };
+        } finally {
+            setTableLoading(false);
+        }
+    };
+    
+    
 
-        fetchUsers();
-    }, []);
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getApiUsers({
+                role: selectedRole,
+                search: searchTerm,
+            });
+        }, 500);
+
+        return () => clearTimeout(delayDebounce);
+    }, [searchTerm, selectedRole, page]);
+
+    const handleRoleChange = (e) => {
+        const role = e.target.value;
+        setSelectedRole(role);
+        getApiUsers({ role });
+        setPage(1);
+    };
 
     const handleDeactivate = async (userId) => {
-        if (!token) {
+        if (!isAdmin) {
             toast.error('No tienes permisos para realizar esta acción.', { position: 'top-right' });
             return;
         }
 
         try {
-            await axios.patch(
-                `http://localhost:3000/health_connection/v1/user/desactivacion/${userId}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            await deleteUser(userId);
             setUsers((prev) =>
                 prev.map((user) =>
-                    user.id === userId ? { ...user, activo: false } : user
+                    user.id === userId ? { ...user, deletedAt: new Date().toISOString() } : user
                 )
             );
             closeModal();
@@ -66,137 +106,189 @@ const UserTable = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <div className="text-gray-500 text-lg font-medium">Cargando usuarios...</div>
-            </div>
-        );
-    }
+    const handlePageChange = (direction) => {
+        setPage((prev) => {
+            if (prev <= 0) {
+                return;
+            };
 
-    if (error) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <div className="text-red-500 text-lg font-semibold">{error}</div>
-            </div>
-        );
-    }
+            const newPage = prev + direction;
+            if (newPage > 0 && newPage <= totalPages) {
+                return newPage;
+            }
+            return prev;
+        });
+    };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <header className="bg-orange-400 shadow-md py-4">
-                <div className="container mx-auto px-4 flex items-center">
-                    <button
+        <MainLayout className="min-h-screen bg-white">
+            <header className="bg-orange-400 p-6 shadow-lg shadow-gray-500">
+                <div className="flex justify-between items-center">
+                    <Button
                         onClick={() => navigate(-1)}
-                        className="bg-blue-500 p-2 rounded-full text-white hover:bg-blue-400 focus:ring-2 focus:ring-blue-300 transition"
-                        aria-label="Volver"
+                        className="absolute text-white p-2 rounded-full shadow-md transition"
                     >
-                        <IoChevronBackOutline size={24} />
-                    </button>
+                        <IoChevronBackOutline className="w-5 h-5" />
+                    </Button>
                     <h1 className="flex-grow text-center text-white text-2xl font-semibold">
                         Lista de Usuarios
                     </h1>
                 </div>
             </header>
 
-            {/* Tabla */}
-            <div className="container mx-auto px-4 py-8">
-                <div className="overflow-x-auto shadow-md rounded-lg bg-white">
-                    <table className="min-w-full table-auto border-collapse">
-                        <thead>
-                            <tr className="bg-indigo-600 text-white text-left text-sm font-medium uppercase">
-                                <th className="px-4 py-3 border-b">ID</th>
-                                <th className="px-4 py-3 border-b">Nombre de Usuario</th>
-                                <th className="px-4 py-3 border-b">Correo</th>
-                                <th className="px-4 py-3 border-b">Rol</th>
-                                <th className="px-4 py-3 border-b">Estado</th>
-                                <th className="px-4 py-3 border-b">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {users.map((user) => (
-                                <tr key={user.id} className="hover:bg-gray-100 transition">
-                                    <td className="px-4 py-2">{user.id}</td>
-                                    <td className="px-4 py-2">{user.username}</td>
-                                    <td className="px-4 py-2">{user.correo}</td>
-                                    <td className="px-4 py-2 capitalize">{user.rol}</td>
-                                    <td className="px-4 py-2">
-                                        {user.activo ? (
-                                            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-                                                Activo
-                                            </span>
-                                        ) : (
-                                            <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
-                                                Inactivo
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-2 space-x-2">
-                                        <button
-                                            onClick={() => {
-                                                // Redirige según el rol del usuario
-                                                if (user.rol === 'paciente') {
-                                                    navigate(`/paciente-profile/${user.id}`);
-                                                } else if (user.rol === 'doctor') {
-                                                    navigate(`/doctor-profile/${user.id}`);
-                                                } else {
-                                                    navigate(`/admin-profile/${user.id}`); // Ruta por defecto para otros roles
-                                                }
-                                            }}
-                                            className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-400 transition"
-                                            aria-label={`Ver perfil de ${user.username}`}
-                                        >
-                                            Ver
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                setShowModal(true);
-                                                setSelectedUser(user);
-                                            }}
-                                            className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-400 transition"
-                                            aria-label={`Desactivar a ${user.username}`}
-                                        >
-                                            Desactivar
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+            <div className="container mx-auto px-4 pt-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    {/* Filtro por rol */}
+                    <div className="flex items-center gap-2">
+                        <label htmlFor="roleFilter" className="text-sm font-medium">
+                            Filtrar por rol:
+                        </label>
+                        <select
+                            id="roleFilter"
+                            value={selectedRole}
+                            onChange={handleRoleChange}
+                            className="p-2 border rounded shadow-sm"
+                        >
+                            <option value="">Todos</option>
+                            <option value="admin">Admin</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="patient">Paciente</option>
+                            <option value="staff">Staff</option>
+                        </select>
+                    </div>
+
+                    {/* Barra de búsqueda */}
+                    <div className="flex-grow sm:max-w-md">
+                        <SearchBar
+                            placeholder="Buscar usuario por nombre de usuario..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    getApiUsers({
+                                        search: e.target.value,
+                                        role: selectedRole,
+                                    });
+                                }
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
 
-            {/* Modal de Confirmación */}
-            {showModal && selectedUser && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                            Confirmar Desactivación
-                        </h2>
-                        <p className="text-gray-600 mb-6">
-                            ¿Estás seguro de que deseas desactivar al usuario{' '}
-                            <span className="font-bold">{selectedUser.username}</span>?
-                        </p>
-                        <div className="flex justify-end space-x-3">
-                            <button
-                                onClick={closeModal}
-                                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                onClick={() => handleDeactivate(selectedUser.id)}
-                                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                            >
-                                Desactivar
-                            </button>
-                        </div>
-                    </div>
+            {users.length > 0 && (
+                <div className="flex justify-center mt-4 gap-2">
+                    <Button
+                        disabled={page === 1}
+                        onClick={() => handlePageChange(-1)}
+                        className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                    >
+                        Anterior
+                    </Button>
+
+                    <span className="px-4 py-2">{`Página ${page} de ${totalPages}`}</span>
+
+                    <Button
+                        disabled={page === totalPages}
+                        onClick={() => handlePageChange(1)}
+                        className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                    >
+                        Siguiente
+                    </Button>
                 </div>
             )}
-            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
-        </div>
+
+            <div className="container mx-auto px-4 py-8">
+                <div className="overflow-x-auto shadow-md rounded-lg bg-white">
+                    {tableLoading ? (
+                        <div className="flex justify-center items-center p-10 text-gray-500">
+                            Cargando usuarios...
+                        </div>
+                    ) : error ? (
+                        <div className="flex justify-center items-center p-10 text-red-500">
+                            {error}
+                        </div>
+                    ) : (
+                        <table className="min-w-full table-auto border-collapse">
+                            <thead>
+                                <tr className="bg-indigo-600 text-white text-left text-sm font-medium uppercase">
+                                    <th className="px-4 py-3 border-b">ID</th>
+                                    <th className="px-4 py-3 border-b">Nombre de Usuario</th>
+                                    <th className="px-4 py-3 border-b">Correo</th>
+                                    <th className="px-4 py-3 border-b">Rol</th>
+                                    <th className="px-4 py-3 border-b">Estado</th>
+                                    <th className="px-4 py-3 border-b">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {users.length === 0 && !tableLoading ? (
+                                    <tr>
+                                        <td colSpan='6' className='text-center py-4 text-gray-400'>
+                                            {error || 'No se encontraron usuarios.'}
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    users.map((user) => (
+                                        <tr key={user.id} className="hover:bg-gray-100 transition">
+                                            <td className="px-4 py-2">{user.id}</td>
+                                            <td className="px-4 py-2">{user.username}</td>
+                                            <td className="px-4 py-2">{user.email}</td>
+                                            <td className="px-4 py-2 capitalize">{getDisplayRole(user.role)}</td>
+                                            <td className="px-4 py-2">
+                                                {!user.deletedAt ? (
+                                                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                                                        Activo
+                                                    </span>
+                                                ) : (
+                                                    <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
+                                                        Inactivo
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td className="px-4 py-2 space-x-2">
+                                            <button
+                                                onClick={() => {
+                                                    console.log("ID del usuario al hacer clic:", user.id);  // Ver el valor de user.id
+                                                    navigate(`/profile/${user.id}`);
+                                                }}
+                                                className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-400 transition"
+                                            >
+                                                Ver
+                                            </button>
+
+                                                <button
+                                                    onClick={() => {
+                                                        setShowModal(true);
+                                                        setSelectedUser(user);
+                                                    }}
+                                                    className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-400 transition"
+                                                >
+                                                    Desactivar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            </div>
+
+            {/* Modal */}
+            {showModal && selectedUser && (
+                <Modal
+                    isOpen={showModal}
+                    onClose={closeModal}
+                    onConfirm={() => handleDeactivate(selectedUser.id)}
+                    type="confirm"
+                    title="Eliminar usuario"
+                    message={`¿Estás seguro de que deseas eliminar a ${selectedUser.username}?`}
+                    confirmText="Eliminar"
+                    cancelText="Cancelar"
+                />
+            )}
+        </MainLayout>
     );
 };
 
