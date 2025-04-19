@@ -46,13 +46,13 @@ const Login = () => {
 
     return (
         <MainLayout containerClass='flex items-center px-2'>
-            <button
+            <Button
                 onClick={() => navigate(-1)}
                 className="absolute top-6 left-6 bg-orange-500 text-white p-2 rounded-full shadow-md hover:bg-orange-600 transition"
                 aria-label="Volver"
             >
                 <IoChevronBackOutline className="w-5 h-5" />
-            </button>
+            </Button>
             <div className="max-w-md mx-auto bg-white shadow-md p-6 rounded-xl">
                 <h2 className="text-2xl font-bold mb-4 text-center">Iniciar Sesión</h2>
 
