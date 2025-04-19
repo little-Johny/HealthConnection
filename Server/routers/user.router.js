@@ -48,18 +48,20 @@ router.get(
     validatorHandler(getQueryUserSchema, 'query'),
     async (req, res, next) => {
         try {
-            const users = await service.find(req.query);
+            const { data, meta } = await service.find(req.query);  // Aquí obtenemos ambos
             ResponseHandler.success({
                 res,
                 req,
                 message: 'Usuarios encontrados',
-                data: users,
+                data,
+                meta  // Incluimos la información de la paginación
             });
         } catch (error) {
             next(error);
         }
     }
 );
+
 
 // obtener todos los usuarios incluso los eliminados
 router.get(

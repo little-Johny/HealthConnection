@@ -38,12 +38,12 @@ class UserService {
         const options = {
             where: {},
             include: [],
-            attributes: { exclude: ['password'] }
+            attributes: { exclude: ['password'] },
         };
     
-        const { 
-            limit, offset, startDate, endDate, search, city, address, birthdate, 
-            speciality, licenseNumber, consultationFee, ...filters 
+        const {
+            limit, offset, startDate, endDate, search, city, address, birthdate,
+            speciality, licenseNumber, consultationFee, ...filters
         } = query;
     
         const filterableFields = ['email', 'phone', 'username', 'role', 'typeDocument', 'numberDocument', 'gender'];
@@ -63,7 +63,7 @@ class UserService {
             if (address) patientFilter.address = { [Op.iLike]: `%${address}%` };
             if (city) patientFilter.city = { [Op.iLike]: `%${city}%` };
             if (birthdate) patientFilter.birthdate = birthdate;
-            
+    
             options.include.push({
                 model: models.Patient,
                 as: 'patient',
@@ -100,9 +100,9 @@ class UserService {
         // Búsqueda flexible en múltiples campos
         if (search) {
             options.where[Op.or] = [
-                { name: { [Op.iLike]: `%${search}%` } }, 
-                { lastName: { [Op.iLike]: `%${search}%` } }, 
-                { email: { [Op.iLike]: `%${search}%` } }, 
+                { name: { [Op.iLike]: `%${search}%` } },
+                { lastName: { [Op.iLike]: `%${search}%` } },
+                { email: { [Op.iLike]: `%${search}%` } },
                 { username: { [Op.iLike]: `%${search}%` } }
             ];
             filterMessages.push(`que coincidan con: ${search}`);
@@ -124,14 +124,25 @@ class UserService {
             filterMessages.push(`creado entre ${startDate} y ${endDate}`);
         }
     
-        const users = await models.User.findAll(options);
+        // Obtener los usuarios con los filtros aplicados
+        const { rows, count } = await models.User.findAndCountAll(options);
     
-        if (users.length === 0) {
+        // Si no se encuentran usuarios
+        if (count === 0) {
             throw boom.notFound(`No se encuentra ningún usuario ${filterMessages.join(', ')}`);
         }
     
-        return users;
-    };
+        return {
+            data: rows,         // Usuarios encontrados
+            meta: {
+                totalCount: count,  // Total de usuarios que cumplen con los filtros
+                totalPages: Math.ceil(count / (limit || 10)), // Páginas totales
+                currentPage: Math.ceil((offset || 0) / (limit || 10)) + 1, // Página actual
+                perPage: limit || 10  // Elementos por página
+            }
+        };
+    }
+    
     
     async findOne(id) {
         const user = await models.User.findByPk(id, {
