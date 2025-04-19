@@ -21,6 +21,10 @@ export default function Register() {
     const [selectedRole, setSelectedRole] = useState(isAdmin ? '' : 'patient'); // Estado para configurar el formulario con los campos de cada rol
     const navigate = useNavigate();
 
+    useEffect(() => {
+        console.log('ROL:', rol);
+    }, [rol]);
+
     const comunFields = [
         { name: 'photo', type: 'file', initialValue: '', label: 'Foto de perfil' },
         { name: 'username', type: 'text', initialValue: '', label: 'Usuario' },
@@ -151,7 +155,7 @@ export default function Register() {
                 await createUser(values);
             }
             toast.success('Usuario creado exitosamente');
-            navigate('/success'); 
+            navigate('/dashboard'); 
         } catch (error) {
             console.log(`No se pudo crear el ${selectedRole}`, error);
             const { response } = error;
@@ -172,6 +176,11 @@ export default function Register() {
         }
     };
 
+    const handleRoleChange = (e) => {
+        const role = e.target.value;
+        setSelectedRole(role);
+    };
+
     return (
         <MainLayout containerClass='flex justify-center items-center px-4 py-6'>
             <Button
@@ -183,20 +192,25 @@ export default function Register() {
             </Button>
             <div className="w-full max-w-xl bg-white shadow-lg rounded-lg p-6">
                 {isAdmin && (
-                    <details className="dropdown mb-6">
-                        <summary className="btn w-full text-left">Seleccionar rol</summary>
-                        <ul className="menu dropdown-content bg-base-100 rounded-box w-full z-[1] shadow-md mt-2">
-                            <li>
-                                <a onClick={() => setSelectedRole('doctor')}>Doctor</a>
-                            </li>
-                            <li>
-                                <a onClick={() => setSelectedRole('patient')}>Paciente</a>
-                            </li>
-                            <li>
-                                <a onClick={() => setSelectedRole('staff')}>Administrativo</a>
-                            </li>
-                        </ul>
-                    </details>
+                    <div className="container mx-auto px-4 pt-6">
+                    <div className="flex items-center gap-4">
+                        <label htmlFor="roleFilter" className="text-sm font-medium">
+                            Filtrar por rol:
+                        </label>
+                        <select
+                            id="roleFilter"
+                            value={setSelectedRole}
+                            onChange={handleRoleChange}
+                            className="p-2 border rounded shadow-sm"
+                        >
+                            <option value="">Todos</option>
+                            <option value="admin">Admin</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="patient">patient</option>
+                            <option value="staff">staff</option>
+                        </select>
+                    </div>
+                </div>
                 )}
 
                 {isAdmin && (
@@ -314,8 +328,12 @@ export default function Register() {
                         ))}
 
                         <div className="col-span-2 flex justify-center">
-                            <Button type="submit" variant="success" className="w-full md:w-1/2">
-                            Registrar
+                            <Button 
+                                type="submit" 
+                                variant="success" 
+                                className="w-full md:w-1/2 px-4"
+                            >
+                                Registrar
                             </Button>
                         </div>
                     </Form>
