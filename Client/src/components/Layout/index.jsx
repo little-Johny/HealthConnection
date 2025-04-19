@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function MainLayout({children, showFooter = true, containerClass= ''} ) {
+export default function MainLayout({children, showFooter = true, containerClass = '', LayoutClass = ''} ) {
     return (
-        <div className='bg-gray-400 min-h-screen flex flex-col'>
+        <div className={`min-h-screen flex flex-col ${LayoutClass}`}>
             <main className={`flex-grow w-full mx-auto ${containerClass}`}>
                 {children}
             </main>
