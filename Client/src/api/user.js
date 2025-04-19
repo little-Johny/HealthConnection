@@ -15,7 +15,15 @@ export const createUser = (data) => {
 };
 export const getUsers = (query) => api.get('/user', { params: query });
 export const getUserById = (id) => api.get(`/user/${id}`);
-export const getUserProfile = () => api.get('/user/profile');
+export const getUserProfile = () => {
+    const token = localStorage.getItem('auth_token'); 
+    return api.get('/user/profile', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
 export const getAllUsers = () => api.get('/user/all');
 export const partiallyUpdateUser = (id, changes) => {
     const userChanges = new FormData();
