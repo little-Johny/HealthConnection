@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { IoChevronBackOutline, IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5';
@@ -10,12 +11,14 @@ import { createDoctor } from './../../api/doctor';
 import { createUser } from './../../api/user';
 import MainLayout from './../../components/Layout';
 import Button from './../../components/Button';
-import { useEffect, useState } from 'react';
+import Modal from './../../components/Modal';
 
 export default function Register() {
     const [specialities, setSpecialities] = useState([]); // Estado para manejar las especialidades
     const [showPassword, setShowPassword] = useState(false); //Estado para la visibilidad de la contraseña
     const [preview, setPreview] = useState(null); // Estado para almacenar la vista previa de la imagen
+    const [showModal, setShowModal] = useState(false); //Estado para ver Modal
+    const [patientId, setPatientId] = useState(null);
     const { token, rol } = useAuth();
     const isAdmin = token && rol === 'admin';
     const [selectedRole, setSelectedRole] = useState(isAdmin ? '' : 'patient'); // Estado para configurar el formulario con los campos de cada rol
@@ -150,12 +153,14 @@ export default function Register() {
             if (selectedRole === 'doctor') {
                 await createDoctor(values);
             } else if (selectedRole === 'patient') {
-                await createPatient(values);
+                const response = await createPatient(values);
+                const patient = response.data.data;
+                setPatientId(patient.id);
+                setShowModal(true);
             } else {
                 await createUser(values);
             }
             toast.success('Usuario creado exitosamente');
-            navigate('/dashboard'); 
         } catch (error) {
             console.log(`No se pudo crear el ${selectedRole}`, error);
             const { response } = error;
@@ -199,7 +204,7 @@ export default function Register() {
                             </label>
                             <select
                                 id="roleFilter"
-                                value={setSelectedRole}
+                                value={selectedRole}
                                 onChange={handleRoleChange}
                                 className="p-2 border rounded shadow-sm"
                             >
@@ -339,6 +344,20 @@ export default function Register() {
                     </Form>
                 </Formik>
             </div>
+
+            {/* Modal */}
+            {showModal && patientId && (
+                <Modal
+                    isOpen={showModal}
+                    onClose={() => navigate('/dashboard')}
+                    onConfirm={() => navigate(`/create-clinical-history/${patientId}`)}
+                    type="confirm"
+                    title="Terminar de crear perfil"
+                    message={`Deseas continuar con la configuracion de los datos?`}
+                    confirmText="Confirmar"
+                    cancelText="Cancelar"
+                />
+            )}
         </MainLayout>
     );
 }

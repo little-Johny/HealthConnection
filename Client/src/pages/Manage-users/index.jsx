@@ -179,23 +179,26 @@ const UserTable = () => {
             {users.length > 0 && (
                 <div className="flex justify-center mt-4 gap-2">
                     <Button
-                        disabled={page === 1}
                         onClick={() => handlePageChange(-1)}
-                        className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-                    >
+                        disabled={page === 1}
+                        variant={page > 1 ? 'primary' : 'secondary'}
+                        className='p-4'
+                        >
                         Anterior
                     </Button>
-
+                
                     <span className="px-4 py-2">{`Página ${page} de ${totalPages}`}</span>
-
+                
                     <Button
-                        disabled={page === totalPages}
                         onClick={() => handlePageChange(1)}
-                        className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                        disabled={page === totalPages}
+                        variant={page < totalPages ? 'primary' : 'secondary'}
+                        className='p-4'
                     >
                         Siguiente
                     </Button>
                 </div>
+            
             )}
 
             <div className="container mx-auto px-4 py-8">

@@ -40,9 +40,6 @@ const Login = () => {
             setSubmitting(false);
         }
     };
-    
-    
-
 
     return (
         <MainLayout containerClass='flex items-center px-2' LayoutClass='bg-gray-400'>

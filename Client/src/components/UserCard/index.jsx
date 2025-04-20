@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getSpecialityById } from "./../../api/speciality";
 import { getDisplayRole } from "./../../utils/roleUtils";
+import { getPatientById } from "./../../api/patient";
+import Button from "../Button";
 
 export default function UserCard({ user }) {
     const [specialityName, setSpecialityName] = useState('');
+    const [patient, setPatient] = useState(null);
+    const navigate = useNavigate();
 
     const getDoctorSpeciality = async(specialityId) => {
         try {
@@ -13,11 +18,23 @@ export default function UserCard({ user }) {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const getPatient = async (patientId) => {
+        try {
+            const response = await getPatientById(patientId);
+            setPatient(response.data.data)
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
         if(user?.doctor?.specialityId) {
             getDoctorSpeciality(user.doctor.specialityId)
+        }
+        if(user?.patient?.id) {
+            getPatient(user.patient.id)
         }
     }, [user]);
 
@@ -70,6 +87,19 @@ export default function UserCard({ user }) {
                             <p><span className="font-medium">Fecha de nacimiento:</span> {new Date(user.patient.birthdate).toLocaleDateString('es-CO')}</p>
                             <p><span className="font-medium">Dirección:</span> {user.patient.address}</p>
                             <p><span className="font-medium">Ciudad:</span> {user.patient.city}</p>
+                            <Button
+                                variant="primary"
+                                className='p-4'
+                                onClick={() => {
+                                    if (patient?.clinical_history === null) {
+                                        navigate(`/create-clinical-history/${patient.id}`);
+                                    } else {
+                                        navigate(`/clinical-history/${patient.clinical_history.id}`);
+                                    }
+                                }}
+                            >
+                                {patient?.clinical_history === null? 'Crear historial clínico' : 'Ver historial clínico' }
+                            </Button>
                         </div>
                     )}
 
