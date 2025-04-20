@@ -6,6 +6,8 @@ import Register from './../pages/Register';
 import Dashboard from './../pages/Dashboard';
 import UserTable from './../pages/Manage-users';
 import Profile from './../pages/Profile';
+import CreateClinicalHistory from './../pages/CreateClinicalHistory';
+import ClinicalHistory from './../pages/ClinicalHistory';
 
 
 const AppRoutes = () => {
@@ -47,6 +49,22 @@ const AppRoutes = () => {
                 </ProtectedRoute>
             ),
         },
+        {
+            path: '/create-clinical-history/:patientId',
+            element: (
+                <ProtectedRoute>
+                    <CreateClinicalHistory/>
+                </ProtectedRoute>
+            ),
+        },
+        {
+            path: '/clinical-history/:clinicalHistoryId',
+            element: (
+                <ProtectedRoute>
+                    <ClinicalHistory/>
+                </ProtectedRoute>
+            ),
+        }
         /* ,
         {
         path: '/solicitar-cita/:userId',

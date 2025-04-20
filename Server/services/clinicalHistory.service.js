@@ -16,6 +16,10 @@ class ClinicalHistoryService {
                 {
                     model: models.Patient,
                     as: 'patient',
+                },
+                {
+                    model: models.Observation,
+                    as: 'observations',
                 }
             ]
         });

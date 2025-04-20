@@ -1,6 +1,6 @@
 import api from './api';
 
-export const createDoctor = () => {
+export const createDoctor = (data) => {
     const doctorData = new FormData();
 
     for (const key in data) {

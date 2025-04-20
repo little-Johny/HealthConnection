@@ -12,7 +12,7 @@ export default function Button({
             case 'primary':
                 return 'bg-blue-500 hover:bg-blue-600';
             case 'secondary':
-                return 'bg-orange-400 hover:bg-orange-500';
+                return 'bg-gray-200 hover:bg-gray-300';
             case 'danger':
                 return 'bg-red-500 hover:bg-red-600';
             case 'success':
