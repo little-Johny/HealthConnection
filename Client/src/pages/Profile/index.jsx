@@ -8,8 +8,10 @@ import UserEditForm from "./../../components/UserEditForm";
 import MainLayout from "./../../components/Layout";
 import UserCard from "./../../components/UserCard";
 import Button from "../../components/Button";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Profile() {
+    const { rol, logout, userId: authUserId } = useAuth();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -45,8 +47,15 @@ export default function Profile() {
 
     const handleUpdate = async (updatedData) => {
         try {
-            const response = await partiallyUpdateUser(user.id, updatedData);
-            setUser(response.data.data); // Actualiza con los nuevos datos
+            const changes = { ...updatedData };
+    
+            // 🔒 Evitar que photo: null sobreescriba la imagen existente
+            if (!changes.photo) {
+                delete changes.photo;
+            }
+    
+            const response = await partiallyUpdateUser(user.id, changes);
+            setUser(response.data.data);
             toast.success("Perfil actualizado correctamente");
             setShowModal(false);
         } catch (error) {
@@ -54,6 +63,7 @@ export default function Profile() {
             toast.error("Error al actualizar el perfil");
         }
     };
+    
 
     if (loading) {
         return (
@@ -91,12 +101,25 @@ export default function Profile() {
                 <div className="w-full max-w-lg">
                     <UserCard user={user} />
 
-                    <Button
-                        onClick={() => setShowModal(true)}
-                        className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                    >
-                        Editar Perfil
-                    </Button>
+                    { rol !== 'doctor' && (
+                        <Button
+                            onClick={() => setShowModal(true)}
+                            className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        >
+                            Editar Perfil
+                        </Button>
+                    )}
+
+                    {user.id === authUserId && (
+                        <Button
+                            onClick={logout}
+                            variant="danger"
+                            className='p-4 mt-4'
+                        >
+                            Cerrar sesión
+                        </Button>
+                    )}
+
                 </div>
             </div>
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getSpecialityById } from "./../../api/speciality";
 import { getDisplayRole } from "./../../utils/roleUtils";
 import { getPatientById } from "./../../api/patient";
-import Button from "../Button";
+import Button from "./../Button";
 
 export default function UserCard({ user }) {
     const [specialityName, setSpecialityName] = useState('');
@@ -23,7 +23,8 @@ export default function UserCard({ user }) {
     const getPatient = async (patientId) => {
         try {
             const response = await getPatientById(patientId);
-            setPatient(response.data.data)
+            /* console.log(response.data.data); */
+            setPatient(response.data.data);
         } catch (error) {
             console.log(error);
         }
@@ -50,9 +51,9 @@ export default function UserCard({ user }) {
             {/* Foto y nombre de usuario */}
             <div className="flex items-center gap-4 mb-6 relative">
                 <div className="avatar">
-                    <div className="w-24 h-24 rounded-full overflow-hidden shadow-lg">
+                    <div className="w-24 h-24 rounded-full overflow-hidden shadow-xl">
                         <img
-                            src={user.photo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+                            src={user.photo || './../../../public/img/51e1c1fc6f50743937e62fca9b942694_t.png'}
                             alt="Foto de perfil"
                             className="w-full h-full object-cover"
                         />
@@ -89,7 +90,7 @@ export default function UserCard({ user }) {
                             <p><span className="font-medium">Ciudad:</span> {user.patient.city}</p>
                             <Button
                                 variant="primary"
-                                className='p-4'
+                                className='p-4 mt-2'
                                 onClick={() => {
                                     if (patient?.clinical_history === null) {
                                         navigate(`/create-clinical-history/${patient.id}`);
@@ -98,7 +99,7 @@ export default function UserCard({ user }) {
                                     }
                                 }}
                             >
-                                {patient?.clinical_history === null? 'Crear historial clínico' : 'Ver historial clínico' }
+                                {patient?.clinical_history === null ? 'Crear historial clínico' : 'Ver historial clínico' }
                             </Button>
                         </div>
                     )}
@@ -109,6 +110,13 @@ export default function UserCard({ user }) {
                             <p><span className="font-medium">Especialidad:</span> {specialityName}</p>
                             <p><span className="font-medium">Licencia:</span> {user.doctor.licenseNumber}</p>
                             <p><span className="font-medium">Tarifa de consulta:</span> ${user.doctor.consultationFee}</p>
+                            <Button
+                                variant="primary"
+                                className='p-4'
+                                onClick={() => navigate(`/schedule/${user.doctor.id}`)}
+                            >
+                                Ver horario
+                            </Button>
                         </div>
                     )}
                 </div>

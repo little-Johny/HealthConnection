@@ -14,8 +14,8 @@ export default function CreateClinicalHistory() {
 
     useEffect(() => {
         if (!patientId) {
-        toast.error('No se encontró el paciente.');
-        navigate('/dashboard');
+            toast.error('No se encontró el paciente.');
+            navigate('/dashboard');
         }
     }, [patientId, navigate]);
 
@@ -72,15 +72,15 @@ export default function CreateClinicalHistory() {
                     <div>
                         <label htmlFor="bloodType" className="block font-medium">Tipo de sangre</label>
                         <Field as="select" name="bloodType" className="w-full border border-gray-300 p-2 rounded">
-                        <option value="">Selecciona un tipo</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
+                            <option value="">Selecciona un tipo</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
                         </Field>
                         <ErrorMessage name="bloodType" component="div" className="text-sm text-red-500" />
                     </div>

@@ -37,21 +37,19 @@ export default function Modal({
                 <p className="text-gray-600 mb-6">{message}</p>
 
                 <div className="flex justify-end space-x-3">
+                <Button
+                    onClick={onClose}
+                    className="px-4 py-2 bg-gray-400 text-gray-800 hover:bg-gray-300"
+                >
+                    {cancelText}
+                </Button>
+                {type === "confirm" && (
                     <Button
-                        onClick={onClose}
-                        variant="secondary"
-                        className="px-4 py-2"
+                        onClick={onConfirm}
+                        className={`px-4 py-2 ${getColor()} hover:opacity-90`}
                     >
-                        {cancelText}
+                        {confirmText}
                     </Button>
-                    {type === "confirm" && (
-                        <Button
-                            onClick={onConfirm}
-                            variant="danger"
-                            className="px-4 py-2"
-                        >
-                            {confirmText}
-                        </Button>
                     )}
                 </div>
             </div>

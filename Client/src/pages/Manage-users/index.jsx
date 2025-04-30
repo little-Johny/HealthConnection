@@ -24,7 +24,7 @@ const UserTable = () => {
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
-
+    
     const closeModal = () => {
         setShowModal(false);
         setSelectedUser(null);
@@ -33,6 +33,11 @@ const UserTable = () => {
     const getApiUsers = async (query = {}) => {
         setTableLoading(true);
         setError(null);
+    
+        // Filtrar usuarios por rol si es doctor
+        if (rol === 'doctor') {
+            query.role = 'patient';  // Solo mostrar pacientes
+        }
     
         // Calcular el offset en función de la página actual
         const offset = (page - 1) * limit;
@@ -64,6 +69,7 @@ const UserTable = () => {
             setTableLoading(false);
         }
     };
+    
     
     
 
@@ -139,23 +145,25 @@ const UserTable = () => {
             <div className="container mx-auto px-4 pt-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     {/* Filtro por rol */}
-                    <div className="flex items-center gap-2">
-                        <label htmlFor="roleFilter" className="text-sm font-medium">
-                            Filtrar por rol:
-                        </label>
-                        <select
-                            id="roleFilter"
-                            value={selectedRole}
-                            onChange={handleRoleChange}
-                            className="p-2 border rounded shadow-sm"
-                        >
-                            <option value="">Todos</option>
-                            <option value="admin">Admin</option>
-                            <option value="doctor">Doctor</option>
-                            <option value="patient">Paciente</option>
-                            <option value="staff">Staff</option>
-                        </select>
-                    </div>
+                    {isAdmin && 
+                        (<div className="flex items-center gap-2">
+                            <label htmlFor="roleFilter" className="text-sm font-medium">
+                                Filtrar por rol:
+                            </label>
+                            <select
+                                id="roleFilter"
+                                value={selectedRole}
+                                onChange={handleRoleChange}
+                                className="p-2 border rounded shadow-sm"
+                            >
+                                <option value="">Todos</option>
+                                <option value="admin">Admin</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="patient">Paciente</option>
+                                <option value="staff">Staff</option>
+                            </select>
+                        </div>)
+                    }
 
                     {/* Barra de búsqueda */}
                     <div className="flex-grow sm:max-w-md">
@@ -259,6 +267,7 @@ const UserTable = () => {
                                                 Ver
                                             </button>
 
+                                            {isAdmin && (
                                                 <button
                                                     onClick={() => {
                                                         setShowModal(true);
@@ -268,6 +277,7 @@ const UserTable = () => {
                                                 >
                                                     Desactivar
                                                 </button>
+                                            )}
                                             </td>
                                         </tr>
                                     ))

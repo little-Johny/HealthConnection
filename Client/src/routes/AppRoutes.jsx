@@ -8,6 +8,14 @@ import UserTable from './../pages/Manage-users';
 import Profile from './../pages/Profile';
 import CreateClinicalHistory from './../pages/CreateClinicalHistory';
 import ClinicalHistory from './../pages/ClinicalHistory';
+import CreateAppointment from './../pages/CreateAppointment';
+import AppointmentTable from './../pages/Manage-appointments';
+import Appointment from './../pages/Appointment';
+import CreateSchedule from '../pages/CreateSchedule';
+import Schedule from '../pages/Schedule';
+import CreateObservation from '../pages/CreateObservation';
+import CreatePost from '../pages/CreatePost';
+import PostTable from '../pages/Manage-post';
 
 
 const AppRoutes = () => {
@@ -64,6 +72,78 @@ const AppRoutes = () => {
                     <ClinicalHistory/>
                 </ProtectedRoute>
             ),
+        },
+        {
+            path:'/create-appointment',
+            element: (
+                <ProtectedRoute>
+                    <CreateAppointment/>
+                </ProtectedRoute>
+            )
+        },
+        {
+            path: '/manage-appointment',
+            element:(
+                <ProtectedRoute>
+                    <AppointmentTable/>
+                </ProtectedRoute>
+            )
+        },
+        {
+            path: '/appointment/:appointmentId',
+            element: (
+                <ProtectedRoute>
+                    <Appointment/>
+                </ProtectedRoute>
+            )
+        },
+        {
+            path: '/create-schedule',
+            element: (
+                <ProtectedRoute>
+                    <CreateSchedule/>
+                </ProtectedRoute>
+            )
+        },
+        {
+            path: `/schedule`,
+            element: (
+                <ProtectedRoute>
+                    <Schedule/>
+                </ProtectedRoute>
+            )
+        },
+        {
+            path: `/schedule/:doctorId`,
+            element: (
+                <ProtectedRoute>
+                    <Schedule/>
+                </ProtectedRoute>
+            )
+        },
+        {
+            path: '/add-observation/:clinicalHistoryId',
+            element: (
+                <ProtectedRoute>
+                    <CreateObservation/>
+                </ProtectedRoute>
+            )
+        },
+        {
+            path: '/add-post',
+            element: (
+                <ProtectedRoute>
+                    <CreatePost/>
+                </ProtectedRoute>
+            ),
+        },
+        {
+            path: '/manage-post',
+            element: (
+                <ProtectedRoute>
+                    <PostTable/>
+                </ProtectedRoute>
+            )
         }
         /* ,
         {

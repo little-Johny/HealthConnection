@@ -21,12 +21,16 @@ export default function Register() {
     const [patientId, setPatientId] = useState(null);
     const { token, rol } = useAuth();
     const isAdmin = token && rol === 'admin';
-    const [selectedRole, setSelectedRole] = useState(isAdmin ? '' : 'patient'); // Estado para configurar el formulario con los campos de cada rol
+    const [selectedRole, setSelectedRole] = useState('patient'); // Estado para configurar el formulario con los campos de cada rol
     const navigate = useNavigate();
 
     useEffect(() => {
         console.log('ROL:', rol);
     }, [rol]);
+
+    useEffect(() => {
+        console.log(selectedRole)
+    }, [selectedRole]);
 
     const comunFields = [
         { name: 'photo', type: 'file', initialValue: '', label: 'Foto de perfil' },
@@ -42,13 +46,16 @@ export default function Register() {
             label: 'Tipo de documento',
         },
         { name: 'numberDocument', type: 'text', initialValue: '', label: 'Número de documento' },
-        { 
-            name: 'gender', 
-            type: 'select', 
-            options: ['Male', 'Female'],
-            initialValue: '', 
-            label: 'Género' 
-        },
+        {
+            name: 'gender',
+            type: 'select',
+            options: [
+                { label: 'Masculino', value: 'Male' },
+                { label: 'Femenino', value: 'Female' },
+            ],
+            initialValue: '',
+            label: 'Género',
+        },        
         { name: 'email', type: 'email', initialValue: '', label: 'Correo electrónico' },
         { name: 'phone', type: 'text', initialValue: '', label: 'Teléfono' },
     ];
@@ -84,16 +91,24 @@ export default function Register() {
             return acc;
         }, {});
 
-    const getApiSpecialities = async () => {
-        try {
-            const response = await getSpecialities();
-            const specialities = response.data.data;
-            setSpecialities(specialities);
-        } catch (error) {
-            console.log('error al obtener especialidades: ', error);
-            toast.error('No se pudieron cargar las especialidades');
-        }
-    };
+        const getApiSpecialities = async () => {
+            try {
+                const response = await getSpecialities();
+                const rawSpecialities = response.data.data;
+        
+                // Transformamos las especialidades para que tengan label y value
+                const formatted = rawSpecialities.map(s => ({
+                    label: s.name,   // o el campo correspondiente al nombre de la especialidad
+                    value: s.id      // o el campo correspondiente al id
+                }));
+        
+                setSpecialities(formatted);
+            } catch (error) {
+                console.log('error al obtener especialidades: ', error);
+                toast.error('No se pudieron cargar las especialidades');
+            }
+        };
+        
 
     // Efecto que hará la petición a la API cuando sea necesario
     useEffect(() => {
@@ -150,6 +165,8 @@ export default function Register() {
                 values.role ='patient'
             }
 
+            console.log('Datos a enviar:', values);
+
             if (selectedRole === 'doctor') {
                 await createDoctor(values);
             } else if (selectedRole === 'patient') {
@@ -161,6 +178,7 @@ export default function Register() {
                 await createUser(values);
             }
             toast.success('Usuario creado exitosamente');
+            navigate('/dashboard')
         } catch (error) {
             console.log(`No se pudo crear el ${selectedRole}`, error);
             const { response } = error;
@@ -183,6 +201,7 @@ export default function Register() {
 
     const handleRoleChange = (e) => {
         const role = e.target.value;
+        console.log(role);
         setSelectedRole(role);
     };
 
@@ -225,6 +244,7 @@ export default function Register() {
                 )}
 
                 <Formik
+                    enableReinitialize
                     initialValues={generateInitialValues(selectedFields)}
                     validationSchema={generateValidationSchema(selectedFields)}
                     onSubmit={handleSubmit}
@@ -291,14 +311,15 @@ export default function Register() {
                                 <option value="">Selecciona alguna opción</option>
                                 {options?.map((opt) => (
                                     <option
-                                    key={typeof opt === 'string' ? opt : opt.id}
-                                    value={typeof opt === 'string' ? opt : opt.id}
+                                        key={typeof opt === 'string' ? opt : opt.value}
+                                        value={typeof opt === 'string' ? opt : opt.value}
                                     >
-                                    {typeof opt === 'string'
-                                        ? opt
-                                        : opt.name || opt.nombre}
+                                        {typeof opt === 'string'
+                                            ? opt
+                                            : opt.label}
                                     </option>
                                 ))}
+
                                 </Field>
                             ) : name === 'password' ? (
                                 <div className="relative">
