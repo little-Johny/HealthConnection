@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { Patient } = require('../db/models/patient.model');
 
 const id = Joi.number().integer().positive();
 const patientId = Joi.number().integer().positive();
@@ -51,9 +52,11 @@ const getAppointmentSchema = Joi.object({
 const getQueryAppointmentSchema = Joi.object({
     patient: Joi.string().optional(),
     doctor: Joi.string().optional(),
+    patientId: patientId.optional(),
+    doctorId: doctorId.optional(),
     speciality: Joi.string().optional(),
     numberDocument: Joi.string().pattern(/^\d{5,20}$/).optional(),
-    date: date.optional(),
+    date: Joi.date().iso().optional(),
     startDate: startDate.optional(),
     endDate: endDate.optional(),
     status: status.optional(),

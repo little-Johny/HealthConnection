@@ -1,0 +1,353 @@
+openapi: 3.0.0
+info:
+  title: API Health Connection
+  version: 1.0.0
+  description: API REST para gestión clínica
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Servidor local
+
+tags:
+  - name: users
+    description: Operaciones sobre usuarios
+  - name: doctors
+    description: Operaciones sobre doctores
+  - name: patients
+    description: Operaciones sobre pacientes
+  - name: appointments
+    description: Gestión de citas médicas
+
+paths:
+  /users:
+    post:
+      tags: [users]
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                apellidos:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Usuario creado
+
+    get:
+      tags: [users]
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+
+  /users/{id}:
+    get:
+      tags: [users]
+      summary: Obtener un usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario encontrado
+
+    put:
+      tags: [users]
+      summary: Actualizar un usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                apellidos:
+                  type: string
+      responses:
+        '200':
+          description: Usuario actualizado
+
+    delete:
+      tags: [users]
+      summary: Eliminar un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Usuario eliminado
+
+  /doctors:
+    post:
+      tags: [doctors]
+      summary: Crear un nuevo doctor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                apellidos:
+                  type: string
+                especialidadId:
+                  type: integer
+                email:
+                  type: string
+                telefono:
+                  type: string
+      responses:
+        '201':
+          description: Doctor creado
+
+    get:
+      tags: [doctors]
+      summary: Obtener todos los doctores
+      responses:
+        '200':
+          description: Lista de doctores
+
+  /doctors/{id}:
+    get:
+      tags: [doctors]
+      summary: Obtener doctor por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Doctor encontrado
+
+    put:
+      tags: [doctors]
+      summary: Actualizar un doctor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                apellidos:
+                  type: string
+      responses:
+        '200':
+          description: Doctor actualizado
+
+    delete:
+      tags: [doctors]
+      summary: Eliminar un doctor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Doctor eliminado
+
+  /patients:
+    post:
+      tags: [patients]
+      summary: Registrar un paciente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombres:
+                  type: string
+                apellidos:
+                  type: string
+                fechaNacimiento:
+                  type: string
+                  format: date
+                genero:
+                  type: string
+                direccion:
+                  type: string
+                telefono:
+                  type: string
+      responses:
+        '201':
+          description: Paciente creado
+
+    get:
+      tags: [patients]
+      summary: Listar pacientes
+      responses:
+        '200':
+          description: Lista de pacientes
+
+  /patients/{id}:
+    get:
+      tags: [patients]
+      summary: Obtener paciente por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos del paciente
+
+    put:
+      tags: [patients]
+      summary: Editar datos del paciente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                direccion:
+                  type: string
+                telefono:
+                  type: string
+      responses:
+        '200':
+          description: Paciente actualizado
+
+    delete:
+      tags: [patients]
+      summary: Eliminar paciente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Paciente eliminado
+
+  /appointments:
+    post:
+      tags: [appointments]
+      summary: Agendar cita médica
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pacienteId:
+                  type: integer
+                doctorId:
+                  type: integer
+                fecha:
+                  type: string
+                  format: date
+                hora:
+                  type: string
+      responses:
+        '201':
+          description: Cita creada
+
+    get:
+      tags: [appointments]
+      summary: Listar todas las citas
+      responses:
+        '200':
+          description: Lista de citas
+
+  /appointments/{id}:
+    get:
+      tags: [appointments]
+      summary: Ver cita por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos de la cita
+
+    put:
+      tags: [appointments]
+      summary: Actualizar cita médica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fecha:
+                  type: string
+                  format: date
+                hora:
+                  type: string
+      responses:
+        '200':
+          description: Cita actualizada
+
+    delete:
+      tags: [appointments]
+      summary: Cancelar cita
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Cita eliminada

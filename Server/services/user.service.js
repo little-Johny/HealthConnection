@@ -58,6 +58,7 @@ class UserService {
         }
     
         // Filtros específicos de Patient
+        let alreadyAddedPatient = false;
         if (address || city || birthdate) {
             const patientFilter = {};
             if (address) patientFilter.address = { [Op.iLike]: `%${address}%` };
@@ -69,11 +70,13 @@ class UserService {
                 as: 'patient',
                 where: patientFilter,
                 required: true,
-                attributes: [],
+                attributes: true,
             });
+            alreadyAddedPatient = true;
         }
     
         // Filtros específicos de Doctor
+        let alreadyAddedDoctor = false;
         if (speciality || licenseNumber || consultationFee) {
             const doctorFilter = {};
             if (licenseNumber) doctorFilter.licenseNumber = licenseNumber;
@@ -93,7 +96,27 @@ class UserService {
                 as: 'doctor',
                 where: doctorFilter,
                 required: true,
-                attributes: [],
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+            });
+            alreadyAddedDoctor = true;
+        }
+    
+        // Incluir siempre ambas relaciones si no se incluyeron antes
+        if (!alreadyAddedPatient) {
+            options.include.push({
+                model: models.Patient,
+                as: 'patient',
+                required: false,
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+            });
+        }
+    
+        if (!alreadyAddedDoctor) {
+            options.include.push({
+                model: models.Doctor,
+                as: 'doctor',
+                required: false,
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
             });
         }
     
@@ -103,7 +126,8 @@ class UserService {
                 { name: { [Op.iLike]: `%${search}%` } },
                 { lastName: { [Op.iLike]: `%${search}%` } },
                 { email: { [Op.iLike]: `%${search}%` } },
-                { username: { [Op.iLike]: `%${search}%` } }
+                { username: { [Op.iLike]: `%${search}%` } },
+                { numberDocument: { [Op.iLike]: `%${search}%`}}
             ];
             filterMessages.push(`que coincidan con: ${search}`);
         }
@@ -127,21 +151,21 @@ class UserService {
         // Obtener los usuarios con los filtros aplicados
         const { rows, count } = await models.User.findAndCountAll(options);
     
-        // Si no se encuentran usuarios
         if (count === 0) {
             throw boom.notFound(`No se encuentra ningún usuario ${filterMessages.join(', ')}`);
         }
     
         return {
-            data: rows,         // Usuarios encontrados
+            data: rows,
             meta: {
-                totalCount: count,  // Total de usuarios que cumplen con los filtros
-                totalPages: Math.ceil(count / (limit || 10)), // Páginas totales
-                currentPage: Math.ceil((offset || 0) / (limit || 10)) + 1, // Página actual
-                perPage: limit || 10  // Elementos por página
+                totalCount: count,
+                totalPages: Math.ceil(count / (limit || 10)),
+                currentPage: Math.ceil((offset || 0) / (limit || 10)) + 1,
+                perPage: limit || 10
             }
         };
     }
+    
     
     
     async findOne(id) {

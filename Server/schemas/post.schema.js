@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const id = Joi.number().integer().positive();
+const id = Joi.number();
 const userId = Joi.number().integer().positive().required();
 const title = Joi.string().min(5).max(100).required();
 const content = Joi.string().min(10).optional().allow(null, '');

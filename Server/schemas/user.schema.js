@@ -85,7 +85,7 @@ const getQueryUserSchema = Joi.object({
     city: Joi.string().max(50),
     licenseNumber: Joi.string().alphanum().max(20),
     consultationFee: Joi.number().precision(2).positive(),
-    specialityId: Joi.number().integer().positive(),
+    speciality: Joi.string(),
     search: Joi.string(),
     limit: limit.optional(),
     offset: offset.optional(),

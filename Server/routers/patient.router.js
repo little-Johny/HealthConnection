@@ -47,7 +47,7 @@ router.post(
 router.get(
     '/:id',
     passport.authenticate('jwt', { session: false}),
-    checkRole(['doctor', 'staff', 'admin']),
+    /* checkRole(['doctor', 'staff', 'admin']), */
     validatorHandler(getPatientSchema, 'params'),
     async (req, res, next) => {
         try {

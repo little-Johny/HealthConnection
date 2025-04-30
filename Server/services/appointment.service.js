@@ -61,60 +61,116 @@ class AppointmentService {
     
     async find(query) {
         const options = {
-            where: {}
-        };
-
-        const filterableFields = ['numberDocument', 'date', 'startTime', 'endTime', 'status']; 
-        const { limit, offset, patient, doctor, speciality, ...filters} = query;
-        let filterMessages = [];
-
-        if(limit) {
-            options.limit = parseInt(limit) || 10;
-        };
-
-        if (offset) {
-            options.offset = parseInt(offset) || 0;
-        };
-
-        if (patient) {
-            const patient = await models.User.findOne({
-                where: { name: patient, role: 'patient' },
-            });
-            options.where.patientId = patient.id;
+            where: {},
+            include: [],
+            limit: parseInt(query.limit)  || 10,
+            offset: parseInt(query.offset) || 0,
         };
         
+        const { patient, doctor, speciality, ...filters } = query;
+        const filterableFields = ['date','startTime','endTime','status', 'patientId', 'doctorId'];
+        let filterMessages = [];
+    
+        // 1) filtro por nombre de paciente
+        if (patient) {
+            const foundPatient = await models.Patient.findOne({
+                include: [{
+                model: models.User,
+                as: 'user',
+                where: { name: patient }
+                }]
+            });
+            if (foundPatient) {
+                options.where.patientId = foundPatient.id;
+                filterMessages.push(`del paciente ${patient}`);
+            }
+        }
+    
+        // 2) filtro por nombre de doctor
         if (doctor) {
-            const doctor = await models.User.findOne({
-                where: { name: doctor, role: 'doctor' },
+            const foundDoctor = await models.Doctor.findOne({
+                include: [{
+                model: models.User,
+                as: 'user',
+                where: { name: doctor }
+                }]
             });
-            options.where.doctorId = doctor.id;
-        };
-
+            if (foundDoctor) {
+                options.where.doctorId = foundDoctor.id;
+                filterMessages.push(`del doctor ${doctor}`);
+            }
+        }
+    
+        // 3) filtro por especialidad
         if (speciality) {
-            const speciality = await models.speciality.findOne({
-                where: { name: speciality },
-            });
-            options.where.specialityId = speciality.id;
-        };
-
+            const foundSpec = await models.Speciality.findOne({ where: { name: speciality } });
+            if (foundSpec) {
+                options.where.specialityId = foundSpec.id;
+                filterMessages.push(`de la especialidad ${speciality}`);
+            }
+        }
+    
+        // 4) resto de filtros directos sobre Appointment
         for (const field of filterableFields) {
             if (filters[field]) {
                 options.where[field] = filters[field];
-                filterMessages.push(`con ${field}: ${filters[field]}`);
-            };
-        };
-
-        const appointments = await models.Appointment.findAll(options);
-            
-        if (appointments.length === 0) {
-            throw boom.notFound(`No se encuentra ningúna cita ${filterMessages.join(', ')}`);
+                filterMessages.push(`${field}: ${filters[field]}`);
+            }
         }
     
-        return appointments;
-    };
+        // 5) siempre incluyo paciente y doctor con su nombre
+        options.include.push(
+            {
+                model: models.Patient,
+                as: 'patient',
+                include: [{ model: models.User, as: 'user', attributes: ['name','lastName'] }]
+            },
+            {
+                model: models.Doctor,
+                as: 'doctor',
+                include: [{ model: models.User, as: 'user', attributes: ['name','lastName'] }]
+            }
+        );
+    
+        // 6) obtengo filas y conteo total para paginación
+        const [appointments, total] = await Promise.all([
+            models.Appointment.findAll(options),
+            models.Appointment.count({ where: options.where })
+        ]);
+    
+        if (appointments.length === 0) {
+            throw boom.notFound(`No se encontró ninguna cita ${filterMessages.join(', ')}`);
+        }
+        
+        return {
+            appointments,
+            meta: {
+                total,
+                limit: options.limit,
+                offset: options.offset,
+                pages: Math.ceil(total / options.limit)
+            }
+        };
+    }
+    
+
+    
 
     async findOne(id) {
-        const appointment = await models.Appointment.findByPk(id);
+        const appointment = await models.Appointment.findByPk(id, {
+            include: [
+                {
+                    model: models.Patient,
+                    as: 'patient',
+                    include: [{ model: models.User, as: 'user', attributes: ['name','lastName'] }]
+                },
+                {
+                    model: models.Doctor,
+                    as: 'doctor',
+                    include: [{ model: models.User, as: 'user', attributes: ['name','lastName'] }]
+                }
+            ]
+        });
         if (!appointment) {
             throw boom.notFound(`No se encontro ninguna cita con ID ${id}`);
         };

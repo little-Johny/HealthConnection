@@ -15,6 +15,6 @@ module.exports = {
   },
 
   async down (queryInterface) {
-    await queryInterface.addColumn(USER_TABLE, 'recovery_token');
+    await queryInterface.removeColumn(USER_TABLE, 'recovery_token');
   }
 };

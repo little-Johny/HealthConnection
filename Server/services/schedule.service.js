@@ -208,7 +208,7 @@ class ScheduleService {
         }
     
         return availableSlots;
-    }
+    };
     
 };
 

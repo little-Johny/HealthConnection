@@ -48,8 +48,8 @@ router.post(
     '/block',
     passport.authenticate('jwt', { session: false }),
     checkRole(['doctor', 'admin']),
-    validatorHandler(createDoctorBlockSchema, 'body'),
     resolveUserRole,
+    validatorHandler(createDoctorBlockSchema, 'body'),
     async (req, res, next) => {
         try {
             const body = {...req.body};
@@ -82,8 +82,8 @@ router.post(
 router.get(
     '/doc/:doctorId',
     passport.authenticate('jwt', { session: false }),
-    validatorHandler(getScheduleByDoctorIdSchema, 'params'),
     resolveUserRole,
+    validatorHandler(getScheduleByDoctorIdSchema, 'params'),
     async (req, res, next) => {
         try {
             const { doctorId } = req.params;
@@ -135,7 +135,7 @@ router.get(
     async (req, res, next) => {
         try {
             const { doctorId } = req.params;
-            const { date, status } = req.body;
+            const { date, status } = req.query;
             const { role, doctorId: userDoctorId } = req.user;
             if (role === 'doctor') {
                 req.params.doctorId = userDoctorId

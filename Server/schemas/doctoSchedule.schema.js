@@ -1,15 +1,15 @@
 const Joi = require('joi');
 
-const id = Joi.number().integer().positive();
-const doctorId = Joi.number().integer().positive().required();
+const id = Joi.number();
+const doctorId = Joi.number().required();
 const dayOfWeek = Joi.string().valid('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday').required();
 const startTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/).messages({
-    'string.pattern.base': 'El formato de la hora de inicio debe ser HH:mm (24h).',
+    'string.pattern.base': 'El formato de la hora de inicio debe ser HH:mm:ss (24h).',
 });
-const endTime = Joi.string()
-    .pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
+
+const endTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
     .messages({
-        'string.pattern.base': 'El formato de la hora de finalización debe ser HH:mm (24h).',
+        'string.pattern.base': 'El formato de la hora de finalización debe ser HH:mm:ss (24h).',
     })
     .custom((value, helpers) => {
     const start = helpers.state.ancestors[0].startTime;

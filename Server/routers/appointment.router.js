@@ -50,7 +50,6 @@ router.post(
 router.get(
     '/',
     passport.authenticate('jwt', { session: false }),
-    checkRole(['doctor', 'admin', 'staff']),
     validatorHandler(getQueryAppointmentSchema, 'query'),
     async (req, res, next) => {
         try {

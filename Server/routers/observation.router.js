@@ -13,8 +13,8 @@ router.post(
     '/',
     passport.authenticate('jwt', { session: false }),
     checkRole(['doctor', 'admin']),
-    validatorHandler(createObservationSchema, 'body'),
     resolveUserRole,
+    validatorHandler(createObservationSchema, 'body'),
     async (req, res, next) => {
         try {
             const body = {...req.body};
@@ -59,7 +59,7 @@ router.get(
 // Obtener observacion por su id
 router.get(
     '/:id',
-    passport.authenticate('jwt', { sesison: false }),
+    passport.authenticate('jwt', { session: false }),
     validatorHandler(getObservationSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -80,7 +80,7 @@ router.get(
 // Actualizar parcialmente una observacion
 router.patch(
     '/:id',
-    passport.authenticate('jwt', { sesison: false }),
+    passport.authenticate('jwt', { session: false }),
     checkRole(['doctor', 'admin']),
     validatorHandler(getObservationSchema, 'params'),
     validatorHandler(updateObservationSchema, 'body'),
@@ -111,7 +111,7 @@ router.patch(
 // Eliminar una observacion
 router.delete(
     '/:id',
-    passport.authenticate('jwt', { sesison: false }),
+    passport.authenticate('jwt', { session: false }),
     checkRole(['doctor', 'admin']),
     validatorHandler(getObservationSchema, 'params'),
     async (req, res, next) => {

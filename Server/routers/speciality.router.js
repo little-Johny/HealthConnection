@@ -54,7 +54,6 @@ router.get(
 router.get(
     '/:id',
     passport.authenticate('jwt', { session: false }),
-    checkRole(['admin', 'staff']),
     validatorHandler(getSpecialitySchema, 'params'),
     async (req, res, next) => {
         try {
