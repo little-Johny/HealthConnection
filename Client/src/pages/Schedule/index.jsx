@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainLayout from '../../components/Layout';
 import Button from '../../components/Button';
 import { useAuth } from '../../hooks/useAuth';
