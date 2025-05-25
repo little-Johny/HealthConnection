@@ -2,6 +2,7 @@ const express = require('express');
 require('express-async-errors'); // Se cargará globalmente si se usa en rutas
 const cors = require('cors');
 const path = require('path');
+require('dotenv').config();
 const sequelize = require('./libs/sequelize');
 const {
     logError, 
@@ -12,7 +13,7 @@ const routerApi = require('./routers');
 const passport = require('passport');
 
 const app = express();
-const port = 3001;
+const port = 3000 || process.env.PORT ;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Procesa form-data
