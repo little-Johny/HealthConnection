@@ -1,9 +1,9 @@
 jest.mock('./../../libs/sequelize');
 const { models, Op } = require('./../../libs/sequelize');
 
-
 const { generateOneSpeciality, generateManySpecialities } = require('./../fakes/specialities.fake');
 const SpecialityService = require('./../../services/speciality.service');
+const { where } = require('sequelize');
 
 describe('Testing for Speciality service', () => {
     let service;
@@ -46,6 +46,97 @@ describe('Testing for Speciality service', () => {
                     where: expect.objectContaining({
                         name: { [Op.iLike]: '%Cardiology%' }
                     })
+                })
+            );
+        });
+
+        test('should ignore empty name filter', async () => { 
+            //Arrange
+            const data = generateManySpecialities();
+            models.Speciality.findAll.mockResolvedValue(data);
+
+            //Act
+            const  result = await service.find({name: ' '});
+            console.log(result);
+            
+            //Assert
+            expect(result).toEqual(data);
+        });
+
+        test('should safely handle possible SQL injection in name filter', async () => { 
+            //Arrange
+            const fakeResult = [];
+            const maliciousInput ="'; DROP TABLE users; --";
+            models.Speciality.findAll.mockResolvedValue(fakeResult);
+
+            //Act & Assert
+            await expect(service.find({ name: maliciousInput })).rejects.toThrow(
+                /No se encontro ninguna especialidad/
+            );
+            expect(models.Speciality.findAll).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    where: expect.objectContaining({
+                        name: { [Op.iLike]: `%${maliciousInput}%` }
+                    })
+                })
+            );
+        });
+
+        test('should filter by createdAt reange', async () => { 
+            //Arrange
+            const data = generateManySpecialities();
+            models.Speciality.findAll.mockResolvedValue(data);
+
+            const startDate = '2023-01-01';
+            const endDate = '2023-12-31';
+
+            //Act
+            const result = await service.find({ startDate, endDate });
+            console.log(result);
+            
+            //Assert
+            expect(result).toEqual(data);
+            expect(models.Speciality.findAll).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    where: expect.objectContaining({
+                        createdAt: { [Op.between]: [new Date(startDate), new Date(endDate)] }
+                    })
+                })
+            );
+        });
+
+        test('shoul convert numeric name to string safely', async () => {
+            //Arrange
+            const input = 123;
+            const expected = [{ id:1, name:'123' }];
+            models.Speciality.findAll.mockResolvedValue(expected);
+            //Act
+            const result = await service.find({ name: input });
+            console.log(result);
+            //Assert
+            expect(result).toEqual(expected);
+            expect(models.Speciality.findAll).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    where: expect.objectContaining({
+                        name: {[Op.iLike]: `%123%`},
+                    })
+                })
+            );
+        });
+
+        test('should limit with limit and offset', async () => { 
+            //Arrange
+                const data = generateManySpecialities(20);
+                models.Speciality.findAll.mockResolvedValue(data);
+            //Act
+                const result = await service.find({ limit : 10, offset : 0 });
+            //Assert
+            expect(result).toEqual(data);
+            expect(models.Speciality.findAll).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    where: {},
+                    limit: 10,
+                    offset: 0
                 })
             );
         });
