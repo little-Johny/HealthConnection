@@ -21,7 +21,7 @@ class SpecialityService {
             options.limit = parseInt(limit) || 10;
         };
 
-        if (offset) {
+        if (offset != null) {
             options.offset = parseInt(offset) || 0;
         };
 
