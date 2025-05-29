@@ -225,12 +225,10 @@ export default function AppointmentTable() {
                     <tr key={appt.id} className="hover:bg-gray-100 transition">
                         <td className="px-4 py-2">{appt.id}</td>
                         <td className="px-4 py-2">
-                        {appt.patient.user.name} {appt.patient.user.lastName}
+                            {appt.patient.user?.name ?? 'Paciente'} {appt.patient.user?.lastName ?? 'Eliminado'}
                         </td>
                         <td className="px-4 py-2">
-                        {console.log("Doctor:", appt.doctor)}
-                        {console.log("User:", appt.doctor?.user)}
-                        {appt.doctor?.user?.name} {appt.doctor?.user?.lastName}
+                            {appt.doctor?.user?.name ?? 'Doctor'} {appt.doctor?.user?.lastName ?? 'Eliminado'}
                         </td>
                         <td className="px-4 py-2">{appt.date}</td>
                         <td className="px-4 py-2 capitalize">
