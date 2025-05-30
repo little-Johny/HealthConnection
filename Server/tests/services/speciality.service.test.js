@@ -96,6 +96,19 @@ describe('Testing for Speciality service', () => {
                     }),
                 );
             });
+
+            test('should trhow notFound error if not found any speciality', async () => {
+                // Arrange
+                models.Speciality.findAll.mockResolvedValue([]);
+                // Act
+                const result = service.find({
+                    name: 'pediatría',
+                    startDate: '2024-01-01',
+                    endDate: '2024-12-31',
+                });
+                // Assert
+                await expect(result).rejects.toThrow('No se encontro ninguna especialidad con el nombre: pediatría, creada entre 2024-01-01 y 2024-12-31');
+            });
         });
 
         describe('Filter date', () => {
@@ -120,19 +133,19 @@ describe('Testing for Speciality service', () => {
         });
 
         describe('Pagination', () => {
-            test('should limit with limit and offset', async () => {
+            test('should limit with limit', async () => {
                 // Arrange
+                const limit = '10';
                 const data = generateManySpecialities(20);
                 models.Speciality.findAll.mockResolvedValue(data);
                 // Act
-                const result = await service.find({ limit: 10, offset: 0 });
+                const result = await service.find({ limit });
                 // Assert
                 expect(result).toEqual(data);
                 expect(models.Speciality.findAll).toHaveBeenCalledWith(
                     expect.objectContaining({
                         where: {},
                         limit: 10,
-                        offset: 0,
                     }),
                 );
             });
@@ -145,6 +158,22 @@ describe('Testing for Speciality service', () => {
                 const result = await service.find({ limit: 10, offset: 0 });
                 // Assert
                 expect(result.length).toBe(10);
+            });
+
+            test('should apply offset if provided', async () => {
+                // Arrange
+                const offset = '5';
+                const data = generateManySpecialities(2);
+                models.Speciality.findAll.mockResolvedValue(data);
+                // Act
+                const result = await service.find({ offset });
+                // Assert
+                expect(models.Speciality.findAll).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        offset: 5,
+                    }),
+                );
+                expect(result).toEqual(data);
             });
         });
 
@@ -254,6 +283,64 @@ describe('Testing for Speciality service', () => {
             expect(service.findOne).toHaveBeenCalledWith(id);
             expect(oldSpeciality.update).toHaveBeenCalledWith(changes);
             expect(result).toEqual(updatedSpeciality);
+        });
+
+        test('should throw notFound error if speciality does not exist', async () => {
+            // Arrange
+            const id = 99;
+            const changes = { name: 'Nueva' };
+            jest.spyOn(service, 'findOne').mockRejectedValue(new Error(`No se encuentra ninguna especialidad con ID ${id}`));
+            // Act & Assert
+            await expect(service.update(id, changes)).rejects.toThrow(`No se encuentra ninguna especialidad con ID ${id}`);
+        });
+
+        test('should first', async () => {
+            // Arrange
+            const id = 1;
+            const error = new Error();
+            const changes = { name: 'Failed' };
+            const speciality = { id, name: 'Cardiologia', update: jest.fn() };
+            jest.spyOn(service, 'findOne').mockResolvedValue(speciality);
+            speciality.update.mockRejectedValue(error);
+
+            // Act & Assert
+            await expect(service.update(id, changes)).rejects.toThrow(error);
+        });
+    });
+
+    describe('Testing DELETE specialities', () => {
+        test('should delete a speciality successfully', async () => {
+            // Arrange
+            const id = 1;
+            const mockSpeciality = { destroy: jest.fn() };
+            // Espiamos el método findOne y lo hacemos retornar una entidad falsa
+            jest.spyOn(service, 'findOne').mockResolvedValue(mockSpeciality);
+            // Act
+            const result = await service.delete(id);
+            // Assert
+            expect(service.findOne).toHaveBeenCalledWith(id);
+            expect(mockSpeciality.destroy).toHaveBeenCalled();
+            expect(result).toEqual({ id });
+        });
+
+        test('should throw if speciality is not found', async () => {
+            // Arrange
+            const id = 999;
+            // Simulamos que findOne lanza un error
+            jest.spyOn(service, 'findOne').mockRejectedValue(new Error(`No se encuentra ninguna especialidad con ID ${id}`));
+            // Act & Assert
+            await expect(service.delete(id)).rejects.toThrow(`No se encuentra ninguna especialidad con ID ${id}`);
+        });
+
+        test('should throw if delete operation fails in DB', async () => {
+            // Arrange
+            const id = 1;
+            const mockSpeciality = {
+                destroy: jest.fn().mockRejectedValue(new Error('DB error')),
+            };
+            jest.spyOn(service, 'findOne').mockResolvedValue(mockSpeciality);
+            // Act & Assert
+            await expect(service.delete(id)).rejects.toThrow('DB error');
         });
     });
 });

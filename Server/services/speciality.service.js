@@ -67,8 +67,8 @@ class SpecialityService {
 
     async delete(id) {
         const speciality = await this.findOne(id);
-        const deletedSpeciality = await speciality.destroy();
-        return deletedSpeciality;
+        await speciality.destroy();
+        return { id };
     }
 }
 
