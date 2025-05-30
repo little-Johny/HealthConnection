@@ -1,20 +1,18 @@
 const boom = require('@hapi/boom');
-const { models } = require('./../libs/sequelize');
+const { models } = require('../libs/sequelize');
 
-const checkRole = (roles) => {
-    return (req, res, next) => {
-        const user = req.user;
+const checkRole = (roles) => (req, res, next) => {
+    const { user } = req;
 
-        if (!user || !user.role) {
-            return next(boom.unauthorized('No se encuentra el rol del usuario'));
-        };
+    if (!user || !user.role) {
+        return next(boom.unauthorized('No se encuentra el rol del usuario'));
+    }
 
-        if (!roles.includes(user.role)) {
-            return next(boom.unauthorized(`Acceso denegado para ${user.role}`));
-        };
+    if (!roles.includes(user.role)) {
+        return next(boom.unauthorized(`Acceso denegado para ${user.role}`));
+    }
 
-        next();
-    };
+    next();
 };
 
 const resolveUserRole = async (req, res, next) => {
@@ -36,6 +34,5 @@ const resolveUserRole = async (req, res, next) => {
         next(error);
     }
 };
-
 
 module.exports = { checkRole, resolveUserRole };

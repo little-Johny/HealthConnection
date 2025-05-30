@@ -6,7 +6,6 @@ const title = Joi.string().min(5).max(100).required();
 const content = Joi.string().min(10).optional().allow(null, '');
 const image = Joi.string().uri().optional().allow(null, '');
 
-
 const createPostSchema = Joi.object({
     userId,
     title,

@@ -2,10 +2,11 @@ const boom = require('@hapi/boom');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const { models } = require('./../libs/sequelize');
-const config = require('./../config/config');
-const UserService = require('./user.service');
 const { Op } = require('sequelize');
+const { models } = require('../libs/sequelize');
+const config = require('../config/config');
+const UserService = require('./user.service');
+
 const userService = new UserService();
 
 class AuthService {
@@ -13,28 +14,28 @@ class AuthService {
         const user = await userService.findByUsername(username);
         if (!user) {
             throw boom.unauthorized();
-        };
+        }
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             throw boom.unauthorized();
-        };
+        }
         delete user.dataValues.password;
         return user;
-    };
+    }
 
     signToken(user) {
         const payload = {
             sub: user.id,
             role: user.role,
         };
-    
-        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '15m'});
-    
+
+        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '15m' });
+
         return {
             user,
             token,
         };
-    };
+    }
 
     async sendMail(bodyMail) {
         const transporter = nodemailer.createTransport({
@@ -50,18 +51,18 @@ class AuthService {
         await transporter.sendMail(bodyMail);
 
         return {
-            message: `Mail sent Correct.`
-        }
-    };
+            message: 'Mail sent Correct.',
+        };
+    }
 
     async sendRecoveryPassword(data) {
-        const { email } = data
+        const { email } = data;
         const user = await models.User.findOne({
             where: { email },
         });
         if (!user) {
-            throw boom.unauthorized();   
-        };
+            throw boom.unauthorized();
+        }
 
         const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
         const requestLast24h = await models.RecoveryLog.count({
@@ -72,38 +73,51 @@ class AuthService {
         });
 
         if (requestLast24h >= 5) {
-            throw boom.tooManyRequests(`Has alcanzado el mimite de 5 solicitudes de recuperacion en las ultimas 24 horas,`);
-        };
+            throw boom.tooManyRequests(
+                'Has alcanzado el mimite de 5 solicitudes de recuperacion en las ultimas 24 horas,',
+            );
+        }
 
         const lastRequest = await models.RecoveryLog.findOne({
             where: { userId: user.id },
             order: [['requested_at', 'DESC']],
         });
 
-        if (lastRequest && (new Date() - new Date(lastRequest.requestedAt)) < 10 * 60 * 1000) {
-            throw boom.tooManyRequests(`Debes esperar 10 minutos antes de solicitar un correo nuevo`);
-        };
-        
+        if (
+            lastRequest
+      && new Date() - new Date(lastRequest.requestedAt) < 10 * 60 * 1000
+        ) {
+            throw boom.tooManyRequests(
+                'Debes esperar 10 minutos antes de solicitar un correo nuevo',
+            );
+        }
+
         const payload = {
             sub: user.id,
         };
-        const token = jwt.sign(payload, config.recoverySecret, { expiresIn: '15m' });
+        const token = jwt.sign(payload, config.recoverySecret, {
+            expiresIn: '15m',
+        });
         const link = `http://myfrontend.com/recovery?token=${token}`;
 
         await user.update({ recoveryToken: token });
         const mail = {
             from: config.mailerUser,
             to: `${user.email}`,
-            subject: `Correo para recuperacion de contraseña`,
-            html: `<b>Entra a este link para lograr recuperar tu contraseña → ${link}</b>` 
+            subject: 'Correo para recuperacion de contraseña',
+            html: `<b>Entra a este link para lograr recuperar tu contraseña → ${link}</b>`,
         };
 
         await this.sendMail(mail);
-        await models.RecoveryLog.create({ userId: user.id, requestedAt: new Date(), ...data});
+        await models.RecoveryLog.create({
+            userId: user.id,
+            requestedAt: new Date(),
+            ...data,
+        });
         return {
-            message: `The recovery mail, has been sent`,
+            message: 'The recovery mail, has been sent',
         };
-    };
+    }
 
     async changePassword(token, newPassword) {
         try {
@@ -120,12 +134,15 @@ class AuthService {
                 message: 'password successfully changed',
             };
         } catch (error) {
-            if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-                throw boom.unauthorized(`Invalid or expired token`);
+            if (
+                error.name === 'JsonWebTokenError'
+        || error.name === 'TokenExpiredError'
+            ) {
+                throw boom.unauthorized('Invalid or expired token');
             }
             throw error;
         }
-    };
-};
+    }
+}
 
 module.exports = AuthService;

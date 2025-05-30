@@ -1,9 +1,9 @@
 const boom = require('@hapi/boom');
 const UserService = require('./user.service');
-const { models } = require('./../libs/sequelize');
-const sequelize = require('./../libs/sequelize');
-const userService = new UserService();
+const { models } = require('../libs/sequelize');
+const sequelize = require('../libs/sequelize');
 
+const userService = new UserService();
 
 class DoctorService {
     async create(data) {
@@ -31,42 +31,41 @@ class DoctorService {
 
             const newUser = await userService.create(userData, { transaction });
 
-            const newDoctor = await models.Doctor.create({ ...doctorData, userId: newUser.id }, { transaction });
+            const newDoctor = await models.Doctor.create(
+                { ...doctorData, userId: newUser.id },
+                { transaction },
+            );
 
             await transaction.commit();
 
             return newDoctor;
-
         } catch (error) {
             await transaction.rollback();
-            throw boom.badImplementation(`Error al crear el paciente`, error);
+            throw boom.badImplementation('Error al crear el paciente', error);
         }
-    };
+    }
 
     async findOne(id) {
-        const doctor = await models.Doctor.findByPk(
-            id,
-            {
-                include: [
-                    {
-                        model: models.User,
-                        as: 'user',
-                        attributes: { exclude: 'password' },
-                    },
-                    {
-                        model: models.DoctorSchedule,
-                        as: 'schedule',
-                    }
-                ],
-            },
-        );
+        const doctor = await models.Doctor.findByPk(id, {
+            include: [
+                {
+                    model: models.User,
+                    as: 'user',
+                    attributes: { exclude: 'password' },
+                },
+                {
+                    model: models.DoctorSchedule,
+                    as: 'schedule',
+                },
+            ],
+        });
 
         if (!doctor) {
             throw boom.notFound(`No se encontro ningun doctor con ID ${id}`);
         }
-        
+
         return doctor;
-    };
-};
+    }
+}
 
 module.exports = DoctorService;

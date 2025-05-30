@@ -1,7 +1,5 @@
-'use strict';
-
-const { USER_TABLE } = require('./../models/user.model');
 const { Sequelize } = require('sequelize');
+const { USER_TABLE } = require('../models/user.model');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -80,6 +78,8 @@ module.exports = {
 
     async down(queryInterface) {
         await queryInterface.dropTable(USER_TABLE);
-        await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_users_role";'); // ✅ Eliminar ENUM manualmente
-    }
+        await queryInterface.sequelize.query(
+            'DROP TYPE IF EXISTS "enum_users_role";',
+        ); // ✅ Eliminar ENUM manualmente
+    },
 };

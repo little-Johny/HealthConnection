@@ -1,21 +1,29 @@
 const express = require('express');
 const passport = require('passport');
-const { checkRole } = require('./../middlewares/authentication.handler');
-const validatorHandler = require('./../middlewares/validation.handler');
-const ResponseHandler = require('./../middlewares/response.handler');
-const { postsUpload, getUploadedFileURL } = require('./../middlewares/files.handler');
-const { createPostSchema, getPostSchema, updatePostSchema } = require('./../schemas/post.schema');
-const PostService = require('./../services/post.service');
+const { checkRole } = require('../middlewares/authentication.handler');
+const validatorHandler = require('../middlewares/validation.handler');
+const ResponseHandler = require('../middlewares/response.handler');
+const {
+    postsUpload,
+    getUploadedFileURL,
+} = require('../middlewares/files.handler');
+const {
+    createPostSchema,
+    getPostSchema,
+    updatePostSchema,
+} = require('../schemas/post.schema');
+const PostService = require('../services/post.service');
+
 const router = express.Router();
 const service = new PostService();
 
 const processPostData = (req) => {
-    let data = { ...req.body };
+    const data = { ...req.body };
     if (req.file) {
-        data.image = getUploadedFileURL('posts', req.file.filename)
-    };
+        data.image = getUploadedFileURL('posts', req.file.filename);
+    }
     return data;
-}
+};
 
 // Crear publicacion
 router.post(
@@ -32,34 +40,30 @@ router.post(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Publicacion creada exitosamente`,
+                message: 'Publicacion creada exitosamente',
                 data: newPost,
                 statusCode: 201,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Obtener publicaciones
-router.get(
-    '/',
-    async (req, res, next) => {
-        try {
-            const posts = await service.find();
-            ResponseHandler.success({
-                res,
-                req,
-                message: `Publicaciones encontradas`,
-                data: posts,
-            });
-        } catch (error) {
-            next(error);
-        }
+router.get('/', async (req, res, next) => {
+    try {
+        const posts = await service.find();
+        ResponseHandler.success({
+            res,
+            req,
+            message: 'Publicaciones encontradas',
+            data: posts,
+        });
+    } catch (error) {
+        next(error);
     }
-);
-
+});
 
 // obtener publicacion por su id
 router.get(
@@ -78,7 +82,7 @@ router.get(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Actualizar parcialmente una publicacion
@@ -109,7 +113,7 @@ router.patch(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Eliminar una publicacion
@@ -123,13 +127,13 @@ router.delete(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Publicacion eliminada exitosamente`,
+                message: 'Publicacion eliminada exitosamente',
                 data: id,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 module.exports = router;

@@ -25,6 +25,6 @@ function routerApi(app) {
     router.use('/observation', observationRouter);
     router.use('/post', postRouter);
     router.use('/auth', authRouter);
-};
+}
 
 module.exports = routerApi;

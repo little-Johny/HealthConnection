@@ -1,21 +1,30 @@
 const express = require('express');
 const passport = require('passport');
 const validatorHandler = require('../middlewares/validation.handler');
-const { userUpload, getUploadedFileURL } = require('./../middlewares/files.handler');
-const ResponseHandler = require('./../middlewares/response.handler');
-const { checkRole } = require('./../middlewares/authentication.handler');
+const {
+    userUpload,
+    getUploadedFileURL,
+} = require('../middlewares/files.handler');
+const ResponseHandler = require('../middlewares/response.handler');
+const { checkRole } = require('../middlewares/authentication.handler');
 const UserService = require('../services/user.service');
-const { createUserSchema, getQueryUserSchema, getUserSchema, updateUserSchema } = require('../schemas/user.schema');
+const {
+    createUserSchema,
+    getQueryUserSchema,
+    getUserSchema,
+    updateUserSchema,
+} = require('../schemas/user.schema');
+
 const router = express.Router();
 const service = new UserService();
 
 // Función para procesar datos del usuario
 const processUserData = (req) => {
-    let data = { ...req.body };
+    const data = { ...req.body };
     if (req.file) {
         data.photo = getUploadedFileURL('users', req.file.filename);
     }
-    console.log({...req.body}, data)
+    console.log({ ...req.body }, data);
     return data;
 };
 
@@ -33,12 +42,12 @@ router.post(
                 req,
                 message: 'Usuario creado exitosamente',
                 data: newUser,
-                statusCode: 201
+                statusCode: 201,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Obtener usuarios con filtros
@@ -48,20 +57,19 @@ router.get(
     validatorHandler(getQueryUserSchema, 'query'),
     async (req, res, next) => {
         try {
-            const { data, meta } = await service.find(req.query);  // Aquí obtenemos ambos
+            const { data, meta } = await service.find(req.query); // Aquí obtenemos ambos
             ResponseHandler.success({
                 res,
                 req,
                 message: 'Usuarios encontrados',
                 data,
-                meta  // Incluimos la información de la paginación
+                meta, // Incluimos la información de la paginación
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
-
 
 // obtener todos los usuarios incluso los eliminados
 router.get(
@@ -74,13 +82,13 @@ router.get(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Usuarios encontrados`,
+                message: 'Usuarios encontrados',
                 data: users,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Obtener el usuario loggeado
@@ -99,7 +107,7 @@ router.get(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Obtener un usuario por ID
@@ -121,9 +129,8 @@ router.get(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
-
 
 // Actualizar parcialmente un usuario
 router.patch(
@@ -149,11 +156,15 @@ router.patch(
                 // Verificar si el campo pertenece a patient o doctor
                 if (originalUser.role === 'patient' && originalUser.patient) {
                     originalValue = originalUser.patient[key] ?? originalValue;
-                    updatedValue = updatedUser.patient ? updatedUser.patient[key] ?? updatedValue : updatedValue;
+                    updatedValue = updatedUser.patient
+                        ? (updatedUser.patient[key] ?? updatedValue)
+                        : updatedValue;
                 }
                 if (originalUser.role === 'doctor' && originalUser.doctor) {
                     originalValue = originalUser.doctor[key] ?? originalValue;
-                    updatedValue = updatedUser.doctor ? updatedUser.doctor[key] ?? updatedValue : updatedValue;
+                    updatedValue = updatedUser.doctor
+                        ? (updatedUser.doctor[key] ?? updatedValue)
+                        : updatedValue;
                 }
 
                 return `${key}: '${originalValue}' → '${updatedValue}'`;
@@ -163,16 +174,13 @@ router.patch(
                 res,
                 req,
                 message: `Usuario actualizado exitosamente. Cambios: ${updatedFields.join(', ')}`,
-                data: updatedUser
+                data: updatedUser,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
-
-
-
 
 // Eliminar usuario por ID
 router.delete(
@@ -188,19 +196,19 @@ router.delete(
                 res,
                 req,
                 message: 'Usuario eliminado exitosamente',
-                data: id 
+                data: id,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Restaurar un usuario
 router.patch(
     '/restore/:id',
     passport.authenticate('jwt', { session: false }),
-    checkRole(['admin']), 
+    checkRole(['admin']),
     validatorHandler(getUserSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -210,12 +218,12 @@ router.patch(
                 res,
                 req,
                 message: 'Usuario restaurado exitosamente',
-                data: restoredUser
+                data: restoredUser,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Eliminacion definitiva de un usuario
@@ -237,8 +245,7 @@ router.delete(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
-
 
 module.exports = router;

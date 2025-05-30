@@ -1,20 +1,27 @@
 const express = require('express');
 const passport = require('passport');
 const validatorHandler = require('../middlewares/validation.handler');
-const { userUpload, getUploadedFileURL } = require('../middlewares/files.handler');
+const {
+    userUpload,
+    getUploadedFileURL,
+} = require('../middlewares/files.handler');
 const ResponseHandler = require('../middlewares/response.handler');
-const { checkRole, resolveUserRole } = require('./../middlewares/authentication.handler');
+const {
+    checkRole,
+    resolveUserRole,
+} = require('../middlewares/authentication.handler');
 const {
     createDoctorSchema,
     getDoctorSchema,
 } = require('../schemas/doctor.schema');
 const DoctorService = require('../services/doctor.service');
+
 const router = express.Router();
 const service = new DoctorService();
 
 // Función para procesar datos del usuario
 const processUserData = (req) => {
-    let data = { ...req.body };
+    const data = { ...req.body };
     if (req.file) {
         data.photo = getUploadedFileURL('users', req.file.filename);
     }
@@ -37,12 +44,12 @@ router.post(
                 req,
                 message: 'Doctor creado exitosamente con un usuario asociado',
                 data: newDoctor,
-                statusCode:201
+                statusCode: 201,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Encontrar un doctor por su id
@@ -57,7 +64,7 @@ router.get(
             const { role, doctorId: userDoctorId } = req.user;
             if (role === 'doctor') {
                 req.params.id = userDoctorId;
-            };
+            }
             const doctor = await service.findOne(id);
             ResponseHandler.success({
                 res,
@@ -68,7 +75,7 @@ router.get(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 module.exports = router;

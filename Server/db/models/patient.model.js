@@ -29,9 +29,9 @@ const PatientSchema = {
                 if (new Date(value) >= new Date()) {
                     throw new Error('La fecha de nacimiento debe ser en el pasado.');
                 }
-            }
+            },
         },
-    },    
+    },
     address: {
         allowNull: false,
         type: DataTypes.STRING,
@@ -61,7 +61,7 @@ const PatientSchema = {
 class Patient extends Model {
     static associate(models) {
         this.belongsTo(models.User, {
-            as:  'user',
+            as: 'user',
             foreignKey: 'userId',
         });
 
@@ -78,7 +78,7 @@ class Patient extends Model {
             modelName: 'Patient',
             timestamps: true,
             paranoid: true,
-        }
+        };
     }
 }
 

@@ -6,7 +6,7 @@ const OBSERVATION_TABLE = 'observation';
 
 const ObservationSchema = {
     id: {
-        allowNull: false, 
+        allowNull: false,
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
@@ -19,7 +19,7 @@ const ObservationSchema = {
             model: CLINICAL_HISTORY_TABLE,
             key: 'id',
         },
-    },  
+    },
     doctorId: {
         field: 'doctor_id',
         allowNull: false,
@@ -68,7 +68,7 @@ class Observation extends Model {
 
         this.belongsTo(models.Doctor, {
             as: 'doctor',
-            foreignKey: 'doctorId'
+            foreignKey: 'doctorId',
         });
     }
 
@@ -79,8 +79,8 @@ class Observation extends Model {
             modelName: 'Observation',
             timestamps: true,
             paranoid: true,
-        }
+        };
     }
-};
+}
 
 module.exports = { OBSERVATION_TABLE, Observation, ObservationSchema };

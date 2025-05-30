@@ -62,14 +62,14 @@ const ClinicalHistorySchema = {
 
 class ClinicalHistory extends Model {
     static associate(models) {
-        this.belongsTo(models.Patient, { 
-            as: 'patient', 
-            foreignKey: 'patientId', 
+        this.belongsTo(models.Patient, {
+            as: 'patient',
+            foreignKey: 'patientId',
         });
 
-        this.hasMany(models.Observation, { 
-            as: 'observations', 
-            foreignKey: 'clinicalHistoryId', 
+        this.hasMany(models.Observation, {
+            as: 'observations',
+            foreignKey: 'clinicalHistoryId',
         });
     }
 
@@ -84,4 +84,8 @@ class ClinicalHistory extends Model {
     }
 }
 
-module.exports = { CLINICAL_HISTORY_TABLE, ClinicalHistory, ClinicalHistorySchema };
+module.exports = {
+    CLINICAL_HISTORY_TABLE,
+    ClinicalHistory,
+    ClinicalHistorySchema,
+};

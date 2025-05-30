@@ -3,17 +3,17 @@ require('express-async-errors'); // Se cargará globalmente si se usa en rutas
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
+const passport = require('passport');
 const sequelize = require('./libs/sequelize');
 const {
-    logError, 
-    errorHandler, 
+    logError,
+    errorHandler,
     boomErrorHandler,
 } = require('./middlewares/error.handler');
 const routerApi = require('./routers');
-const passport = require('passport');
 
 const app = express();
-const port = 3000 || process.env.PORT ;
+const port = 3000 || process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Procesa form-data
@@ -46,11 +46,11 @@ const testDbConnection = async () => {
 (async () => {
     try {
         await testDbConnection(); // Verificar conexión con la base de datos
-        
-        // Opcional: sincronizar modelos (solo en desarrollo, evita usar en producción)
-        // await sequelize.sync({ force: false }); 
 
-        app.listen(port,'0.0.0.0', () => {
+        // Opcional: sincronizar modelos (solo en desarrollo, evita usar en producción)
+        // await sequelize.sync({ force: false });
+
+        app.listen(port, '0.0.0.0', () => {
             console.log(`🚀 Server is running on port: ${port}`);
         });
     } catch (error) {

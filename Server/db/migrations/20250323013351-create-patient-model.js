@@ -1,69 +1,67 @@
-'use strict';
-
 const { DataTypes, Sequelize } = require('sequelize');
 const { PATIENT_TABLE } = require('../models/patient.model');
 const { USER_TABLE } = require('../models/user.model');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-    async up (queryInterface) {
+    async up(queryInterface) {
         await queryInterface.createTable(PATIENT_TABLE, {
-        id: {
-            allowNull: false,
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        userId: {
-            field: 'user_id',
-            allowNull: false,
-            type: DataTypes.INTEGER,
-            references: {
-                model: USER_TABLE,
-                key: 'id',
+            id: {
+                allowNull: false,
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
             },
-            onDelete: 'SET NULL',
-            onUpdate: 'CASCADE',
-        },
-        birthdate: {
-            allowNull: false,
-            type: DataTypes.DATE,
-            validate: {
-                isBefore(value) {
-                    if (new Date(value) >= new Date()) {
-                        throw new Error('La fecha de nacimiento debe ser en el pasado.');
-                    }
-                }
+            userId: {
+                field: 'user_id',
+                allowNull: false,
+                type: DataTypes.INTEGER,
+                references: {
+                    model: USER_TABLE,
+                    key: 'id',
+                },
+                onDelete: 'SET NULL',
+                onUpdate: 'CASCADE',
             },
-        },    
-        address: {
-            allowNull: false,
-            type: DataTypes.STRING,
-        },
-        city: {
-            allowNull: false,
-            type: DataTypes.STRING,
-        },
-        createdAt: {
-            field: 'created_at',
-            allowNull: false,
-            type: DataTypes.DATE,
-            defaultValue: Sequelize.NOW,
-        },
-        updatedAt: {
-            field: 'updated_at',
-            allowNull: true,
-            type: DataTypes.DATE,
-        },
-        deletedAt: {
-            field: 'deleted_at',
-            allowNull: true,
-            type: DataTypes.DATE,
-        },
+            birthdate: {
+                allowNull: false,
+                type: DataTypes.DATE,
+                validate: {
+                    isBefore(value) {
+                        if (new Date(value) >= new Date()) {
+                            throw new Error('La fecha de nacimiento debe ser en el pasado.');
+                        }
+                    },
+                },
+            },
+            address: {
+                allowNull: false,
+                type: DataTypes.STRING,
+            },
+            city: {
+                allowNull: false,
+                type: DataTypes.STRING,
+            },
+            createdAt: {
+                field: 'created_at',
+                allowNull: false,
+                type: DataTypes.DATE,
+                defaultValue: Sequelize.NOW,
+            },
+            updatedAt: {
+                field: 'updated_at',
+                allowNull: true,
+                type: DataTypes.DATE,
+            },
+            deletedAt: {
+                field: 'deleted_at',
+                allowNull: true,
+                type: DataTypes.DATE,
+            },
         });
     },
 
-    async down (queryInterface) {
+    async down(queryInterface) {
         await queryInterface.dropTable(PATIENT_TABLE);
-    }
+    },
 };

@@ -3,12 +3,12 @@ const { USER_TABLE } = require('./user.model');
 
 const POST_TABLE = 'post';
 
-const  PostSchema = {
+const PostSchema = {
     id: {
         allowNull: false,
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true,   
+        primaryKey: true,
     },
     userId: {
         field: 'user_id',
@@ -57,7 +57,7 @@ class Post extends Model {
             as: 'user',
             foreignKey: 'userId',
         });
-    };
+    }
 
     static config(sequelize) {
         return {
@@ -66,7 +66,7 @@ class Post extends Model {
             modelName: 'Post',
             timestamps: true,
         };
-    };
-};
+    }
+}
 
 module.exports = { POST_TABLE, Post, PostSchema };

@@ -1,10 +1,16 @@
 const express = require('express');
 const passport = require('passport');
-const { checkRole } = require('./../middlewares/authentication.handler');
-const validatorHandler = require('./../middlewares/validation.handler');
-const ResponseHandler = require('./../middlewares/response.handler');
-const SpecialityService = require('./../services/speciality.service');
-const { createSpecialitySchema, getQuerySpecialitySchema, getSpecialitySchema, updateSpecialitySchema } = require('./../schemas/speciality.schema');
+const { checkRole } = require('../middlewares/authentication.handler');
+const validatorHandler = require('../middlewares/validation.handler');
+const ResponseHandler = require('../middlewares/response.handler');
+const SpecialityService = require('../services/speciality.service');
+const {
+    createSpecialitySchema,
+    getQuerySpecialitySchema,
+    getSpecialitySchema,
+    updateSpecialitySchema,
+} = require('../schemas/speciality.schema');
+
 const router = express.Router();
 const service = new SpecialityService();
 
@@ -21,14 +27,14 @@ router.post(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Especialidad creada exitosamente`,
+                message: 'Especialidad creada exitosamente',
                 data: newSpeciality,
                 statusCode: 201,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Obtener especialidad con filtros
@@ -47,7 +53,7 @@ router.get(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Obtener una especialidad por su ID
@@ -68,7 +74,7 @@ router.get(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Actualizar parcialmente una especialidad
@@ -87,21 +93,21 @@ router.patch(
 
             const updatedSpeciality = await service.update(id, changes);
 
-            //mensaje de respuesta
+            // mensaje de respuesta
             const updatedFields = Object.keys(changes).map(
-                (key) => `${key}: '${ originalSpeciality[key] }' → '${ updatedSpeciality[key] }'`,
-            )
+                (key) => `${key}: '${originalSpeciality[key]}' → '${updatedSpeciality[key]}'`,
+            );
 
             ResponseHandler.success({
                 res,
                 req,
                 message: `Especialidad actualizada exitosamente. Cambios: ${updatedFields.join(', ')}`,
-                data: updatedSpeciality
+                data: updatedSpeciality,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Eliminar una especialidad por ID
@@ -117,13 +123,13 @@ router.delete(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Especialidad eliminada exitosamente`,
+                message: 'Especialidad eliminada exitosamente',
                 data: id,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 module.exports = router;

@@ -34,9 +34,9 @@ const SpecialitySchema = {
 
 class Speciality extends Model {
     static associate(models) {
-        this.hasMany(models.Doctor, { 
-            as: 'doctors' ,
-            foreignKey: 'specialityId', 
+        this.hasMany(models.Doctor, {
+            as: 'doctors',
+            foreignKey: 'specialityId',
         });
 
         this.hasMany(models.Appointment, {
@@ -44,6 +44,7 @@ class Speciality extends Model {
             foreignKey: 'specialityId',
         });
     }
+
     static config(sequelize) {
         return {
             sequelize,

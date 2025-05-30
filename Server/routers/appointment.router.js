@@ -1,19 +1,22 @@
 const express = require('express');
 const passport = require('passport');
-const ResponseHandler = require('./../middlewares/response.handler');
-const validatorHandler = require('./../middlewares/validation.handler');
-const { checkRole, resolveUserRole } = require('./../middlewares/authentication.handler');
-const { 
-    createAppointmentSchema, 
-    getAppointmentSchema, 
-    getQueryAppointmentSchema, 
-    updateAppointmentSchema, 
+const ResponseHandler = require('../middlewares/response.handler');
+const validatorHandler = require('../middlewares/validation.handler');
+const {
+    checkRole,
+    resolveUserRole,
+} = require('../middlewares/authentication.handler');
+const {
+    createAppointmentSchema,
+    getAppointmentSchema,
+    getQueryAppointmentSchema,
+    updateAppointmentSchema,
     updateStatusAppointmentSchema,
-} = require('./../schemas/appointment.schema');
-const AppointmentService = require('./../services/appointment.service'); 
+} = require('../schemas/appointment.schema');
+const AppointmentService = require('../services/appointment.service');
+
 const service = new AppointmentService();
 const router = express.Router();
-
 
 // Registrar una nueva cita
 router.post(
@@ -35,16 +38,15 @@ router.post(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Cita creada exitosamente`,
+                message: 'Cita creada exitosamente',
                 data: newAppointment,
                 statusCode: 201,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
-
 
 // Obtener citas con varios filtros
 router.get(
@@ -57,7 +59,7 @@ router.get(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Citas encontradas`,
+                message: 'Citas encontradas',
                 data: appointments,
             });
         } catch (error) {
@@ -73,18 +75,18 @@ router.get(
     validatorHandler(getAppointmentSchema, 'params'),
     async (req, res, next) => {
         try {
-            const { id } = req.params; 
+            const { id } = req.params;
             const appointment = await service.findOne(id);
             ResponseHandler.success({
                 res,
                 req,
-                message: `Cita encontrada`,
+                message: 'Cita encontrada',
                 data: appointment,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Actualizar parcialmente una cita
@@ -97,15 +99,15 @@ router.patch(
     async (req, res, next) => {
         try {
             const { id } = req.params;
-            const changes = {...req.body};
+            const changes = { ...req.body };
             const originalAppointment = await service.findOne(id);
 
             const updatedAppointment = await service.update(id, changes);
-            
+
             const updatedFields = Object.keys(changes).map(
                 (key) => `${key}: '${originalAppointment[key]}' → '${updatedAppointment[key]}'`,
             );
-            
+
             ResponseHandler.success({
                 res,
                 req,
@@ -115,7 +117,7 @@ router.patch(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Eliminar una cita
@@ -131,13 +133,13 @@ router.delete(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Cita eliminada`,
+                message: 'Cita eliminada',
                 data: id,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Cambiar el estado de una cita
@@ -163,7 +165,7 @@ router.patch(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 module.exports = router;

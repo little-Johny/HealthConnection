@@ -1,20 +1,24 @@
 const express = require('express');
 const passport = require('passport');
-const { checkRole } = require('./../middlewares/authentication.handler');
+const { checkRole } = require('../middlewares/authentication.handler');
 const validatorHandler = require('../middlewares/validation.handler');
-const { userUpload, getUploadedFileURL } = require('../middlewares/files.handler');
+const {
+    userUpload,
+    getUploadedFileURL,
+} = require('../middlewares/files.handler');
 const ResponseHandler = require('../middlewares/response.handler');
 const {
     createPatientSchema,
     getPatientSchema,
 } = require('../schemas/patient.schema');
 const PatientService = require('../services/patient.service');
+
 const router = express.Router();
 const service = new PatientService();
 
 // Función para procesar datos del usuario
 const processUserData = (req) => {
-    let data = { ...req.body };
+    const data = { ...req.body };
     if (req.file) {
         data.photo = getUploadedFileURL('users', req.file.filename);
     }
@@ -35,18 +39,18 @@ router.post(
                 req,
                 message: 'Paciente creado exitosamente con un usuario asociado',
                 data: newPatient,
-                statusCode:201
+                statusCode: 201,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Encontrar un paciente por su id
 router.get(
     '/:id',
-    passport.authenticate('jwt', { session: false}),
+    passport.authenticate('jwt', { session: false }),
     /* checkRole(['doctor', 'staff', 'admin']), */
     validatorHandler(getPatientSchema, 'params'),
     async (req, res, next) => {
@@ -62,7 +66,7 @@ router.get(
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 module.exports = router;

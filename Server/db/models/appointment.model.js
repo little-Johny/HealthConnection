@@ -5,7 +5,7 @@ const { SPECIALITY_TABLE } = require('./speciality.model');
 
 const APPOINTMENT_TABLE = 'appointment';
 
-const AppointmentSchema = { 
+const AppointmentSchema = {
     id: {
         allowNull: false,
         type: DataTypes.INTEGER,
@@ -61,7 +61,7 @@ const AppointmentSchema = {
     },
     price: {
         allowNull: false,
-        type: DataTypes.DECIMAL(10,2),
+        type: DataTypes.DECIMAL(10, 2),
         validate: {
             isDecimal: true,
             min: 0,
@@ -89,7 +89,7 @@ const AppointmentSchema = {
     },
 };
 
-class Appointment extends Model{
+class Appointment extends Model {
     static associate(models) {
         this.belongsTo(models.Doctor, {
             as: 'doctor',
@@ -106,6 +106,7 @@ class Appointment extends Model{
             foreignKey: 'specialityId',
         });
     }
+
     static config(sequelize) {
         return {
             sequelize,
@@ -113,11 +114,8 @@ class Appointment extends Model{
             modelName: 'Appointment',
             timestamps: true,
             paranoid: true,
-        }
+        };
     }
-};
+}
 
 module.exports = { APPOINTMENT_TABLE, Appointment, AppointmentSchema };
-
-
-

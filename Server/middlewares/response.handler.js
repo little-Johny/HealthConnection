@@ -1,5 +1,12 @@
 class ResponseHandler {
-    success({ res, req, message = 'Operación exitosa', data = null, statusCode = 200, meta = null}) {
+    success({
+        res,
+        req,
+        message = 'Operación exitosa',
+        data = null,
+        statusCode = 200,
+        meta = null,
+    }) {
         const response = {
             success: true,
             message: `${message}`,
@@ -14,7 +21,13 @@ class ResponseHandler {
         res.status(statusCode).json(response);
     }
 
-    error({ res, req, message = 'Error en la operación', error = null, statusCode = 500}) {
+    error({
+        res,
+        req,
+        message = 'Error en la operación',
+        error = null,
+        statusCode = 500,
+    }) {
         res.status(statusCode).json({
             success: false,
             message: `${message}`,

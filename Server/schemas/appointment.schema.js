@@ -8,30 +8,41 @@ const specialityId = Joi.number().integer().positive();
 const date = Joi.date().iso().greater('now').messages({
     'date.greater': 'La fecha de la cita debe ser en el futuro.',
 });
-const startTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/).messages({
-    'string.pattern.base': 'El formato de la hora de inicio debe ser HH:mm:ss (24h).',
-});
+const startTime = Joi.string()
+    .pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
+    .messages({
+        'string.pattern.base':
+      'El formato de la hora de inicio debe ser HH:mm:ss (24h).',
+    });
 
-const endTime = Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/).messages({
-    'string.pattern.base': 'El formato de la hora de finalización debe ser HH:mm:ss (24h).',
-});
+const endTime = Joi.string()
+    .pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
+    .messages({
+        'string.pattern.base':
+      'El formato de la hora de finalización debe ser HH:mm:ss (24h).',
+    });
 
 const price = Joi.number().precision(2).positive();
-const status = Joi.string().valid('pending', 'confirmed', 'completed', 'canceled');
+const status = Joi.string().valid(
+    'pending',
+    'confirmed',
+    'completed',
+    'canceled',
+);
 const startDate = Joi.date().iso();
 const endDate = Joi.date().iso().greater(Joi.ref('startDate'));
 const limit = Joi.number().integer().positive().default(10);
 const offset = Joi.number().integer().min(0).default(0);
 
 const createAppointmentSchema = Joi.object({
-    patientId: patientId,
+    patientId,
     doctorId: doctorId.required(),
     specialityId: specialityId.required(),
     date: date.required(),
     startTime: startTime.required(),
     endTime: endTime.required(),
-    price: price,
-    status: status,
+    price,
+    status,
 });
 
 const updateAppointmentSchema = Joi.object({
@@ -55,7 +66,9 @@ const getQueryAppointmentSchema = Joi.object({
     patientId: patientId.optional(),
     doctorId: doctorId.optional(),
     speciality: Joi.string().optional(),
-    numberDocument: Joi.string().pattern(/^\d{5,20}$/).optional(),
+    numberDocument: Joi.string()
+        .pattern(/^\d{5,20}$/)
+        .optional(),
     date: Joi.date().iso().optional(),
     startDate: startDate.optional(),
     endDate: endDate.optional(),
@@ -64,9 +77,8 @@ const getQueryAppointmentSchema = Joi.object({
     offset: offset.optional(),
 }).and('startDate', 'endDate');
 
-
 const updateStatusAppointmentSchema = Joi.object({
-    status: status.required()
+    status: status.required(),
 });
 
 module.exports = {

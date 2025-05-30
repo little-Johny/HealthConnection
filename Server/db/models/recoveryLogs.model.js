@@ -44,7 +44,7 @@ class RecoveryLog extends Model {
             as: 'user',
             foreignKey: 'userId',
         });
-    };
+    }
 
     static config(sequelize) {
         return {
@@ -53,7 +53,7 @@ class RecoveryLog extends Model {
             modelName: 'RecoveryLog',
             timestamps: false,
         };
-    };
-};
+    }
+}
 
 module.exports = { RECOVERY_LOG_TABLE, RecoveryLog, RecoveryLogSchema };

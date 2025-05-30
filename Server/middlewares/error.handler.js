@@ -1,6 +1,6 @@
 const ResponseHandler = require('./response.handler');
 
-// Capturador de errores 
+// Capturador de errores
 function logError(error, req, res, next) {
     console.error(error);
     next(error);
@@ -9,10 +9,10 @@ function logError(error, req, res, next) {
 // Manejo de errores generales
 function errorHandler(error, req, res, next) {
     ResponseHandler.error({
-        res,  // ❌ Faltaba res
+        res,
         req,
         message: 'Error interno del servidor',
-        error: process.env.NODE_ENV === 'development' ? error : null, // Muestra detalles solo en desarrollo
+        error: process.env.NODE_ENV === 'development' ? error : null,
         statusCode: 500,
     });
 }
@@ -21,13 +21,13 @@ function errorHandler(error, req, res, next) {
 function boomErrorHandler(error, req, res, next) {
     if (error.isBoom) {
         const { output } = error;
-        
+
         ResponseHandler.error({
             res,
             req,
             message: output.payload.message,
             error, // Opcional: puedes incluir el error completo si estás en desarrollo
-            statusCode: output.statusCode
+            statusCode: output.statusCode,
         });
 
         return; // ⛔ Detenemos la ejecución para que no llame a next(error)
@@ -39,5 +39,5 @@ function boomErrorHandler(error, req, res, next) {
 module.exports = {
     logError,
     errorHandler,
-    boomErrorHandler
+    boomErrorHandler,
 };

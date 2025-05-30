@@ -1,10 +1,18 @@
 const express = require('express');
 const passport = require('passport');
-const { checkRole, resolveUserRole } = require('./../middlewares/authentication.handler');
-const ResponseHandler = require('./../middlewares/response.handler');
-const validatorHandler = require('./../middlewares/validation.handler');
-const ObservationService = require('./../services/observation.service');
-const { createObservationSchema, getObservationSchema, updateObservationSchema } = require('./../schemas/observation.schema');
+const {
+    checkRole,
+    resolveUserRole,
+} = require('../middlewares/authentication.handler');
+const ResponseHandler = require('../middlewares/response.handler');
+const validatorHandler = require('../middlewares/validation.handler');
+const ObservationService = require('../services/observation.service');
+const {
+    createObservationSchema,
+    getObservationSchema,
+    updateObservationSchema,
+} = require('../schemas/observation.schema');
+
 const router = express.Router();
 const service = new ObservationService();
 
@@ -17,23 +25,23 @@ router.post(
     validatorHandler(createObservationSchema, 'body'),
     async (req, res, next) => {
         try {
-            const body = {...req.body};
+            const body = { ...req.body };
             const { role, doctorId: userDoctorId } = req.user;
             if (role === 'doctor') {
-                body.doctorId = userDoctorId
-            };
+                body.doctorId = userDoctorId;
+            }
             const newObservation = await service.create(body);
             ResponseHandler.success({
                 res,
                 req,
-                message: `Observacion creada exitosamente`,
+                message: 'Observacion creada exitosamente',
                 data: newObservation,
                 statusCode: 201,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Obtener observaciones con filtros
@@ -47,13 +55,13 @@ router.get(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Observaciones encontradas`,
+                message: 'Observaciones encontradas',
                 data: observations,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Obtener observacion por su id
@@ -68,13 +76,13 @@ router.get(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Observacion encontrada`,
+                message: 'Observacion encontrada',
                 data: observation,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Actualizar parcialmente una observacion
@@ -90,22 +98,21 @@ router.patch(
             const changes = req.body;
             const originalObservation = await service.findOne(id);
             const updatedObservation = await service.update(id, changes);
-            
+
             const updatedFields = Object.keys(changes).map(
-                (key) => `${key}: '${originalObservation[key]}' → '${updatedObservation[key]}'`
+                (key) => `${key}: '${originalObservation[key]}' → '${updatedObservation[key]}'`,
             );
 
             ResponseHandler.success({
                 res,
                 req,
                 message: `Observacion actualizada exitosamente. Cambios: ${updatedFields.join(', ')}`,
-                data: updatedObservation
+                data: updatedObservation,
             });
-
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 // Eliminar una observacion
@@ -121,13 +128,13 @@ router.delete(
             ResponseHandler.success({
                 res,
                 req,
-                message: `Observacion eliminada exitosamente`,
+                message: 'Observacion eliminada exitosamente',
                 data: id,
             });
         } catch (error) {
             next(error);
         }
-    }
+    },
 );
 
 module.exports = router;

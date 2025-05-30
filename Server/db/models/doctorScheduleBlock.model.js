@@ -39,11 +39,10 @@ const DoctorScheduleBlockSchema = {
                 const start = new Date(`1970-01-01T${this.startTime}Z`);
                 const end = new Date(`1970-01-01T${value}Z`);
                 if (end <= start) {
-                    throw new Error(`The end time must be greater than the start time.`);
+                    throw new Error('The end time must be greater than the start time.');
                 }
-            }
-        }
-        
+            },
+        },
     },
     reason: {
         allowNull: false,
@@ -72,8 +71,8 @@ class DoctorScheduleBlock extends Model {
         this.belongsTo(models.Doctor, {
             as: 'doctor',
             foreignKey: 'doctorId',
-        })
-    };
+        });
+    }
 
     static config(sequelize) {
         return {
@@ -84,6 +83,10 @@ class DoctorScheduleBlock extends Model {
             paranoid: true,
         };
     }
-};
+}
 
-module.exports = { DOCTOR_SCHEDULE_BLOCK_TABLE, DoctorScheduleBlock, DoctorScheduleBlockSchema };
+module.exports = {
+    DOCTOR_SCHEDULE_BLOCK_TABLE,
+    DoctorScheduleBlock,
+    DoctorScheduleBlockSchema,
+};

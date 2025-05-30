@@ -1,9 +1,9 @@
 const boom = require('@hapi/boom');
 const UserService = require('./user.service');
-const { models } = require('./../libs/sequelize');
-const sequelize = require('./../libs/sequelize');
-const userService = new UserService();
+const { models } = require('../libs/sequelize');
+const sequelize = require('../libs/sequelize');
 
+const userService = new UserService();
 
 class PatientService {
     async create(data) {
@@ -29,9 +29,12 @@ class PatientService {
                 city: data.city,
             };
 
-            const newUser = await userService.create( userData, { transaction } );
+            const newUser = await userService.create(userData, { transaction });
 
-            const newPatient = await models.Patient.create({ ...patientData, userId: newUser.id }, { transaction });
+            const newPatient = await models.Patient.create(
+                { ...patientData, userId: newUser.id },
+                { transaction },
+            );
 
             await transaction.commit();
 
@@ -39,23 +42,23 @@ class PatientService {
         } catch (error) {
             await transaction.rollback();
             console.error(error);
-            throw boom.badImplementation(`Error al crear el paciente`);
+            throw boom.badImplementation('Error al crear el paciente');
         }
-    };
+    }
 
     async findOne(id) {
         const patient = await models.Patient.findByPk(id, {
             include: [
-                {   
+                {
                     model: models.User,
                     as: 'user',
-                    attributes: { exclude: 'password'}
+                    attributes: { exclude: 'password' },
                 },
                 {
                     model: models.ClinicalHistory,
                     as: 'clinical_history',
-                }
-            ]
+                },
+            ],
         });
 
         if (!patient) {
@@ -63,8 +66,7 @@ class PatientService {
         }
 
         return patient;
-    };
-
-};
+    }
+}
 
 module.exports = PatientService;

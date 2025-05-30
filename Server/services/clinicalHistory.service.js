@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
-const { models } = require('./../libs/sequelize');
+const { models } = require('../libs/sequelize');
 const PatientService = require('./patient.service');
+
 const patientService = new PatientService();
 
 class ClinicalHistoryService {
@@ -8,7 +9,7 @@ class ClinicalHistoryService {
         await patientService.findOne(data.patientId);
         const newClinicalHistory = await models.ClinicalHistory.create(data);
         return newClinicalHistory;
-    };
+    }
 
     async findOne(id) {
         const clinicalHistory = await models.ClinicalHistory.findByPk(id, {
@@ -20,8 +21,8 @@ class ClinicalHistoryService {
                 {
                     model: models.Observation,
                     as: 'observations',
-                }
-            ]
+                },
+            ],
         });
         if (!clinicalHistory) {
             throw boom.notFound(`No se encuentra el historial clinico con ID ${id}`);
@@ -32,10 +33,12 @@ class ClinicalHistoryService {
     async update(id, changes) {
         const clinicalHistory = await this.findOne(id);
         const clinicalHistoryUpdated = await clinicalHistory.update(changes, {
-            fields: Object.keys(changes).filter(field => field !== 'id' && field !== 'patientId'),
+            fields: Object.keys(changes).filter(
+                (field) => field !== 'id' && field !== 'patientId',
+            ),
         });
         return clinicalHistoryUpdated;
-    };
-};
+    }
+}
 
-module.exports = ClinicalHistoryService; 
+module.exports = ClinicalHistoryService;

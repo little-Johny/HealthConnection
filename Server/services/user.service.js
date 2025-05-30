@@ -2,8 +2,8 @@ const boom = require('@hapi/boom');
 const { Op, Sequelize } = require('sequelize');
 const path = require('path');
 const fs = require('fs');
-const { models } = require('./../libs/sequelize');
-const sequelize = require('./../libs/sequelize');
+const { models } = require('../libs/sequelize');
+const sequelize = require('../libs/sequelize');
 
 class UserService {
     async create(data) {
@@ -18,7 +18,9 @@ class UserService {
             });
 
             if (existingUser) {
-                throw boom.conflict(`Ya existe un usuario con el documento ${data.numberDocument} y el rol ${data.role}.`);
+                throw boom.conflict(
+                    `Ya existe un usuario con el documento ${data.numberDocument} y el rol ${data.role}.`,
+                );
             }
 
             const newUser = await models.User.create(data);
@@ -28,35 +30,55 @@ class UserService {
         } catch (error) {
             await transaction.rollback();
             if (error.name === 'SequelizeUniqueConstraintError') {
-                throw boom.conflict(`El username ${data.username} ya existe, intenta con otro`);
+                throw boom.conflict(
+                    `El username ${data.username} ya existe, intenta con otro`,
+                );
             }
             throw error;
         }
-    };
-    
+    }
+
     async find(query) {
         const options = {
             where: {},
             include: [],
             attributes: { exclude: ['password'] },
         };
-    
+
         const {
-            limit, offset, startDate, endDate, search, city, address, birthdate,
-            speciality, licenseNumber, consultationFee, ...filters
+            limit,
+            offset,
+            startDate,
+            endDate,
+            search,
+            city,
+            address,
+            birthdate,
+            speciality,
+            licenseNumber,
+            consultationFee,
+            ...filters
         } = query;
-    
-        const filterableFields = ['email', 'phone', 'username', 'role', 'typeDocument', 'numberDocument', 'gender'];
-        let filterMessages = [];
-    
+
+        const filterableFields = [
+            'email',
+            'phone',
+            'username',
+            'role',
+            'typeDocument',
+            'numberDocument',
+            'gender',
+        ];
+        const filterMessages = [];
+
         if (limit) {
             options.limit = parseInt(limit) || 10;
         }
-    
+
         if (offset) {
             options.offset = parseInt(offset) || 0;
         }
-    
+
         // Filtros específicos de Patient
         let alreadyAddedPatient = false;
         if (address || city || birthdate) {
@@ -64,7 +86,7 @@ class UserService {
             if (address) patientFilter.address = { [Op.iLike]: `%${address}%` };
             if (city) patientFilter.city = { [Op.iLike]: `%${city}%` };
             if (birthdate) patientFilter.birthdate = birthdate;
-    
+
             options.include.push({
                 model: models.Patient,
                 as: 'patient',
@@ -74,23 +96,25 @@ class UserService {
             });
             alreadyAddedPatient = true;
         }
-    
+
         // Filtros específicos de Doctor
         let alreadyAddedDoctor = false;
         if (speciality || licenseNumber || consultationFee) {
             const doctorFilter = {};
             if (licenseNumber) doctorFilter.licenseNumber = licenseNumber;
             if (consultationFee) doctorFilter.consultationFee = consultationFee;
-    
+
             if (speciality) {
-                const spec = await models.Speciality.findOne({ where: { name: speciality } });
+                const spec = await models.Speciality.findOne({
+                    where: { name: speciality },
+                });
                 if (spec) {
                     doctorFilter.specialityId = spec.id;
                 } else {
                     throw boom.notFound(`No se encontró la especialidad: ${speciality}`);
                 }
             }
-    
+
             options.include.push({
                 model: models.Doctor,
                 as: 'doctor',
@@ -100,7 +124,7 @@ class UserService {
             });
             alreadyAddedDoctor = true;
         }
-    
+
         // Incluir siempre ambas relaciones si no se incluyeron antes
         if (!alreadyAddedPatient) {
             options.include.push({
@@ -110,7 +134,7 @@ class UserService {
                 attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
             });
         }
-    
+
         if (!alreadyAddedDoctor) {
             options.include.push({
                 model: models.Doctor,
@@ -119,7 +143,7 @@ class UserService {
                 attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
             });
         }
-    
+
         // Búsqueda flexible en múltiples campos
         if (search) {
             options.where[Op.or] = [
@@ -127,11 +151,11 @@ class UserService {
                 { lastName: { [Op.iLike]: `%${search}%` } },
                 { email: { [Op.iLike]: `%${search}%` } },
                 { username: { [Op.iLike]: `%${search}%` } },
-                { numberDocument: { [Op.iLike]: `%${search}%`}}
+                { numberDocument: { [Op.iLike]: `%${search}%` } },
             ];
             filterMessages.push(`que coincidan con: ${search}`);
         }
-    
+
         // Aplicar otros filtros específicos
         for (const field of filterableFields) {
             if (filters[field]) {
@@ -139,7 +163,7 @@ class UserService {
                 filterMessages.push(`con ${field}: ${filters[field]}`);
             }
         }
-    
+
         // Filtrado por rango de fechas
         if (startDate && endDate) {
             options.where.createdAt = {
@@ -147,27 +171,27 @@ class UserService {
             };
             filterMessages.push(`creado entre ${startDate} y ${endDate}`);
         }
-    
+
         // Obtener los usuarios con los filtros aplicados
         const { rows, count } = await models.User.findAndCountAll(options);
-    
+
         if (count === 0) {
-            throw boom.notFound(`No se encuentra ningún usuario ${filterMessages.join(', ')}`);
+            throw boom.notFound(
+                `No se encuentra ningún usuario ${filterMessages.join(', ')}`,
+            );
         }
-    
+
         return {
             data: rows,
             meta: {
                 totalCount: count,
                 totalPages: Math.ceil(count / (limit || 10)),
                 currentPage: Math.ceil((offset || 0) / (limit || 10)) + 1,
-                perPage: limit || 10
-            }
+                perPage: limit || 10,
+            },
         };
     }
-    
-    
-    
+
     async findOne(id) {
         const user = await models.User.findByPk(id, {
             attributes: { exclude: ['password'] },
@@ -181,139 +205,149 @@ class UserService {
                     model: models.Patient,
                     as: 'patient',
                     required: false,
-                }
-            ]
+                },
+            ],
         });
-    
+
         if (!user) {
             throw boom.notFound(`No se encuentra usuario con ID ${id}`);
         }
         /* console.log(`User:`);
         console.log(user); */
-        
-    
+
         return user;
-    };
+    }
 
     async findByUsername(username) {
         const user = await models.User.findOne({
             where: { username },
             include: [
                 { model: models.Patient, as: 'patient', required: false },
-                { model: models.Doctor, as: 'doctor', required: false }
-            ]
+                { model: models.Doctor, as: 'doctor', required: false },
+            ],
         });
-    
+
         if (!user) {
             throw boom.notFound('Usuario no encontrado');
         }
-    
-        return user;
-    };
 
-    
+        return user;
+    }
+
     async findAll() {
         return await models.User.findAll({
-            attributes: [...Object.keys(models.User.getAttributes()),
-                [Sequelize.literal(`deleted_at IS NOT NULL`), 'isDeleted']
+            attributes: [
+                ...Object.keys(models.User.getAttributes()),
+                [Sequelize.literal('deleted_at IS NOT NULL'), 'isDeleted'],
             ],
             paranoid: false,
         });
-    };
+    }
 
     async update(id, changes) {
         const transaction = await sequelize.transaction();
-    
+
         try {
             const user = await this.findOne(id);
-    
+
             // Validar si el username ya existe en otro usuario
             if (changes.username) {
-                const existingUser = await models.User.findOne({ where: { username: changes.username } });
+                const existingUser = await models.User.findOne({
+                    where: { username: changes.username },
+                });
                 if (existingUser && existingUser.id !== id) {
-                    throw boom.conflict(`El username ${changes.username} ya está en uso.`);
+                    throw boom.conflict(
+                        `El username ${changes.username} ya está en uso.`,
+                    );
                 }
             }
-    
+
             // Manejo de actualización de pacientes y doctores
             if (user.role === 'patient' && user.patient) {
                 await user.patient.update(changes, { transaction });
             }
-            
+
             if (user.role === 'doctor' && user.doctor) {
                 await user.doctor.update(changes, { transaction });
             }
-    
+
             // Si el usuario tiene una foto y se actualiza, eliminar la anterior
             if (changes.photo) {
                 await this.unlinkUserPhoto(user.photo);
             }
-    
+
             // Actualizar usuario, excluyendo campos no permitidos
             const userUpdated = await user.update(changes, {
-                fields: Object.keys(changes).filter(field => field !== 'id' && field !== 'password' && field !== 'patientId' && field !== 'doctorId' ),
-                transaction
+                fields: Object.keys(changes).filter(
+                    (field) => field !== 'id'
+            && field !== 'password'
+            && field !== 'patientId'
+            && field !== 'doctorId',
+                ),
+                transaction,
             });
-    
+
             await transaction.commit();
             return userUpdated;
         } catch (error) {
             await transaction.rollback();
             throw error;
         }
-    };    
+    }
 
     async delete(id) {
         const user = await this.findOne(id);
         const userDeleted = await user.destroy();
         return userDeleted;
-    };
+    }
 
     async restore(id) {
         const user = await models.User.findOne({
             where: { id },
-            paranoid: false // Buscamos incluso si fue eliminado
+            paranoid: false, // Buscamos incluso si fue eliminado
         });
-    
+
         if (!user) {
             throw boom.notFound(`Usuario con ID ${id} no encontrado`);
         }
-    
+
         await user.restore(); // Restauramos el usuario
-    
+
         return user;
-    };
+    }
 
     async forceDelete(id) {
         const user = await models.User.findOne({
             where: { id },
-            paranoid: false // Incluir usuarios eliminados
+            paranoid: false, // Incluir usuarios eliminados
         });
-    
+
         if (!user) {
             throw boom.notFound(`No se encuentra usuario con ID ${id}`);
         }
-    
+
         // Eliminar foto si existe
         if (user.photo) {
             await this.unlinkUserPhoto(user.photo);
         }
-    
+
         // Borrar usuario completamente
         await user.destroy({ force: true });
-    
+
         return { message: `Usuario con ID ${id} eliminado permanentemente` };
-    };
-    
+    }
+
     async unlinkUserPhoto(photo) {
-        const filePath = path.join(__dirname, '../../Uploads/users', path.basename(photo));
+        const filePath = path.join(
+            __dirname,
+            '../../Uploads/users',
+            path.basename(photo),
+        );
 
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
-
-        return;
-    };
-};
+    }
+}
 
 module.exports = UserService;

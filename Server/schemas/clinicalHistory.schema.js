@@ -2,17 +2,30 @@ const Joi = require('joi');
 
 const id = Joi.number().integer().positive();
 const patientId = Joi.number().integer().positive();
-const bloodType = Joi.string().valid('A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-');
+const bloodType = Joi.string().valid(
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'O+',
+    'O-',
+    'AB+',
+    'AB-',
+);
 const weight = Joi.number().positive().max(500).optional();
 const height = Joi.number().positive().max(3).optional(); // Máx: 3 metros
-const chronicDiseases = Joi.alternatives().try(
-    Joi.string().allow(null, ''), // Acepta string vacío o nulo
-    Joi.array().items(Joi.string().min(2).max(100)) // También puede ser un array
-).optional();
-const allergies = Joi.alternatives().try(
-    Joi.string().allow(null, ''),
-    Joi.array().items(Joi.string().min(2).max(100))
-).optional();
+const chronicDiseases = Joi.alternatives()
+    .try(
+        Joi.string().allow(null, ''), // Acepta string vacío o nulo
+        Joi.array().items(Joi.string().min(2).max(100)), // También puede ser un array
+    )
+    .optional();
+const allergies = Joi.alternatives()
+    .try(
+        Joi.string().allow(null, ''),
+        Joi.array().items(Joi.string().min(2).max(100)),
+    )
+    .optional();
 const startDate = Joi.date().iso();
 const endDate = Joi.date().iso().greater(Joi.ref('startDate'));
 const limit = Joi.number().integer().positive().default(10);

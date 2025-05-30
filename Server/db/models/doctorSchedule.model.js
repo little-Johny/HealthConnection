@@ -16,7 +16,7 @@ const DoctorScheduleSchema = {
         type: DataTypes.INTEGER,
         references: {
             model: DOCTOR_TABLE,
-            key: 'id'
+            key: 'id',
         },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
@@ -24,25 +24,33 @@ const DoctorScheduleSchema = {
     dayOfWeek: {
         field: 'day_of_week',
         allowNull: false,
-        type: DataTypes.ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
-    },    
+        type: DataTypes.ENUM(
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+        ),
+    },
     startTime: {
         field: 'start_time',
-        allowNull:false,
+        allowNull: false,
         type: DataTypes.TIME,
     },
     endTime: {
         field: 'end_time',
-        allowNull:false,
+        allowNull: false,
         type: DataTypes.TIME,
         validate: {
             isGreaterThanStart(value) {
                 if (value <= this.startTime || !value || value === this.startTime) {
-                    throw new Error(`The end time must be greater than the start time.`);
+                    throw new Error('The end time must be greater than the start time.');
                 }
-            }
-        }
-    }, 
+            },
+        },
+    },
     createdAt: {
         field: 'created_at',
         allowNull: false,
@@ -66,8 +74,8 @@ class DoctorSchedule extends Model {
         this.belongsTo(models.Doctor, {
             as: 'doctor',
             foreignKey: 'doctorId',
-        })
-    };
+        });
+    }
 
     static config(sequelize) {
         return {
@@ -80,10 +88,14 @@ class DoctorSchedule extends Model {
                 {
                     unique: true,
                     fields: ['doctor_id', 'day_of_week'],
-                }
+                },
             ],
-        } 
-    };
-};
+        };
+    }
+}
 
-module.exports = { DOCTOR_SCHEDULE_TABLE, DoctorSchedule, DoctorScheduleSchema };
+module.exports = {
+    DOCTOR_SCHEDULE_TABLE,
+    DoctorSchedule,
+    DoctorScheduleSchema,
+};

@@ -1,5 +1,5 @@
 const { DataTypes, Model, Sequelize } = require('sequelize');
-const  bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 const USER_TABLE = 'user';
 
@@ -35,12 +35,12 @@ const UserSchema = {
         allowNull: true,
         type: DataTypes.STRING,
     },
-    typeDocument:{
+    typeDocument: {
         field: 'type_document',
         allowNull: false,
         type: DataTypes.STRING,
     },
-    numberDocument:{
+    numberDocument: {
         field: 'number_document',
         allowNull: false,
         type: DataTypes.STRING,
@@ -67,7 +67,7 @@ const UserSchema = {
         allowNull: true,
         type: DataTypes.STRING,
         defaultValue: null,
-    },    
+    },
     createdAt: {
         field: 'created_at',
         allowNull: false,
@@ -84,7 +84,7 @@ const UserSchema = {
         allowNull: true,
         type: DataTypes.DATE,
     },
-}
+};
 
 class User extends Model {
     static associate(models) {
@@ -119,8 +119,8 @@ class User extends Model {
                     user.password = password;
                 },
             },
-        }
+        };
     }
 }
 
-module.exports = { USER_TABLE, User, UserSchema }; 
+module.exports = { USER_TABLE, User, UserSchema };

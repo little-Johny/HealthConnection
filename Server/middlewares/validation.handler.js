@@ -8,7 +8,9 @@ function validatorHandler(schema, property) {
 
         if (error) {
             // Si hay errores, crea un error tipo Boom con detalles claros (HTTP 400 - Bad Request)
-            next(boom.badRequest(error.details.map(error => error.message).join(', ')));
+            next(
+                boom.badRequest(error.details.map((error) => error.message).join(', ')),
+            );
         } else {
             // Si no hay errores, continúa con el siguiente middleware o controlador
             next();

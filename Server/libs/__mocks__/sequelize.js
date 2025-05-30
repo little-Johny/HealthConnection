@@ -6,11 +6,11 @@ const mockModels = {
         create: jest.fn(),
         findByPk: jest.fn(),
         update: jest.fn(),
-        destroy: jest.fn()
-    }
+        destroy: jest.fn(),
+    },
 };
 
 module.exports = {
     models: mockModels,
-    Op
+    Op,
 };

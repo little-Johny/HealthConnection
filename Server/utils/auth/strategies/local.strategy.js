@@ -1,5 +1,6 @@
 const { Strategy } = require('passport-local');
 const AuthService = require('../../../services/auth.service');
+
 const service = new AuthService();
 
 const LocalStrategy = new Strategy(
@@ -14,7 +15,7 @@ const LocalStrategy = new Strategy(
         } catch (error) {
             done(error, false);
         }
-    }
+    },
 );
 
 module.exports = LocalStrategy;

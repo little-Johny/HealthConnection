@@ -1,4 +1,5 @@
 const Joi = require('joi');
+
 const ROLES = ['admin', 'staff', 'doctor', 'patient'];
 const DocTypes = ['C.C.', 'T.I', 'Passport'];
 
@@ -8,13 +9,16 @@ const password = Joi.string()
     .alphanum()
     .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,12}$/)
     .messages({
-        'string.pattern.base': 'La contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener una longitud mínima de 8 caracteres y máxima de 12 caracteres.',
+        'string.pattern.base':
+      'La contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener una longitud mínima de 8 caracteres y máxima de 12 caracteres.',
     });
 const name = Joi.string();
 const lastName = Joi.string();
 const photo = Joi.string();
 const typeDocument = Joi.string().valid(...DocTypes);
-const numberDocument = Joi.string().pattern(/^\d{5,20}$/).optional();
+const numberDocument = Joi.string()
+    .pattern(/^\d{5,20}$/)
+    .optional();
 const gender = Joi.string().valid('Male', 'Female');
 const email = Joi.string().email();
 const phone = Joi.string()
@@ -66,7 +70,7 @@ const getUserSchema = Joi.object({
     id: id.required(),
 });
 
-const getQueryUserSchema = Joi.object({ 
+const getQueryUserSchema = Joi.object({
     username: username.optional(),
     name: name.optional(),
     lastName: lastName.optional(),
