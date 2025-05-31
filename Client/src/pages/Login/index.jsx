@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { IoChevronBackOutline } from 'react-icons/io5';
@@ -83,6 +83,11 @@ const Login = () => {
                     </Form>
                     )}
                 </Formik>
+                <div className="text-center mt-4">
+                    <Link to="/recovery-password" className="text-sm text-blue-600 hover:underline">
+                        ¿Olvidaste tu contraseña?
+                    </Link>
+                </div>
             </div>
         </MainLayout>
     );

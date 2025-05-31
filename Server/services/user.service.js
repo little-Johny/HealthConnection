@@ -72,11 +72,11 @@ class UserService {
         const filterMessages = [];
 
         if (limit) {
-            options.limit = parseInt(limit) || 10;
+            options.limit = parseInt(limit, 10) || 10;
         }
 
         if (offset) {
-            options.offset = parseInt(offset) || 0;
+            options.offset = parseInt(offset, 10) || 0;
         }
 
         // Filtros específicos de Patient
@@ -235,7 +235,7 @@ class UserService {
     }
 
     async findAll() {
-        return await models.User.findAll({
+        return models.User.findAll({
             attributes: [
                 ...Object.keys(models.User.getAttributes()),
                 [Sequelize.literal('deleted_at IS NOT NULL'), 'isDeleted'],

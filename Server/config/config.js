@@ -11,6 +11,7 @@ const config = {
     recoverySecret: process.env.JWT_RECOVERY_PASS_SECRET,
     mailerUser: process.env.MAILER_USER,
     mailerPassword: process.env.MAILER_PASSWORD,
+    frontUrl: process.env.FRONTEND_URL,
 };
 
 module.exports = config;

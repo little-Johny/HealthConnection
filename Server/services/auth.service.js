@@ -85,7 +85,7 @@ class AuthService {
 
         if (
             lastRequest
-      && new Date() - new Date(lastRequest.requestedAt) < 10 * 60 * 1000
+        && new Date() - new Date(lastRequest.requestedAt) < 10 * 60 * 1000
         ) {
             throw boom.tooManyRequests(
                 'Debes esperar 10 minutos antes de solicitar un correo nuevo',
@@ -98,7 +98,7 @@ class AuthService {
         const token = jwt.sign(payload, config.recoverySecret, {
             expiresIn: '15m',
         });
-        const link = `http://myfrontend.com/recovery?token=${token}`;
+        const link = `${config.frontUrl}/reset-password?token=${token}`;
 
         await user.update({ recoveryToken: token });
         const mail = {

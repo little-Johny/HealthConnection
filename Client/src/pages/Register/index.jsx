@@ -85,29 +85,28 @@ export default function Register() {
         { name: 'consultationFee', type: 'decimal', initialValue: '', label: 'Tarifa de consulta' },
     ];
 
-    const generateInitialValues = (fields) =>
-        fields.reduce((acc, field) => {
-            acc[field.name] = field.initialValue;
-            return acc;
-        }, {});
+    const generateInitialValues = (fields) => fields.reduce((acc, field) => {
+        acc[field.name] = field.initialValue;
+        return acc;
+    }, {});
 
-        const getApiSpecialities = async () => {
-            try {
-                const response = await getSpecialities();
-                const rawSpecialities = response.data.data;
-        
-                // Transformamos las especialidades para que tengan label y value
-                const formatted = rawSpecialities.map(s => ({
-                    label: s.name,   // o el campo correspondiente al nombre de la especialidad
-                    value: s.id      // o el campo correspondiente al id
-                }));
-        
-                setSpecialities(formatted);
-            } catch (error) {
-                console.log('error al obtener especialidades: ', error);
-                toast.error('No se pudieron cargar las especialidades');
-            }
-        };
+    const getApiSpecialities = async () => {
+        try {
+            const response = await getSpecialities();
+            const rawSpecialities = response.data.data;
+    
+            // Transformamos las especialidades para que tengan label y value
+            const formatted = rawSpecialities.map(s => ({
+                label: s.name,   // o el campo correspondiente al nombre de la especialidad
+                value: s.id      // o el campo correspondiente al id
+            }));
+    
+            setSpecialities(formatted);
+        } catch (error) {
+            console.log('error al obtener especialidades: ', error);
+            toast.error('No se pudieron cargar las especialidades');
+        }
+    };
         
 
     // Efecto que hará la petición a la API cuando sea necesario

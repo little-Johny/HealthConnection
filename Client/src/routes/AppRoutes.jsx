@@ -16,6 +16,8 @@ import Schedule from '../pages/Schedule';
 import CreateObservation from '../pages/CreateObservation';
 import CreatePost from '../pages/CreatePost';
 import PostTable from '../pages/Manage-post';
+import RecoveryPassword from '../pages/RecoveryPassword';
+import ResetPassword from '../pages/ResetPassword';
 
 
 const AppRoutes = () => {
@@ -23,6 +25,8 @@ const AppRoutes = () => {
         { path: '/', element: <Home /> },
         { path: '/login', element: <Login /> },
         { path: '/register', element: <Register/> },
+        { path: '/recovery-password', element: <RecoveryPassword/> },
+        { path: '/reset-password', element: <ResetPassword/>},
         
         // Rutas protegidas
         {
