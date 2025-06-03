@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const { Op, Sequelize } = require('sequelize');
+const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
 const { models } = require('../libs/sequelize');
@@ -22,8 +23,9 @@ class UserService {
                     `Ya existe un usuario con el documento ${data.numberDocument} y el rol ${data.role}.`,
                 );
             }
-
-            const newUser = await models.User.create(data);
+            const hashedPassword = await bcrypt.hash(data.password, 10);
+            const userToCreateData = { ...data, password: hashedPassword };
+            const newUser = await models.User.create(userToCreateData);
             await transaction.commit();
             delete newUser.dataValues.password;
             return newUser;

@@ -16,5 +16,16 @@ module.exports = {
         'object-curly-newline': 'off',
         'no-restricted-syntax': 'off',
         'class-methods-use-this': 'off',
+        'import/no-extraneous-dependencies' : [
+            'error',
+            {
+                devDependencies: [
+                    '**/*.test.js',
+                    '**/*.spec.js',
+                    '**/test/**',
+                    '**/__tests__/**',
+                ],
+            },
+        ],
     },
 };
