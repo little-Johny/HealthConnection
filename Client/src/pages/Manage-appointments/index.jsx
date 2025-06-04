@@ -221,51 +221,59 @@ export default function AppointmentTable() {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                    {appointments.map(appt => (
-                    <tr key={appt.id} className="hover:bg-gray-100 transition">
-                        <td className="px-4 py-2">{appt.id}</td>
-                        <td className="px-4 py-2">
+                    {appointments.length === 0 ? (
+                        <tr>
+                        <td colSpan="6" className="px-4 py-6 text-center text-gray-500">
+                            No hay citas disponibles.
+                        </td>
+                        </tr>
+                    ) : (
+                        appointments.map(appt => (
+                        <tr key={appt.id} className="hover:bg-gray-100 transition">
+                            <td className="px-4 py-2">{appt.id}</td>
+                            <td className="px-4 py-2">
                             {appt.patient.user?.name ?? 'Paciente'} {appt.patient.user?.lastName ?? 'Eliminado'}
-                        </td>
-                        <td className="px-4 py-2">
+                            </td>
+                            <td className="px-4 py-2">
                             {appt.doctor?.user?.name ?? 'Doctor'} {appt.doctor?.user?.lastName ?? 'Eliminado'}
-                        </td>
-                        <td className="px-4 py-2">{appt.date}</td>
-                        <td className="px-4 py-2 capitalize">
-                        <span
-                            className={`px-3 py-1 rounded-full text-sm ${
-                            appt.status === 'pending'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : appt.status === 'completed'
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}
-                        >
-                            {appt.status}
-                        </span>
-                        </td>
-                        <td className="px-4 py-2 space-x-2">
-                        <button
-                            onClick={() => navigate(`/appointment/${appt.id}`)}
-                            className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-400"
-                        >
-                            Ver
-                        </button>
-                        {appt.status === 'pending' && (
-                            <button
-                            onClick={() => {
-                                setSelectedAppointment(appt);
-                                setShowModal(true);
-                            }}
-                            className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-400"
+                            </td>
+                            <td className="px-4 py-2">{appt.date}</td>
+                            <td className="px-4 py-2 capitalize">
+                            <span
+                                className={`px-3 py-1 rounded-full text-sm ${
+                                appt.status === 'pending'
+                                    ? 'bg-yellow-100 text-yellow-800'
+                                    : appt.status === 'completed'
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-red-100 text-red-800'
+                                }`}
                             >
-                            Cancelar
+                                {appt.status}
+                            </span>
+                            </td>
+                            <td className="px-4 py-2 space-x-2">
+                            <button
+                                onClick={() => navigate(`/appointment/${appt.id}`)}
+                                className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-400"
+                            >
+                                Ver
                             </button>
-                        )}
-                        </td>
-                    </tr>
-                    ))}
-                </tbody>
+                            {appt.status === 'pending' && (
+                                <button
+                                onClick={() => {
+                                    setSelectedAppointment(appt);
+                                    setShowModal(true);
+                                }}
+                                className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-400"
+                                >
+                                Cancelar
+                                </button>
+                            )}
+                            </td>
+                        </tr>
+                        ))
+                    )}
+                    </tbody>
                 </table>
             )}
             </div>

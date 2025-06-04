@@ -27,5 +27,6 @@ module.exports = {
                 ],
             },
         ],
+        'max-len' : 'off'
     },
 };

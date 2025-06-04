@@ -29,10 +29,10 @@ export default function AppointmentCard({ appointment }) {
     return (
         <div className="bg-white shadow-xl rounded-2xl p-6 w-full max-w-3xl mx-auto mt-6 text-gray-700">
             <h2 className="text-lg font-semibold mb-1">
-                Paciente: {appointment.patient.user.name} {appointment.patient.user.lastName}
+                Paciente: {appointment.patient?.user?.name} {appointment.patient?.user?.lastName}
             </h2>
             <p className="text-sm text-gray-600 mb-4">
-                Doctor: {appointment.doctor.user.name} {appointment.doctor.user.lastName}
+                Doctor: {appointment.doctor?.user?.name ?? 'Doctor'} {appointment.doctor?.user?.lastName ?? 'Eliminado'}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -43,7 +43,7 @@ export default function AppointmentCard({ appointment }) {
 
                 <div>
                     <label className="block text-sm font-medium mb-1">Doctor</label>
-                    <p>{appointment.doctor.user.name} {appointment.doctor.user.lastName}</p>
+                    <p>{appointment.doctor?.user?.name ?? 'Doctor'} {appointment.doctor?.user?.lastName ?? 'Eliminado'}</p>
                 </div>
 
                 <div>

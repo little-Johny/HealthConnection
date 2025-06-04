@@ -3,8 +3,7 @@ const { Op, Sequelize } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
-const { models } = require('../libs/sequelize');
-const sequelize = require('../libs/sequelize');
+const { sequelize, models } = require('../libs/sequelize');
 
 class UserService {
     async create(data) {
