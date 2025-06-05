@@ -1,7 +1,7 @@
 const { faker } = require('@faker-js/faker');
 
-const generateOneUser = ( overrides = {}) => ({
-    id: faker.number.int({ min: 1, max: 1000}),
+const generateOneUser = (overrides = {}) => ({
+    id: faker.number.int({ min: 1, max: 1000 }),
     username: faker.internet.username(),
     password: faker.internet.password(12), // ya tiene longitud minima de 8
     name: faker.person.firstName(),
@@ -20,7 +20,6 @@ const generateOneUser = ( overrides = {}) => ({
     ...overrides,
 });
 
-const generateManyUsers = ( size = 10 ) => Array.from({length: size}, () => generateOneUser());
-
+const generateManyUsers = (size = 10) => Array.from({ length: size }, () => generateOneUser());
 
 module.exports = { generateOneUser, generateManyUsers };

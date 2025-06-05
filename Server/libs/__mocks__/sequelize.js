@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 const mockModels = {
     Speciality: {
@@ -43,4 +43,5 @@ module.exports = {
     models: mockModels,
     sequelize: mockSequelize,
     Op,
+    Sequelize,
 };
