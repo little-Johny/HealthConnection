@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { faker } = require('@faker-js/faker');
 
 const generateOneUser = (overrides = {}) => ({
@@ -13,7 +14,7 @@ const generateOneUser = (overrides = {}) => ({
     email: faker.internet.email(),
     phone: faker.phone.number(),
     role: faker.helpers.arrayElement(['admin', 'staff', 'doctor', 'patient']),
-    recoveryToker: null,
+    recoveryToken: null,
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
     deletedAt: null,

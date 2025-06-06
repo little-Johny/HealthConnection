@@ -27,6 +27,7 @@ module.exports = {
                 ],
             },
         ],
-        'max-len': 'off'
+        'max-len': 'off',
+        'no-plusplus': 'off',
     },
 };
