@@ -12,6 +12,7 @@ const config = {
     mailerUser: process.env.MAILER_USER,
     mailerPassword: process.env.MAILER_PASSWORD,
     frontUrl: process.env.FRONTEND_URL,
+    backUrl: process.env.BACKEND_URL || `http://localhost:${this.port}/health_connection/v2`,
 };
 
 module.exports = config;

@@ -24,7 +24,6 @@
     "seeders:delete": "sequelize-cli db:seed:undo:all",
     "setup:db": "npm run migrations:run && npm run seeders:run",
     "reset:db": "npm run seeders:delete && npm run migrations:delete"
-
   },
 
   "keywords": [],
