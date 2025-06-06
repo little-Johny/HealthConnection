@@ -51,6 +51,20 @@ function setUpModels(sequelize) {
     Observation.associate(sequelize.models);
     Post.associate(sequelize.models);
     RecoveryLog.associate(sequelize.models);
+
+    return {
+        User: sequelize.models.User,
+        Patient: sequelize.models.Patient,
+        Doctor: sequelize.models.Doctor,
+        DoctorSchedule: sequelize.models.DoctorSchedule,
+        DoctorScheduleBlock: sequelize.models.DoctorScheduleBlock,
+        ClinicalHistory: sequelize.models.ClinicalHistory,
+        Appointment: sequelize.models.Appointment,
+        Speciality: sequelize.models.Speciality,
+        Observation: sequelize.models.Observation,
+        Post: sequelize.models.Post,
+        RecoveryLog: sequelize.models.RecoveryLog,
+    };
 }
 
 module.exports = setUpModels;
