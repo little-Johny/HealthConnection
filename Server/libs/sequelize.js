@@ -21,7 +21,7 @@ const sequelize = new Sequelize(URL, {
     },
 });
 
-setUpModels(sequelize);
+const models = setUpModels(sequelize);
 /* sequelize.sync(); */
 (async () => {
     try {
@@ -32,4 +32,4 @@ setUpModels(sequelize);
     }
 })();
 
-module.exports = sequelize;
+module.exports = { sequelize, models };
