@@ -7,6 +7,8 @@ const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 const URL = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 
+console.log('DB URL used:', URL);
+
 // nueva instancia de sequelize
 const sequelize = new Sequelize(URL, {
     // que base de datos se usara

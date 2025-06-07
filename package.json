@@ -6,17 +6,16 @@
   "scripts": {
     "dev": "nodemon Server/index.js",
     "start": "node Server/index.js",
+    "postinstall": "npx sequelize-cli db:migrate",
     "client": "vite Client/",
     "test": "jest",
     "lint": "eslint Server/**",
     "lint:fix": "eslint Server/** --fix",
     "dev:all": "concurrently \"npm run dev\" \"npm run client\"",
-
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
     "migrations:revert": "sequelize-cli db:migrate:undo --name",
     "migrations:delete": "sequelize-cli db:migrate:undo:all",
-
     "seeders:generate": "sequelize-cli seed:generate --name",
     "seeders:run": "sequelize-cli db:seed:all",
     "seeders:run:name": "sequelize-cli db:seed --name",
@@ -25,14 +24,12 @@
     "setup:db": "npm run migrations:run && npm run seeders:run",
     "reset:db": "npm run seeders:delete && npm run migrations:delete"
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^9.8.0",
     "@hapi/boom": "^10.0.1",
-    "axios": "^1.7.9",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -40,7 +37,6 @@
     "eslint-plugin-prettier": "^5.2.3",
     "express": "^4.21.1",
     "express-async-errors": "^3.1.1",
-    "formik": "^2.4.6",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^3.1.2",
@@ -53,12 +49,7 @@
     "passport-local": "^1.0.0",
     "pg": "^8.14.1",
     "pg-hstore": "^2.3.4",
-    "prop-types": "^15.8.1",
-    "react-icons": "^5.4.0",
-    "react-router-dom": "^7.0.2",
-    "react-toastify": "^10.0.6",
-    "sequelize": "^6.37.6",
-    "yup": "^1.6.1"
+    "sequelize": "^6.37.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

@@ -7,7 +7,7 @@ const config = {
     dbHost: process.env.DB_HOST,
     dbName: process.env.DB_NAME,
     dbPort: process.env.DB_PORT || 5432,
-    jwtSecret: process.env.JWT_SECRET,
+    jwtSecret: process.env.JWT_SECRET || 'fallback-secret',
     recoverySecret: process.env.JWT_RECOVERY_PASS_SECRET,
     mailerUser: process.env.MAILER_USER,
     mailerPassword: process.env.MAILER_PASSWORD,
