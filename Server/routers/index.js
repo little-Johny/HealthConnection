@@ -17,6 +17,7 @@ function routerApi(app) {
     app.use('/health_connection/v2', router);
     router.get('/ping', (req, res) => {
         res.json({ message: 'Backend en línea ✅' });
+        console.log('✔️ Ping recibido: Backend en línea');
     });
     router.use('/user', userRouter);
     router.use('/patient', patientRouter);
