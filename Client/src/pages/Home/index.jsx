@@ -72,8 +72,8 @@ const Home = () => {
                         <p className="mt-3 text-gray-600">Ofrecemos consultas con especialistas...</p>
                     </div>
                     <div className="bg-white shadow-xl p-6 rounded-lg hover:shadow-2xl transition">
-                        <h5 className="text-xl font-bold">Chequeos cuando quieras</h5>
-                        <p className="mt-3 text-gray-600">Posibilidad de solicitar un chequeo cuando y como quieras</p>
+                        <h5 className="text-xl font-bold">Consultas cuando quieras</h5>
+                        <p className="mt-3 text-gray-600">Posibilidad de solicitar una consulta cuando y como quieras</p>
                     </div>
                     <div className="bg-white shadow-xl p-6 rounded-lg hover:shadow-2xl transition">
                         <h5 className="text-xl font-bold">Doctores de la mejor calidad</h5>

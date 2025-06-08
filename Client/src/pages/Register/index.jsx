@@ -145,9 +145,7 @@ export default function Register() {
                 rule = Yup.date().required('Este campo es obligatorio');
             }
 
-            if (type === 'file') {
-                rule = Yup.mixed().required('Debe subir un archivo');
-            }
+            
 
             shape[name] = rule;
         });

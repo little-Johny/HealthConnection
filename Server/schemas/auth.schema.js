@@ -8,7 +8,10 @@ const password = Joi.string()
         'string.pattern.base':
         'La contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener una longitud mínima de 8 caracteres y máxima de 12 caracteres.',
     });
-const username = Joi.string().alphanum().min(5).max(50);
+const username = Joi.string()
+    .pattern(/^[a-zA-Z0-9 ]+$/)
+    .min(5)
+    .max(50);
 const email = Joi.string().email();
 
 const LoginSchema = Joi.object({

@@ -50,7 +50,7 @@ module.exports = {
             },
             reason: {
                 allowNull: false,
-                type: DataTypes.ENUM('appintment', 'break', 'meeting'),
+                type: DataTypes.ENUM('appointment', 'break', 'meeting'),
             },
             createdAt: {
                 field: 'created_at',
