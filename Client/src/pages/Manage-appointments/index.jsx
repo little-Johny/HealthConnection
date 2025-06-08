@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
@@ -30,25 +30,22 @@ export default function AppointmentTable() {
     const [totalPages, setTotalPages] = useState(1);
 
     const closeModal = () => {
-        console.log("Modal cerrado");
         setShowModal(false);
         setSelectedAppointment(null);
     };
 
-    const getApiAppointments = async (query = {}) => {
-        console.log("Cargando citas con query:", query);
+    const getApiAppointments = useCallback(async (query = {}) => {
         setTableLoading(true);
         setError(null);
-
         const offset = (page - 1) * limit;
         const cleanQuery = Object.fromEntries(
+            // eslint-disable-next-line no-unused-vars
             Object.entries({ ...query, offset, limit }).filter(([_, v]) => v !== "")
         );
 
         try {
             const response = await getAppointments(cleanQuery);
             const { appointments, meta } = response.data.data;
-            console.log("Citas recibidas:", appointments);
             setAppointments(appointments);
             setTotalPages(meta.pages);
         } catch (err) {
@@ -63,43 +60,38 @@ export default function AppointmentTable() {
         } finally {
             setTableLoading(false);
         }
-    };
+    }, [page, limit]);
 
-    const getUserAppointments = async () => {
-        console.log("Cargando citas del paciente...");
+    const getUserAppointments = useCallback(async () => {
         try {
             const profile = await getUserProfile(userId);
-            const name = profile.data.data.user.name;
-            console.log("Nombre del paciente:", name);
+            const name = profile?.data?.data?.user?.name;
+            if (!name) throw new Error('Usuario inválido');
             await getApiAppointments({ patient: name, status: selectedStatus });
         } catch (error) {
             console.error("Error al obtener citas del paciente:", error);
             toast.error('No se pudieron cargar tus citas.');
         }
-    };
+    }, [userId, selectedStatus, getApiAppointments]);
 
-    const getDoctorAppointments = async () => {
-        console.log("Cargando citas del doctor...");
+    const getDoctorAppointments = useCallback(async () => {
         try {
             const profile = await getUserProfile(userId);
-            const name = profile.data.data.user.name;
-            console.log("Nombre del doctor:", name);
+            const name = profile?.data?.data?.user?.name;
+            if (!name) throw new Error('Usuario inválido');
             await getApiAppointments({ doctor: name, status: selectedStatus });
         } catch (error) {
             console.error("Error al obtener citas del doctor:", error);
             toast.error('No se pudieron cargar tus citas.');
         }
-    };
+    }, [userId, selectedStatus, getApiAppointments]);
 
     const handleStatusChange = (e) => {
-        const newStatus = e.target.value;
-        console.log("Filtro de estado cambiado a:", newStatus);
-        setSelectedStatus(newStatus);
+        setSelectedStatus(e.target.value);
         setPage(1);
     };
 
     const handleCancel = async (id) => {
-        console.log("Intentando cancelar cita con ID:", id);
         try {
             await deleteAppointment(id);
             toast.success('Cita cancelada');
@@ -119,7 +111,6 @@ export default function AppointmentTable() {
     };
 
     useEffect(() => {
-        console.log("Ejecutando useEffect con estado:", selectedStatus, " búsqueda:", searchTerm, " página:", page);
         const timer = setTimeout(() => {
             if (isAdmin) {
                 getApiAppointments({ status: selectedStatus, date: searchTerm });
@@ -130,14 +121,12 @@ export default function AppointmentTable() {
             }
         }, 500);
         return () => clearTimeout(timer);
-    }, [selectedStatus, searchTerm, page]);
+    }, [selectedStatus, searchTerm, page, isAdmin, isDoctor, isPatient, getApiAppointments, getDoctorAppointments, getUserAppointments]);
 
     const handlePageChange = (dir) => {
-        setPage(p => {
-            const np = p + dir;
-            const validPage = np > 0 && np <= totalPages ? np : p;
-            console.log("Cambio de página:", validPage);
-            return validPage;
+        setPage(prev => {
+            const newPage = prev + dir;
+            return newPage > 0 && newPage <= totalPages ? newPage : prev;
         });
     };
 
@@ -202,95 +191,83 @@ export default function AppointmentTable() {
                 </div>
             )}
 
-        <div className="container mx-auto px-4 py-8">
-            <div className="overflow-x-auto shadow-md rounded-lg bg-white">
-            {tableLoading ? (
-                <div className="p-10 text-center text-gray-500">Cargando citas...</div>
-            ) : error ? (
-                <div className="p-10 text-center text-red-500">{error}</div>
-            ) : (
-                <table className="min-w-full table-auto border-collapse">
-                <thead>
-                    <tr className="bg-indigo-600 text-white text-left text-sm font-medium uppercase">
-                    <th className="px-4 py-3 border-b">ID</th>
-                    <th className="px-4 py-3 border-b">Paciente</th>
-                    <th className="px-4 py-3 border-b">Doctor</th>
-                    <th className="px-4 py-3 border-b">Fecha</th>
-                    <th className="px-4 py-3 border-b">Estado</th>
-                    <th className="px-4 py-3 border-b">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                    {appointments.length === 0 ? (
-                        <tr>
-                        <td colSpan="6" className="px-4 py-6 text-center text-gray-500">
-                            No hay citas disponibles.
-                        </td>
-                        </tr>
+            <div className="container mx-auto px-4 py-8">
+                <div className="overflow-x-auto shadow-md rounded-lg bg-white">
+                    {tableLoading ? (
+                        <div className="p-10 text-center text-gray-500">Cargando citas...</div>
+                    ) : error ? (
+                        <div className="p-10 text-center text-red-500">{error}</div>
                     ) : (
-                        appointments.map(appt => (
-                        <tr key={appt.id} className="hover:bg-gray-100 transition">
-                            <td className="px-4 py-2">{appt.id}</td>
-                            <td className="px-4 py-2">
-                            {appt.patient.user?.name ?? 'Paciente'} {appt.patient.user?.lastName ?? 'Eliminado'}
-                            </td>
-                            <td className="px-4 py-2">
-                            {appt.doctor?.user?.name ?? 'Doctor'} {appt.doctor?.user?.lastName ?? 'Eliminado'}
-                            </td>
-                            <td className="px-4 py-2">{appt.date}</td>
-                            <td className="px-4 py-2 capitalize">
-                            <span
-                                className={`px-3 py-1 rounded-full text-sm ${
-                                appt.status === 'pending'
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : appt.status === 'completed'
-                                    ? 'bg-green-100 text-green-800'
-                                    : 'bg-red-100 text-red-800'
-                                }`}
-                            >
-                                {appt.status}
-                            </span>
-                            </td>
-                            <td className="px-4 py-2 space-x-2">
-                            <button
-                                onClick={() => navigate(`/appointment/${appt.id}`)}
-                                className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-400"
-                            >
-                                Ver
-                            </button>
-                            {appt.status === 'pending' && (
-                                <button
-                                onClick={() => {
-                                    setSelectedAppointment(appt);
-                                    setShowModal(true);
-                                }}
-                                className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-400"
-                                >
-                                Cancelar
-                                </button>
-                            )}
-                            </td>
-                        </tr>
-                        ))
+                        <table className="min-w-full table-auto border-collapse">
+                            <thead>
+                                <tr className="bg-indigo-600 text-white text-left text-sm font-medium uppercase">
+                                    <th className="px-4 py-3 border-b">ID</th>
+                                    <th className="px-4 py-3 border-b">Paciente</th>
+                                    <th className="px-4 py-3 border-b">Doctor</th>
+                                    <th className="px-4 py-3 border-b">Fecha</th>
+                                    <th className="px-4 py-3 border-b">Estado</th>
+                                    <th className="px-4 py-3 border-b">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {appointments.map(appt => (
+                                    <tr key={appt.id} className="hover:bg-gray-100 transition">
+                                        <td className="px-4 py-2">{appt.id}</td>
+                                        <td className="px-4 py-2">
+                                            {appt.patient?.user?.name ?? 'Paciente'} {appt.patient?.user?.lastName ?? 'Desconocido'}
+                                        </td>
+                                        <td className="px-4 py-2">
+                                            {appt.doctor?.user?.name ?? 'Doctor'} {appt.doctor?.user?.lastName ?? 'Desconocido'}
+                                        </td>
+                                        <td className="px-4 py-2">{appt.date}</td>
+                                        <td className="px-4 py-2 capitalize">
+                                            <span
+                                                className={`px-3 py-1 rounded-full text-sm ${
+                                                    appt.status === 'pending'
+                                                        ? 'bg-yellow-100 text-yellow-800'
+                                                        : appt.status === 'completed'
+                                                        ? 'bg-green-100 text-green-800'
+                                                        : 'bg-red-100 text-red-800'
+                                                }`}
+                                            >
+                                                {appt.status}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-2 space-x-2">
+                                            <button
+                                                onClick={() => navigate(`/appointment/${appt.id}`)}
+                                                className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-400"
+                                            >
+                                                Ver
+                                            </button>
+                                            {appt.status === 'pending' && (
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedAppointment(appt);
+                                                        setShowModal(true);
+                                                    }}
+                                                    className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-400"
+                                                >
+                                                    Cancelar
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     )}
-                    </tbody>
-                </table>
-            )}
+                </div>
             </div>
-        </div>
 
-        {showModal && selectedAppointment && (
-            <Modal
-            isOpen={showModal}
-            onClose={closeModal}
-            onConfirm={() => handleCancel(selectedAppointment.id)}
-            type="confirm"
-            title="Cancelar cita"
-            message={`¿Estás seguro de que deseas cancelar la cita con ID ${selectedAppointment.id}?`}
-            confirmText="Sí, cancelar"
-            cancelText="No"
-            />
-        )}
+            {showModal && selectedAppointment && (
+                <Modal
+                    title="Cancelar Cita"
+                    message="¿Estás seguro de que deseas cancelar esta cita?"
+                    onConfirm={() => handleCancel(selectedAppointment.id)}
+                    onCancel={closeModal}
+                />
+            )}
         </MainLayout>
     );
 }
