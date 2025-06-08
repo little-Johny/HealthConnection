@@ -15,6 +15,9 @@ function routerApi(app) {
     const router = express.Router();
 
     app.use('/health_connection/v2', router);
+    router.get('/ping', (req, res) => {
+        res.json({ message: 'Backend en línea ✅' });
+    });
     router.use('/user', userRouter);
     router.use('/patient', patientRouter);
     router.use('/doctor', doctorRouter);
