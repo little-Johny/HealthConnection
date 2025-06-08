@@ -1,9 +1,8 @@
 const boom = require('@hapi/boom');
 const { DateTime } = require('luxon');
 const { Op } = require('sequelize');
-const { models } = require('../libs/sequelize');
+const { models, sequelize } = require('../libs/sequelize');
 const DoctorService = require('./doctor.service');
-const sequelize = require('../libs/sequelize');
 
 const doctorService = new DoctorService();
 

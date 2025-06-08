@@ -1,9 +1,8 @@
 const boom = require('@hapi/boom');
 const path = require('path');
 const fs = require('fs');
-const { models } = require('../libs/sequelize');
+const { models, sequelize } = require('../libs/sequelize');
 const UserService = require('./user.service');
-const sequelize = require('../libs/sequelize');
 
 const userService = new UserService();
 

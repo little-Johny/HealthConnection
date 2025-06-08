@@ -1,7 +1,6 @@
 const boom = require('@hapi/boom');
 const UserService = require('./user.service');
-const { models } = require('../libs/sequelize');
-const sequelize = require('../libs/sequelize');
+const { models, sequelize } = require('../libs/sequelize');
 
 const userService = new UserService();
 

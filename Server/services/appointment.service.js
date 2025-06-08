@@ -1,6 +1,5 @@
 const boom = require('@hapi/boom');
-const { models } = require('../libs/sequelize');
-const sequelize = require('../libs/sequelize');
+const { models, sequelize } = require('../libs/sequelize');
 const PatientService = require('./patient.service');
 const DoctorService = require('./doctor.service');
 const ScheduleService = require('./schedule.service');
