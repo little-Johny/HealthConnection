@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon Server/index.js",
     "start": "node Server/index.js",
-    "postinstall": "npx sequelize-cli db:migrate",
+    "postinstall": "",
     "client": "vite Client/",
     "test": "jest",
     "lint": "eslint Server/**",
