@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const express = require('express');
 
 const userRouter = require('./user.router');

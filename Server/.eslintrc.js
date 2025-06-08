@@ -16,7 +16,7 @@ module.exports = {
         'object-curly-newline': 'off',
         'no-restricted-syntax': 'off',
         'class-methods-use-this': 'off',
-        'import/no-extraneous-dependencies' : [
+        'import/no-extraneous-dependencies': [
             'error',
             {
                 devDependencies: [
