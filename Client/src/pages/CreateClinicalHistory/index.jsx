@@ -21,8 +21,17 @@ export default function CreateClinicalHistory() {
 
     const validationSchema = Yup.object({
         bloodType: Yup.string().required('Requerido'),
-        weight: Yup.number().positive('Debe ser positivo').required('Requerido'),
-        height: Yup.number().positive('Debe ser positivo').required('Requerido'),
+        weight: Yup.number()
+            .positive('Debe ser positivo')
+            .min(30, 'El peso mínimo es 20 kg')       // límite mínimo
+            .max(300, 'El peso máximo es 300 kg')     // límite máximo
+            .required('Requerido'),
+
+        height: Yup.number()
+            .positive('Debe ser positivo')
+            .min(100, 'La altura mínima es 100 cm')   // límite mínimo
+            .max(300, 'La altura máxima es 300 cm')   // límite máximo
+            .required('Requerido'),
         chronicDiseases: Yup.string().required('Requerido'),
         allergies: Yup.string().required('Requerido'),
     });
@@ -38,7 +47,7 @@ export default function CreateClinicalHistory() {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-        const response = await createClinicalHistory(values);
+        await createClinicalHistory(values);
         toast.success('Historial clínico creado con éxito');
         navigate('/dashboard'); // o a donde prefieras redirigir después
         } catch (error) {

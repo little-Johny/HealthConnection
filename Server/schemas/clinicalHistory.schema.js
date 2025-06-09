@@ -13,7 +13,7 @@ const bloodType = Joi.string().valid(
     'AB-',
 );
 const weight = Joi.number().positive().max(500).optional();
-const height = Joi.number().positive().max(3).optional(); // Máx: 3 metros
+const height = Joi.number().positive().max(300).optional(); // Máx: 3 metros
 const chronicDiseases = Joi.alternatives()
     .try(
         Joi.string().allow(null, ''), // Acepta string vacío o nulo
