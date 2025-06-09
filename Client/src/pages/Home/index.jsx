@@ -130,11 +130,11 @@ const Home = () => {
                         ¿Tienes alguna pregunta o necesitas más información? Contáctanos
                         hoy mismo.
                     </p>
-                    <a
-                        href="mailto:info@healthconnection.com"
+                    <a 
+                        href="mailto:molano.johny721@gmail.com?subject=Consulta&body=Hola, quiero más información..."
                         className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-4 inline-block"
                     >
-                        Enviar un Correo
+                        Envíanos un correo
                     </a>
                 </div>
             </section>
