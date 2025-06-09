@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { deletePost, getAllPost, partiallyUpdate } from '../../api/post';
 import MainLayout from '../../components/Layout';
@@ -13,6 +13,8 @@ const PostTable = () => {
     const [showModal, setShowModal] = useState(false);
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 7;
     const navigate = useNavigate();
 
     const closeModal = () => {
@@ -28,7 +30,7 @@ const PostTable = () => {
     const getPost = async () => {
         try {
             const response = await getAllPost();
-            setPosts(response.data.data.slice(0, 10));
+            setPosts(response.data.data);
         } catch (error) {
             console.error(error);
         }
@@ -41,20 +43,18 @@ const PostTable = () => {
             getPost();
             closeModal();
         } catch (error) {
+            console.error(error);
             toast.error('No se puede eliminar la publicación');
         }
     };
 
-    const updateHandle = async ( values) => {
+    const updateHandle = async (values) => {
         try {
             const filteredValues = {
                 title: values.title,
                 content: values.content,
                 image: values.image,
             };
-    
-            console.log('Valores enviados al backend:', filteredValues); // 👈 importante
-    
             await partiallyUpdate(selectedPost.id, filteredValues);
             toast.success('Publicación actualizada correctamente');
             getPost();
@@ -64,12 +64,16 @@ const PostTable = () => {
             console.error(error.response?.data || error.message);
         }
     };
-    
-    
 
     useEffect(() => {
         getPost();
     }, []);
+
+    // Cálculo de paginación
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+    const totalPages = Math.ceil(posts.length / postsPerPage);
 
     return (
         <MainLayout className="min-h-screen bg-white">
@@ -101,8 +105,8 @@ const PostTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {posts.length > 0 ? (
-                            posts.map((post) => (
+                        {currentPosts.length > 0 ? (
+                            currentPosts.map((post) => (
                                 <tr key={post.id} className="border-t hover:bg-gray-50">
                                     <td className="px-6 py-4">{post.id}</td>
                                     <td className="px-6 py-4">{post.title}</td>
@@ -141,6 +145,29 @@ const PostTable = () => {
                         )}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Controles de paginación */}
+            <div className="flex justify-center items-center gap-4 my-6">
+                <Button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-400 transition"
+                >
+                    Anterior
+                </Button>
+                <span className="text-gray-700">Página {currentPage} de {totalPages}</span>
+                <Button
+                    onClick={() =>
+                        setCurrentPage((prev) =>
+                            prev < totalPages ? prev + 1 : prev
+                        )
+                    }
+                    disabled={currentPage === totalPages}
+                    className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-400 transition"
+                >
+                    Siguiente
+                </Button>
             </div>
 
             {/* Modal de Confirmación */}
