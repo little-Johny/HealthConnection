@@ -10,7 +10,7 @@ import PostCard from '../../components/PostCard'; // Ajusta la ruta según tu es
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const { rol, isLoading } = useAuth();
+    const { rol, isLoading, logout} = useAuth();
     const [posts, setPosts] = useState([]);
 
     const getPost = async () => {
@@ -43,7 +43,10 @@ const Dashboard = () => {
             <header className='bg-orange-400 p-6 shadow-lg shadow-gray-500'>
                 <div className='flex justify-between items-center'>
                 <Button
-                    onClick={() => navigate(-1)}
+                    onClick={() => {
+                        logout();            // Llama la función logout
+                        navigate(-1);        // Va una página atrás en el historial
+                    }}
                     className="absolute text-white p-2 rounded-full shadow-md transition"
                 >
                     <IoChevronBackOutline className="w-5 h-5" />
