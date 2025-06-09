@@ -14,13 +14,16 @@ const Dashboard = () => {
     const [posts, setPosts] = useState([]);
 
     const getPost = async () => {
-        try {
-            const response = await getAllPost();
-            setPosts(response.data.data.slice(0, 10));
-        } catch (error) {
-            console.error(error);
-        }
+    try {
+        const response = await getAllPost();
+        const allPosts = response.data.data;
+        const lastTenPosts = allPosts.slice().reverse().slice(0, 10);
+        setPosts(lastTenPosts);
+    } catch (error) {
+        console.error(error);
     }
+}
+
 
     useEffect(() => {
         getPost();
@@ -168,16 +171,16 @@ const Dashboard = () => {
             {/* Sección de publicaciones */}
             <section className="p-8 pt-4 max-w-6xl mx-auto">
                 <h2 className="text-2xl font-semibold mb-4 text-gray-800 text-center">
-                Últimas publicaciones
+                    Últimas publicaciones
                 </h2>
                 {posts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {posts.map((post) => (
-                    <PostCard key={post.id} post={post} />
-                    ))}
-                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {posts.map((post) => (
+                            <PostCard key={post.id} post={post} />
+                        ))}
+                    </div>
                 ) : (
-                <p className="text-center text-gray-500">No hay publicaciones aún.</p>
+                    <p className="text-center text-gray-500">No hay publicaciones aún.</p>
                 )}
             </section>
         </MainLayout>
