@@ -83,7 +83,7 @@ export default function AppointmentTable() {
         console.log("Cargando citas del doctor...");
         try {
             const profile = await getUserProfile(userId);
-            const name = profile.data.data.user.name;
+            const name = profile.data.data.name;
             console.log("Nombre del doctor:", name);
             await getApiAppointments({ doctor: name, status: selectedStatus });
         } catch (error) {

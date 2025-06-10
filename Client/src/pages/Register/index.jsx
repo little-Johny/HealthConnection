@@ -13,6 +13,45 @@ import MainLayout from './../../components/Layout';
 import Button from './../../components/Button';
 import Modal from './../../components/Modal';
 
+const DocTypes = ['C.C.', 'T.I', 'Passport'];
+
+const yupValidationSchema = Yup.object().shape({
+    username: Yup.string()
+        .min(5, 'Debe tener al menos 5 caracteres')
+        .max(50, 'No debe exceder los 50 caracteres')
+        .matches(/^[a-zA-Z0-9]*$/, 'Solo se permiten caracteres alfanuméricos')
+        .required('Este campo es obligatorio'),
+
+    password: Yup.string()
+        .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,12}$/,
+        'La contraseña debe contener al menos una letra minúscula, una mayúscula, un dígito y tener entre 8 y 12 caracteres.'
+        )
+        .required('Este campo es obligatorio'),
+
+    name: Yup.string().matches(/^[a-zA-Z]*$/, 'Solo se permiten letras').required('Este campo es obligatorio'),
+    lastName: Yup.string().required('Este campo es obligatorio'),
+    photo: Yup.mixed().notRequired(),
+    typeDocument: Yup.string()
+        .oneOf(DocTypes, 'Tipo de documento no válido')
+        .required('Este campo es obligatorio'),
+
+    numberDocument: Yup.string()
+        .matches(/^[0-9]{5,20}$/, 'Debe tener entre 5 y 20 dígitos, solo numeros')
+        .required('Este campo es obligatorio'),
+
+    gender: Yup.string()
+        .oneOf(['Male', 'Female'], 'Género no válido')
+        .required('Este campo es obligatorio'),
+
+    email: Yup.string().email('Correo electrónico inválido').notRequired(),
+
+    phone: Yup.string()
+        .matches(/^\d{10}$/, 'El número debe contener 10 dígitos, solo numeros')
+        .notRequired(),
+});
+
+
 export default function Register() {
     const [specialities, setSpecialities] = useState([]); // Estado para manejar las especialidades
     const [showPassword, setShowPassword] = useState(false); //Estado para la visibilidad de la contraseña
@@ -126,32 +165,7 @@ export default function Register() {
     if (selectedRole === 'doctor') selectedFields.push(...updatedDoctorFields);
     if (selectedRole === 'patient') selectedFields.push(...patientFields);
 
-    const generateValidationSchema = (fields) => {
-        const shape = {};
-
-        fields.forEach(({ name, type }) => {
-            let rule = Yup.string().required('Este campo es obligatorio');
-
-            // Reglas personalizadas por tipo
-            if (type === 'email') {
-                rule = Yup.string().email('Correo inválido').required('Este campo es obligatorio');
-            }
-
-            if (type === 'number' || type === 'decimal') {
-                rule = Yup.number().typeError('Debe ser un número').required('Este campo es obligatorio');
-            }
-
-            if (type === 'date') {
-                rule = Yup.date().required('Este campo es obligatorio');
-            }
-
-            
-
-            shape[name] = rule;
-        });
-
-        return Yup.object().shape(shape);
-    };
+    
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
@@ -243,106 +257,106 @@ export default function Register() {
                 <Formik
                     enableReinitialize
                     initialValues={generateInitialValues(selectedFields)}
-                    validationSchema={generateValidationSchema(selectedFields)}
+                    validationSchema={yupValidationSchema}
                     onSubmit={handleSubmit}
                 >
                     <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-  {selectedFields.map(({ name, type, options, label }) => (
-    <div
-      key={name}
-      className={`flex flex-col gap-2 w-full ${type === 'file' ? 'md:col-span-2' : ''}`}
-    >
-      <label htmlFor={name} className="text-sm font-medium capitalize">
-        {label || name}
-      </label>
+                        {selectedFields.map(({ name, type, options, label }) => (
+                            <div
+                            key={name}
+                            className={`flex flex-col gap-2 w-full ${type === 'file' ? 'md:col-span-2' : ''}`}
+                            >
+                            <label htmlFor={name} className="text-sm font-medium capitalize">
+                                {label || name}
+                            </label>
 
-      {type === 'file' ? (
-        <Field name={name}>
-          {({ form }) => (
-            <>
-              <input
-                type="file"
-                id={name}
-                name={name}
-                className="hidden"
-                onChange={(e) => {
-                  form.setFieldValue(name, e.currentTarget.files[0]);
-                  const file = e.target.files[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => setPreview(reader.result);
-                    reader.readAsDataURL(file);
-                  }
-                }}
-              />
-              <label
-                htmlFor={name}
-                className="w-full flex flex-col items-center border p-3 rounded-md shadow-sm cursor-pointer"
-              >
-                <span className="text-gray-600">Haz clic para seleccionar una foto</span>
-                {preview && (
-                  <img
-                    src={preview}
-                    alt="preview"
-                    className="mt-3 w-24 h-24 object-cover rounded-full border-2 border-gray-200"
-                  />
-                )}
-              </label>
-            </>
-          )}
-        </Field>
-      ) : type === 'select' ? (
-        <Field
-          as="select"
-          name={name}
-          id={name}
-          className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          <option value="">Selecciona una opción</option>
-          {options?.map((opt) => (
-            <option
-              key={typeof opt === 'string' ? opt : opt.value}
-              value={typeof opt === 'string' ? opt : opt.value}
-            >
-              {typeof opt === 'string' ? opt : opt.label}
-            </option>
-          ))}
-        </Field>
-      ) : name === 'password' ? (
-        <div className="relative w-full">
-          <Field
-            type={showPassword ? 'text' : 'password'}
-            name={name}
-            id={name}
-            className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-          <Button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500"
-          >
-            {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-          </Button>
-        </div>
-      ) : (
-        <Field
-          type={type}
-          name={name}
-          id={name}
-          className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      )}
+                            {type === 'file' ? (
+                                <Field name={name}>
+                                {({ form }) => (
+                                    <>
+                                    <input
+                                        type="file"
+                                        id={name}
+                                        name={name}
+                                        className="hidden"
+                                        onChange={(e) => {
+                                        form.setFieldValue(name, e.currentTarget.files[0]);
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => setPreview(reader.result);
+                                            reader.readAsDataURL(file);
+                                        }
+                                        }}
+                                    />
+                                    <label
+                                        htmlFor={name}
+                                        className="w-full flex flex-col items-center border p-3 rounded-md shadow-sm cursor-pointer"
+                                    >
+                                        <span className="text-gray-600">Haz clic para seleccionar una foto</span>
+                                        {preview && (
+                                        <img
+                                            src={preview}
+                                            alt="preview"
+                                            className="mt-3 w-24 h-24 object-cover rounded-full border-2 border-gray-200"
+                                        />
+                                        )}
+                                    </label>
+                                    </>
+                                )}
+                                </Field>
+                            ) : type === 'select' ? (
+                                <Field
+                                as="select"
+                                name={name}
+                                id={name}
+                                className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                >
+                                <option value="">Selecciona una opción</option>
+                                {options?.map((opt) => (
+                                    <option
+                                    key={typeof opt === 'string' ? opt : opt.value}
+                                    value={typeof opt === 'string' ? opt : opt.value}
+                                    >
+                                    {typeof opt === 'string' ? opt : opt.label}
+                                    </option>
+                                ))}
+                                </Field>
+                            ) : name === 'password' ? (
+                                <div className="relative w-full">
+                                <Field
+                                    type={showPassword ? 'text' : 'password'}
+                                    name={name}
+                                    id={name}
+                                    className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                                <Button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500"
+                                >
+                                    {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                                </Button>
+                                </div>
+                            ) : (
+                                <Field
+                                type={type}
+                                name={name}
+                                id={name}
+                                className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                            )}
 
-      <ErrorMessage name={name} component="div" className="text-xs text-red-600" />
-    </div>
-  ))}
+                            <ErrorMessage name={name} component="div" className="text-xs text-red-600" />
+                            </div>
+                        ))}
 
-  <div className="md:col-span-2">
-    <Button type="submit" className="w-full" variant="success">
-      Registrar
-    </Button>
-  </div>
-</Form>
+                        <div className="md:col-span-2">
+                            <Button type="submit" className="w-full" variant="success">
+                            Registrar
+                            </Button>
+                        </div>
+                    </Form>
 
 
                 </Formik>
