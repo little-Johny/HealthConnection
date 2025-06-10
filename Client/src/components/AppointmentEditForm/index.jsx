@@ -227,7 +227,7 @@ export default function AppointmentEditForm({ appointment, onSubmit }) {
                             >
                                 <option value="pending">Pendiente</option>
                                 <option value="confirmed">Confirmada</option>
-                                <option value="cancelled">Cancelada</option>
+                                <option value="canceled">Cancelada</option>
                             </Field>
                             <ErrorMessage name="status" component="div" className="text-red-500 text-sm" />
                         </div>
