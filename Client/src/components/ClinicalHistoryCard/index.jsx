@@ -23,10 +23,19 @@ export default function ClinicalHistoryCard({ clinicalHistory, onSave, isEditabl
 
     const validationSchema = Yup.object({
         bloodType: Yup.string().required('Requerido'),
-        weight: Yup.number().positive('Debe ser positivo').required('Requerido'),
-        height: Yup.number().positive('Debe ser positivo').required('Requerido'),
-        chronicDiseases: Yup.string(),
-        allergies: Yup.string()
+        weight: Yup.number()
+            .positive('Debe ser positivo')
+            .min(30, 'El peso mínimo es 20 kg')       // límite mínimo
+            .max(300, 'El peso máximo es 300 kg')     // límite máximo
+            .required('Requerido'),
+
+        height: Yup.number()
+            .positive('Debe ser positivo')
+            .min(100, 'La altura mínima es 100 cm')   // límite mínimo
+            .max(300, 'La altura máxima es 300 cm')   // límite máximo
+            .required('Requerido'),
+        chronicDiseases: Yup.string().required('Requerido'),
+        allergies: Yup.string().required('Requerido'),
     });
 
     const handleDeleteObservation = async (id) => {
@@ -102,7 +111,7 @@ export default function ClinicalHistoryCard({ clinicalHistory, onSave, isEditabl
                         </div>
 
                         <div>
-                            <label className="font-medium">Altura (m)</label>
+                            <label className="font-medium">Altura (cm)</label>
                             <Field
                                 name="height"
                                 type="number"

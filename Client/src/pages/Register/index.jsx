@@ -247,119 +247,104 @@ export default function Register() {
                     onSubmit={handleSubmit}
                 >
                     <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {selectedFields.map(({ name, type, options, label }) => (
-                            <div
-                            key={name}
-                            className={`space-y-2 ${type === 'file' ? 'col-span-2' : ''}`}
-                            >
-                            <label
-                                className="block text-sm font-medium capitalize"
-                                htmlFor={name}
-                            >
-                                {label || name}
-                            </label>
+  {selectedFields.map(({ name, type, options, label }) => (
+    <div
+      key={name}
+      className={`flex flex-col gap-2 w-full ${type === 'file' ? 'md:col-span-2' : ''}`}
+    >
+      <label htmlFor={name} className="text-sm font-medium capitalize">
+        {label || name}
+      </label>
 
-                            {type === 'file' ? (
-                                <Field name={name}>
-                                {({ form }) => (
-                                    <>
-                                    <input
-                                        type="file"
-                                        id={name}
-                                        name={name}
-                                        className="hidden"
-                                        onChange={(e) => {
-                                        form.setFieldValue(name, e.currentTarget.files[0]);
-                                        const file = e.target.files[0];
-                                        if (file) {
-                                            const reader = new FileReader();
-                                            reader.onloadend = () => {
-                                            setPreview(reader.result);
-                                            };
-                                            reader.readAsDataURL(file);
-                                        }
-                                        }}
-                                    />
-                                    <label
-                                        htmlFor={name}
-                                        className="w-full flex flex-col items-center border p-3 rounded-md shadow-sm cursor-pointer"
-                                    >
-                                        <span className="text-gray-600">
-                                        Haz clic para seleccionar una foto
-                                        </span>
-                                        {preview && (
-                                        <img
-                                            src={preview}
-                                            alt="preview"
-                                            className="mt-3 w-24 h-24 object-cover rounded-full border-2 border-gray-200"
-                                        />
-                                        )}
-                                    </label>
-                                    </>
-                                )}
-                                </Field>
-                            ) : type === 'select' ? (
-                                <Field
-                                as="select"
-                                name={name}
-                                id={name}
-                                className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                                >
-                                <option value="">Selecciona alguna opción</option>
-                                {options?.map((opt) => (
-                                    <option
-                                        key={typeof opt === 'string' ? opt : opt.value}
-                                        value={typeof opt === 'string' ? opt : opt.value}
-                                    >
-                                        {typeof opt === 'string'
-                                            ? opt
-                                            : opt.label}
-                                    </option>
-                                ))}
+      {type === 'file' ? (
+        <Field name={name}>
+          {({ form }) => (
+            <>
+              <input
+                type="file"
+                id={name}
+                name={name}
+                className="hidden"
+                onChange={(e) => {
+                  form.setFieldValue(name, e.currentTarget.files[0]);
+                  const file = e.target.files[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => setPreview(reader.result);
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+              <label
+                htmlFor={name}
+                className="w-full flex flex-col items-center border p-3 rounded-md shadow-sm cursor-pointer"
+              >
+                <span className="text-gray-600">Haz clic para seleccionar una foto</span>
+                {preview && (
+                  <img
+                    src={preview}
+                    alt="preview"
+                    className="mt-3 w-24 h-24 object-cover rounded-full border-2 border-gray-200"
+                  />
+                )}
+              </label>
+            </>
+          )}
+        </Field>
+      ) : type === 'select' ? (
+        <Field
+          as="select"
+          name={name}
+          id={name}
+          className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          <option value="">Selecciona una opción</option>
+          {options?.map((opt) => (
+            <option
+              key={typeof opt === 'string' ? opt : opt.value}
+              value={typeof opt === 'string' ? opt : opt.value}
+            >
+              {typeof opt === 'string' ? opt : opt.label}
+            </option>
+          ))}
+        </Field>
+      ) : name === 'password' ? (
+        <div className="relative w-full">
+          <Field
+            type={showPassword ? 'text' : 'password'}
+            name={name}
+            id={name}
+            className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <Button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500"
+          >
+            {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+          </Button>
+        </div>
+      ) : (
+        <Field
+          type={type}
+          name={name}
+          id={name}
+          className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      )}
 
-                                </Field>
-                            ) : name === 'password' ? (
-                                <div className="relative">
-                                    <Field
-                                    type={showPassword ? 'text' : 'password'}
-                                    name={name}
-                                    id={name}
-                                    className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary pr-10"
-                                    />
-                                    <Button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500"
-                                    >
-                                        {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-                                    </Button>
-                                </div>
-                            ) : (
-                                <Field
-                                type={type}
-                                name={name}
-                                id={name}
-                                className="w-full border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                                />
-                            )}
-                            <ErrorMessage
-                                name={name}
-                                component="div"
-                                className="text-xs text-red-600"
-                            />
-                            </div>
-                        ))}
+      <ErrorMessage name={name} component="div" className="text-xs text-red-600" />
+    </div>
+  ))}
 
-                        <div className="col-span-2 flex justify-center">
-                            <Button 
-                                type="submit" 
-                                variant="success" 
-                                className="w-full md:w-1/2 px-4"
-                            >
-                                Registrar
-                            </Button>
-                        </div>
-                    </Form>
+  <div className="md:col-span-2">
+    <Button type="submit" className="w-full" variant="success">
+      Registrar
+    </Button>
+  </div>
+</Form>
+
+
                 </Formik>
             </div>
 

@@ -75,7 +75,7 @@ const Dashboard = () => {
                     {rol !== 'patient' && (
                     <Link to='/manage-users' className='dashboard-card'>
                         <img
-                            src='./../../../public/img/gestion_users.png' 
+                            src='https://cdn-icons-png.freepik.com/512/12669/12669701.png' 
                             alt='Gestionar Usuarios'
                             className='w-full h-32 object-cover rounded-xl mb-4'
                         />
@@ -88,7 +88,7 @@ const Dashboard = () => {
                     <>
                         <Link to='/register' className='dashboard-card'>
                             <img
-                                src='./../../../public/img/addUser.png' 
+                                src='https://w7.pngwing.com/pngs/869/794/png-transparent-computer-icons-registered-user-login-user-profile-others-blue-logo-registered-user-thumbnail.png' 
                                 alt='Crear Usuario'
                                 className='w-full h-32 object-cover rounded-xl mb-4'
                             />
@@ -97,7 +97,7 @@ const Dashboard = () => {
                         </Link>
                         <Link to='/add-post' className='dashboard-card'>
                         <img
-                            src='./../../../public/img/s.png' 
+                            src='https://cdn-icons-png.flaticon.com/512/8896/8896503.png' 
                             alt='Crear publicaciones'
                             className='w-full h-32 object-cover rounded-xl mb-4'
                         />
@@ -106,8 +106,8 @@ const Dashboard = () => {
                         </Link>
                         <Link to='/manage-post' className='dashboard-card'>
                         <img
-                            src='./../../../public/img/managePost.png' 
-                            alt='Gestionar Usuarios'
+                            src='https://cdn-icons-png.flaticon.com/512/4199/4199802.png' 
+                            alt='Gestionar Publicaciones'
                             className='w-full h-32 object-cover rounded-xl mb-4'
                         />
                             <h2>Publicaciones</h2>
@@ -119,8 +119,8 @@ const Dashboard = () => {
                     {rol !== 'doctor' && (
                     <Link to='/create-appointment' className='dashboard-card'>
                         <img
-                            src='./../../../public/img/addAppointment.png' 
-                            alt='Gestionar Usuarios'
+                            src='https://cdn-icons-png.flaticon.com/512/1572/1572663.png' 
+                            alt='Crear cita'
                             className='w-full h-32 object-cover rounded-xl mb-4'
                         />
                         <h2>Solicita una cita</h2>
@@ -130,8 +130,8 @@ const Dashboard = () => {
 
                     <Link to='/manage-appointment' className='dashboard-card'>
                         <img
-                            src='./../../../public/img/citas.png' 
-                            alt='Gestionar Usuarios'
+                            src='https://www.shutterstock.com/image-vector/appointment-line-design-scheduling-calendar-600nw-2525793589.jpg' 
+                            alt='Gestionar Citas'
                             className='w-full h-32 object-cover rounded-xl mb-4'
                         />
                         <h2>Ver citas</h2>
@@ -143,8 +143,8 @@ const Dashboard = () => {
 
                         <Link to='/schedule' className='dashboard-card'>
                         <img
-                            src='./../../../public/img/getSchedule.png' 
-                            alt='Gestionar Usuarios'
+                            src='https://w7.pngwing.com/pngs/593/822/png-transparent-computer-icons-calendar-date-time-rally-miscellaneous-blue-text.png' 
+                            alt='Ver Horario'
                             className='w-full h-32 object-cover rounded-xl mb-4'
                         />
                         <h2>Consultar mi horario</h2>
@@ -154,11 +154,11 @@ const Dashboard = () => {
                     )}
 
                     {rol !== 'patient' && (
-                    <Link to='/create-schedule' className='dashboard-card'>
+                    <Link to='/create-schedule' className='dashboard-card '>
                         <img
-                            src='./../../../public/img/creaerHorario.png' 
-                            alt='Gestionar Usuarios'
-                            className='w-full h-32 object-cover rounded-xl mb-4'
+                            src='https://medifolios.net/img/iconos/Personaliza_AGENDA.png' 
+                            alt='Gestionar Horario doctor'
+                            className='w-full h-32 bg-gray-100 rounded-xl mb-4 object-contain'
                         />
                         <h2>Crear horario</h2>
                         <p>Define tu horario para cada día</p>

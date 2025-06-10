@@ -1,6 +1,5 @@
 const express = require('express');
 const passport = require('passport');
-const { checkRole } = require('../middlewares/authentication.handler');
 const validatorHandler = require('../middlewares/validation.handler');
 const {
     userUpload,
